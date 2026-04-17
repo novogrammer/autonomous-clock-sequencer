@@ -186,6 +186,16 @@ input {
   color: #1f4f59;
 }
 
+.app-footer {
+  margin-top: 18px;
+  font-size: 0.9rem;
+}
+
+.app-footer a {
+  color: #235f68;
+  font-weight: 700;
+}
+
 @media (max-width: 720px) {
   .app-shell {
     padding: 16px;

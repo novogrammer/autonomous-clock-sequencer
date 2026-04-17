@@ -187,6 +187,16 @@ function App() {
           <span>URL</span>
           <code>{currentUrl}</code>
         </div>
+
+        <footer className="app-footer">
+          <a
+            href="https://github.com/novogrammer/autonomous-clock-sequencer"
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub repository
+          </a>
+        </footer>
       </section>
     </main>
   );
