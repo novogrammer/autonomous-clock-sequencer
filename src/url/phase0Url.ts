@@ -55,7 +55,12 @@ function readNumber(
   min: number,
   max: number,
 ): number {
-  const value = Number(params.get(key));
+  const raw = params.get(key);
+  if (raw === null || raw.trim() === "") {
+    return fallback;
+  }
+
+  const value = Number(raw);
   if (!Number.isFinite(value)) {
     return fallback;
   }
