@@ -13,6 +13,10 @@ type EngineConfig = Omit<TransportConfig, "startAt"> & {
 const LOOKAHEAD_MS = 140;
 const TICK_MS = 35;
 
+export async function unlockMetronomeAudio(): Promise<void> {
+  await Tone.start();
+}
+
 export class MetronomeEngine {
   private synth: Tone.Synth | null = null;
   private timerId: number | null = null;
@@ -20,7 +24,7 @@ export class MetronomeEngine {
   private nextStep = 0;
 
   async start(config: EngineConfig): Promise<void> {
-    await Tone.start();
+    await unlockMetronomeAudio();
     this.stop();
 
     this.config = config;

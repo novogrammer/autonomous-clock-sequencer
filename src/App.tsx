@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { MetronomeEngine } from "./engine/metronomeEngine";
+import {
+  MetronomeEngine,
+  unlockMetronomeAudio,
+} from "./engine/metronomeEngine";
 import { useMetronomeStore } from "./state/metronomeStore";
 import { calculatePosition, type TransportPosition } from "./transport/transport";
 import { replaceUrlFromState } from "./url/phase0Url";
@@ -26,8 +29,9 @@ function App() {
   const [position, setPosition] = useState<TransportPosition>(() =>
     calculatePosition({ bpm, stepsPerBeat, swing, startAt }, Date.now()),
   );
-  const [audioStatus, setAudioStatus] = useState<"idle" | "starting" | "ready" | "blocked">(
-    "idle",
+  const [audioEnabled, setAudioEnabled] = useState(false);
+  const [audioStatus, setAudioStatus] = useState<AudioStatus>(
+    startAt === null ? "idle" : "locked",
   );
   const currentUrl = useCurrentUrl(urlState);
 
@@ -47,24 +51,66 @@ function App() {
   useEffect(() => {
     if (!isPlaying || startAt === null) {
       engineRef.current?.stop();
+      setAudioStatus("idle");
+      return;
+    }
+
+    if (!audioEnabled) {
+      engineRef.current?.stop();
+      setAudioStatus("locked");
       return;
     }
 
     const engine = engineRef.current ?? new MetronomeEngine();
     engineRef.current = engine;
+    let isActive = true;
     setAudioStatus("starting");
     engine
       .start({ bpm, stepsPerBeat, swing, startAt })
-      .then(() => setAudioStatus("ready"))
+      .then(() => {
+        if (isActive) {
+          setAudioStatus("ready");
+        }
+      })
       .catch((error: unknown) => {
         console.error(error);
-        setAudioStatus("blocked");
+        if (isActive) {
+          setAudioEnabled(false);
+          setAudioStatus("blocked");
+        }
       });
 
     return () => {
+      isActive = false;
       engine.stop();
     };
-  }, [bpm, isPlaying, startAt, stepsPerBeat, swing]);
+  }, [audioEnabled, bpm, isPlaying, startAt, stepsPerBeat, swing]);
+
+  async function enableAudio() {
+    setAudioStatus("starting");
+
+    try {
+      await unlockMetronomeAudio();
+      setAudioEnabled(true);
+    } catch (error) {
+      console.error(error);
+      setAudioEnabled(false);
+      setAudioStatus("blocked");
+    }
+  }
+
+  async function handlePlay() {
+    start();
+    await enableAudio();
+  }
+
+  async function handleEnableAudio() {
+    await enableAudio();
+  }
+
+  function handleStop() {
+    stop();
+  }
 
   return (
     <main className="app-shell">
@@ -78,10 +124,16 @@ function App() {
         </div>
 
         <div className="transport-row">
-          <button className="primary" onClick={() => start()}>
+          <button className="primary" onClick={handlePlay} disabled={isPlaying}>
             再生
           </button>
-          <button onClick={stop}>停止</button>
+          <button
+            onClick={handleEnableAudio}
+            disabled={!isPlaying || audioEnabled || audioStatus === "starting"}
+          >
+            音声を有効化
+          </button>
+          <button onClick={handleStop}>停止</button>
         </div>
 
         <div className="controls">
@@ -147,6 +199,8 @@ type UrlState = {
   startAt: number | null;
 };
 
+type AudioStatus = "idle" | "locked" | "starting" | "ready" | "blocked";
+
 function useCurrentUrl(state: UrlState): string {
   const [href, setHref] = useState(() => window.location.href);
 
@@ -163,7 +217,7 @@ function StatusBadge({
   audioStatus,
 }: {
   isPlaying: boolean;
-  audioStatus: "idle" | "starting" | "ready" | "blocked";
+  audioStatus: AudioStatus;
 }) {
   const label = isPlaying ? audioStatus : "stopped";
   return <span className={`status status-${label}`}>{label}</span>;
