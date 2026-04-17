@@ -3,6 +3,7 @@ import {
   MetronomeEngine,
   unlockMetronomeAudio,
 } from "./engine/metronomeEngine";
+import { DelayTestPanel } from "./components/DelayTestPanel";
 import { useMetronomeStore } from "./state/metronomeStore";
 import { calculatePosition, type TransportPosition } from "./transport/transport";
 import { replaceUrlFromState } from "./url/phase0Url";
@@ -187,6 +188,8 @@ function App() {
           <span>URL</span>
           <code>{currentUrl}</code>
         </div>
+
+        <DelayTestPanel />
 
         <footer className="app-footer">
           <a
