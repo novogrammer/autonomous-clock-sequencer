@@ -65,22 +65,11 @@ h2 {
   letter-spacing: 0;
 }
 
-h3 {
-  margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.2;
-  letter-spacing: 0;
-}
-
 .section-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 24px;
-}
-
-.section-header.compact {
-  margin-bottom: 16px;
 }
 
 .status {
@@ -139,13 +128,6 @@ button.primary {
   border-color: #235f68;
   background: #235f68;
   color: #ffffff;
-}
-
-button.selected {
-  border-color: #235f68;
-  background: #e7f0f1;
-  color: #174d56;
-  font-weight: 700;
 }
 
 .controls {
@@ -224,26 +206,8 @@ input {
   border-top: 1px solid #ded8cf;
 }
 
-.delay-controls {
-  grid-template-columns: minmax(140px, 180px) 1fr;
-  align-items: end;
-}
-
-.preset-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.preset-row button {
-  min-height: 44px;
-  padding: 0 12px;
-}
-
 .calibration-panel {
   margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid #ded8cf;
 }
 
 .calibration-controls {
@@ -297,7 +261,6 @@ input {
   }
 
   .controls,
-  .delay-controls,
   .time-readout,
   .position-grid {
     grid-template-columns: 1fr;

@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { DelayTestEngine } from "../engine/delayTestEngine";
-import {
-  DELAY_PRESETS_MS,
-  useDelayTestStore,
-} from "../state/delayTestStore";
+import { useDelayTestStore } from "../state/delayTestStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
 
 type DelayTestAudioStatus = "idle" | "starting" | "ready" | "blocked";
@@ -12,12 +9,8 @@ const PLAYBACK_OFFSET_STEPS_MS = [-1000, -100, -10, -1, 1, 10, 100, 1000] as con
 
 export function DelayTestPanel() {
   const {
-    delayMs,
-    isLooping,
     calibrationIntervalMs,
     isCalibrating,
-    setDelayMs,
-    setLooping,
     setCalibrationIntervalMs,
     setCalibrating,
   } = useDelayTestStore();
@@ -44,34 +37,6 @@ export function DelayTestPanel() {
 
     return () => window.clearInterval(timerId);
   }, []);
-
-  useEffect(() => {
-    if (!isLooping) {
-      return;
-    }
-
-    let isActive = true;
-    setAudioStatus("starting");
-
-    engineRef.current
-      ?.startLoop(delayMs)
-      .then(() => {
-        if (isActive) {
-          setAudioStatus("ready");
-        }
-      })
-      .catch((error: unknown) => {
-        console.error(error);
-        if (isActive) {
-          setLooping(false);
-          setAudioStatus("blocked");
-        }
-      });
-
-    return () => {
-      isActive = false;
-    };
-  }, [delayMs, isLooping, setLooping]);
 
   useEffect(() => {
     if (!isCalibrating) {
@@ -106,21 +71,8 @@ export function DelayTestPanel() {
     setCalibrating,
   ]);
 
-  async function playOnce() {
-    setAudioStatus("starting");
-
-    try {
-      await engineRef.current?.playOnce(delayMs);
-      setAudioStatus("ready");
-    } catch (error) {
-      console.error(error);
-      setAudioStatus("blocked");
-    }
-  }
-
-  function stopAll() {
+  function stopCalibration() {
     engineRef.current?.stop();
-    setLooping(false);
     setCalibrating(false);
     setAudioStatus("idle");
   }
@@ -129,60 +81,13 @@ export function DelayTestPanel() {
     <section className="delay-test">
       <div className="section-header">
         <div>
-          <p className="eyebrow">Timing Test</p>
-          <h2>Delay perception check</h2>
+          <p className="eyebrow">Calibration</p>
+          <h2>Playback calibration</h2>
         </div>
         <span className={`status status-${audioStatus}`}>{audioStatus}</span>
       </div>
 
-      <div className="controls delay-controls">
-        <label>
-          <span>delay ms</span>
-          <input
-            type="number"
-            min="0"
-            max="100"
-            step="1"
-            value={delayMs}
-            onChange={(event) => setDelayMs(Number(event.target.value))}
-          />
-        </label>
-
-        <div className="preset-row" aria-label="Delay presets">
-          {DELAY_PRESETS_MS.map((preset) => (
-            <button
-              key={preset}
-              className={preset === delayMs ? "selected" : ""}
-              onClick={() => setDelayMs(preset)}
-            >
-              {preset} ms
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="transport-row">
-        <button onClick={playOnce}>単発再生</button>
-        <button
-          className="primary"
-          onClick={() => setLooping(true)}
-          disabled={isLooping}
-        >
-          連続再生
-        </button>
-        <button onClick={stopAll} disabled={!isLooping}>
-          停止
-        </button>
-      </div>
-
       <div className="calibration-panel">
-        <div className="section-header compact">
-          <div>
-            <p className="eyebrow">Calibration</p>
-            <h3>Calibration beep</h3>
-          </div>
-        </div>
-
         <div className="controls calibration-controls">
           <label>
             <span>playbackOffsetMs</span>
@@ -240,7 +145,7 @@ export function DelayTestPanel() {
           >
             時報開始
           </button>
-          <button onClick={stopAll} disabled={!isLooping && !isCalibrating}>
+          <button onClick={stopCalibration} disabled={!isCalibrating}>
             停止
           </button>
         </div>
