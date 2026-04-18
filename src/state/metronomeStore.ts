@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { roundedNowMs } from "../clock/clock";
 import { retimeStartAtForBpmChange } from "../transport/transport";
 import { parsePhase0Url } from "../url/phase0Url";
 
@@ -25,7 +26,7 @@ export const useMetronomeStore = create<MetronomeState>((set) => ({
   ...initialUrlState,
   isPlaying: initialUrlState.startAt !== null,
 
-  setBpm: (bpm, nowMs = Date.now()) =>
+  setBpm: (bpm, nowMs = roundedNowMs()) =>
     set((state) => {
       const nextBpm = clamp(bpm, 20, 300);
       const startAt = state.isPlaying
@@ -40,7 +41,7 @@ export const useMetronomeStore = create<MetronomeState>((set) => ({
 
   setSwing: (swing) => set({ swing: clamp(swing, 0, 0.95) }),
 
-  start: (nowMs = Date.now()) =>
+  start: (nowMs = roundedNowMs()) =>
     set((state) => ({
       isPlaying: true,
       startAt: state.startAt ?? nowMs,

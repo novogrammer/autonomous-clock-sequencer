@@ -1,4 +1,5 @@
 import * as Tone from "tone";
+import { nowMs } from "../clock/clock";
 import {
   calculatePosition,
   msPerStep,
@@ -44,7 +45,7 @@ export class MetronomeEngine {
     this.nextStep = Math.max(
       0,
       Math.floor(
-        calculatePosition(config, Date.now() + config.playbackOffsetMs).step,
+        calculatePosition(config, nowMs() + config.playbackOffsetMs).step,
       ),
     );
     this.schedule();
@@ -60,7 +61,7 @@ export class MetronomeEngine {
     this.nextStep = Math.max(
       0,
       Math.floor(
-        calculatePosition(config, Date.now() + config.playbackOffsetMs).step,
+        calculatePosition(config, nowMs() + config.playbackOffsetMs).step,
       ),
     );
   }
@@ -82,8 +83,8 @@ export class MetronomeEngine {
       return;
     }
 
-    const nowMs = Date.now();
-    const horizonMs = nowMs + LOOKAHEAD_MS;
+    const currentNowMs = nowMs();
+    const horizonMs = currentNowMs + LOOKAHEAD_MS;
     const stepLengthMs = msPerStep(this.config.bpm, this.config.stepsPerBeat);
 
     while (true) {
@@ -94,8 +95,8 @@ export class MetronomeEngine {
         break;
       }
 
-      if (eventMs >= nowMs - stepLengthMs && !this.config.metronomeMuted) {
-        const toneTime = Tone.now() + Math.max(0, eventMs - nowMs) / 1000;
+      if (eventMs >= currentNowMs - stepLengthMs && !this.config.metronomeMuted) {
+        const toneTime = Tone.now() + Math.max(0, eventMs - currentNowMs) / 1000;
         const stepInBeat = this.nextStep % this.config.stepsPerBeat;
         const isBeat = stepInBeat === 0;
         this.synth.triggerAttackRelease(

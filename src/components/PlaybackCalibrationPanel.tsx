@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { nowMs } from "../clock/clock";
 import { PlaybackCalibrationEngine } from "../engine/playbackCalibrationEngine";
 import { usePlaybackCalibrationRuntimeStore } from "../state/playbackCalibrationRuntimeStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
@@ -21,7 +22,7 @@ export function PlaybackCalibrationPanel() {
   const engineRef = useRef<PlaybackCalibrationEngine | null>(null);
   const [audioStatus, setAudioStatus] =
     useState<PlaybackCalibrationAudioStatus>("idle");
-  const [nowMs, setNowMs] = useState(() => Date.now());
+  const [currentNowMs, setCurrentNowMs] = useState(() => nowMs());
 
   useEffect(() => {
     engineRef.current = new PlaybackCalibrationEngine();
@@ -34,7 +35,7 @@ export function PlaybackCalibrationPanel() {
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
-      setNowMs(Date.now());
+      setCurrentNowMs(nowMs());
     }, 50);
 
     return () => window.clearInterval(timerId);
@@ -139,10 +140,10 @@ export function PlaybackCalibrationPanel() {
         </div>
 
         <div className="time-readout">
-          <Readout label="raw time" value={formatLocalTime(nowMs)} />
+          <Readout label="raw time" value={formatLocalTime(currentNowMs)} />
           <Readout
             label="offset time"
-            value={formatLocalTime(nowMs + playbackOffsetMs)}
+            value={formatLocalTime(currentNowMs + playbackOffsetMs)}
           />
         </div>
 

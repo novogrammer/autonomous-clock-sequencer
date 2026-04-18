@@ -1,4 +1,5 @@
 import * as Tone from "tone";
+import { nowMs } from "../clock/clock";
 
 const CLICK_DURATION_SECONDS = 0.015;
 const BOUNDARY_DURATION_SECONDS = 2;
@@ -21,7 +22,7 @@ export class PlaybackCalibrationEngine {
     this.ensureSynths();
 
     this.nextCalibrationTimeMs = nextCalibrationTimeMs(
-      Date.now() + playbackOffsetMs,
+      nowMs() + playbackOffsetMs,
       REFERENCE_INTERVAL_MS,
     );
     this.scheduleCalibration(playbackOffsetMs, clickFrequencyHz);
@@ -68,16 +69,16 @@ export class PlaybackCalibrationEngine {
       return;
     }
 
-    const nowMs = Date.now();
-    const correctedNowMs = nowMs + playbackOffsetMs;
+    const currentNowMs = nowMs();
+    const correctedNowMs = currentNowMs + playbackOffsetMs;
     const horizonMs = correctedNowMs + CALIBRATION_LOOKAHEAD_MS;
 
     while (this.nextCalibrationTimeMs <= horizonMs) {
       const localEventMs = this.nextCalibrationTimeMs - playbackOffsetMs;
 
-      if (localEventMs >= nowMs - REFERENCE_INTERVAL_MS) {
+      if (localEventMs >= currentNowMs - REFERENCE_INTERVAL_MS) {
         const toneTime =
-          Tone.now() + Math.max(0, localEventMs - nowMs) / 1000;
+          Tone.now() + Math.max(0, localEventMs - currentNowMs) / 1000;
         this.referenceSynth.triggerAttackRelease(
           clickFrequencyHz,
           CLICK_DURATION_SECONDS,

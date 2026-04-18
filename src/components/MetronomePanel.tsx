@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { nowMs, roundedNowMs } from "../clock/clock";
 import {
   MetronomeEngine,
   unlockMetronomeAudio,
@@ -41,7 +42,7 @@ export function MetronomePanel() {
   const [position, setPosition] = useState<TransportPosition>(() =>
     calculatePosition(
       { bpm, stepsPerBeat, swing, startAt },
-      Date.now() + playbackOffsetMs,
+      nowMs() + playbackOffsetMs,
     ),
   );
   const [audioEnabled, setAudioEnabled] = useState(false);
@@ -58,7 +59,7 @@ export function MetronomePanel() {
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
-      setPosition(calculatePosition(config, Date.now() + playbackOffsetMs));
+      setPosition(calculatePosition(config, nowMs() + playbackOffsetMs));
     }, 50);
 
     return () => window.clearInterval(timerId);
@@ -132,7 +133,7 @@ export function MetronomePanel() {
   }
 
   async function handlePlay() {
-    start(Date.now() + playbackOffsetMs);
+    start(roundedNowMs() + playbackOffsetMs);
     await enableAudio();
   }
 
@@ -183,7 +184,7 @@ export function MetronomePanel() {
             step="1"
             value={bpm}
             onChange={(event) =>
-              setBpm(Number(event.target.value), Date.now() + playbackOffsetMs)
+              setBpm(Number(event.target.value), nowMs() + playbackOffsetMs)
             }
           />
         </label>
