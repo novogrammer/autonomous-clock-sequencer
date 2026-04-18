@@ -200,7 +200,7 @@ input {
   color: #1f4f59;
 }
 
-.delay-test {
+.playback-calibration {
   margin-top: 28px;
   padding-top: 24px;
   border-top: 1px solid #ded8cf;
@@ -211,7 +211,7 @@ input {
 }
 
 .calibration-controls {
-  grid-template-columns: minmax(140px, 180px) 1fr minmax(140px, 180px);
+  grid-template-columns: minmax(140px, 180px) 1fr;
   align-items: end;
 }
 

@@ -6,7 +6,7 @@ const REFERENCE_INTERVAL_MS = 1000;
 const CALIBRATION_LOOKAHEAD_MS = 250;
 const CALIBRATION_TICK_MS = 40;
 
-export class DelayTestEngine {
+export class PlaybackCalibrationEngine {
   private referenceSynth: Tone.Synth | null = null;
   private boundarySynth: Tone.Synth | null = null;
   private calibrationTimerId: number | null = null;

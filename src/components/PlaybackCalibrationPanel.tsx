@@ -1,23 +1,24 @@
 import { useEffect, useRef, useState } from "react";
-import { DelayTestEngine } from "../engine/delayTestEngine";
-import { useDelayTestStore } from "../state/delayTestStore";
+import { PlaybackCalibrationEngine } from "../engine/playbackCalibrationEngine";
+import { usePlaybackCalibrationSessionStore } from "../state/playbackCalibrationSessionStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
 
-type DelayTestAudioStatus = "idle" | "starting" | "ready" | "blocked";
+type PlaybackCalibrationAudioStatus = "idle" | "starting" | "ready" | "blocked";
 
 const PLAYBACK_OFFSET_STEPS_MS = [-1000, -100, -10, -1, 1, 10, 100, 1000] as const;
 
-export function DelayTestPanel() {
-  const { isCalibrating, setCalibrating } = useDelayTestStore();
+export function PlaybackCalibrationPanel() {
+  const { isCalibrating, setCalibrating } =
+    usePlaybackCalibrationSessionStore();
   const { playbackOffsetMs, setPlaybackOffsetMs } =
     usePlaybackCalibrationStore();
-  const engineRef = useRef<DelayTestEngine | null>(null);
+  const engineRef = useRef<PlaybackCalibrationEngine | null>(null);
   const [audioStatus, setAudioStatus] =
-    useState<DelayTestAudioStatus>("idle");
+    useState<PlaybackCalibrationAudioStatus>("idle");
   const [nowMs, setNowMs] = useState(() => Date.now());
 
   useEffect(() => {
-    engineRef.current = new DelayTestEngine();
+    engineRef.current = new PlaybackCalibrationEngine();
 
     return () => {
       engineRef.current?.stop();
@@ -68,7 +69,7 @@ export function DelayTestPanel() {
   }
 
   return (
-    <section className="delay-test">
+    <section className="playback-calibration">
       <div className="section-header">
         <div>
           <p className="eyebrow">Calibration</p>

@@ -3,7 +3,7 @@ import {
   MetronomeEngine,
   unlockMetronomeAudio,
 } from "./engine/metronomeEngine";
-import { DelayTestPanel } from "./components/DelayTestPanel";
+import { PlaybackCalibrationPanel } from "./components/PlaybackCalibrationPanel";
 import { useMetronomeStore } from "./state/metronomeStore";
 import { usePlaybackCalibrationStore } from "./state/playbackCalibrationStore";
 import { calculatePosition, type TransportPosition } from "./transport/transport";
@@ -206,7 +206,7 @@ function App() {
           <code>{currentUrl}</code>
         </div>
 
-        <DelayTestPanel />
+        <PlaybackCalibrationPanel />
 
         <footer className="app-footer">
           <a
