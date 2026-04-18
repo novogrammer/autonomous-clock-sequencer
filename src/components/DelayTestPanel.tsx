@@ -8,12 +8,7 @@ type DelayTestAudioStatus = "idle" | "starting" | "ready" | "blocked";
 const PLAYBACK_OFFSET_STEPS_MS = [-1000, -100, -10, -1, 1, 10, 100, 1000] as const;
 
 export function DelayTestPanel() {
-  const {
-    calibrationIntervalMs,
-    isCalibrating,
-    setCalibrationIntervalMs,
-    setCalibrating,
-  } = useDelayTestStore();
+  const { isCalibrating, setCalibrating } = useDelayTestStore();
   const { playbackOffsetMs, setPlaybackOffsetMs } =
     usePlaybackCalibrationStore();
   const engineRef = useRef<DelayTestEngine | null>(null);
@@ -47,7 +42,7 @@ export function DelayTestPanel() {
     setAudioStatus("starting");
 
     engineRef.current
-      ?.startCalibration(playbackOffsetMs, calibrationIntervalMs)
+      ?.startCalibration(playbackOffsetMs)
       .then(() => {
         if (isActive) {
           setAudioStatus("ready");
@@ -64,12 +59,7 @@ export function DelayTestPanel() {
     return () => {
       isActive = false;
     };
-  }, [
-    calibrationIntervalMs,
-    isCalibrating,
-    playbackOffsetMs,
-    setCalibrating,
-  ]);
+  }, [isCalibrating, playbackOffsetMs, setCalibrating]);
 
   function stopCalibration() {
     engineRef.current?.stop();
@@ -114,19 +104,6 @@ export function DelayTestPanel() {
             ))}
           </div>
 
-          <label>
-            <span>interval ms</span>
-            <input
-              type="number"
-              min="250"
-              max="5000"
-              step="250"
-              value={calibrationIntervalMs}
-              onChange={(event) =>
-                setCalibrationIntervalMs(Number(event.target.value))
-              }
-            />
-          </label>
         </div>
 
         <div className="time-readout">
