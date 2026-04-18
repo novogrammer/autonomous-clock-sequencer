@@ -1,6 +1,6 @@
 import * as Tone from "tone";
 
-const CLICK_DURATION_SECONDS = 0.025;
+const CLICK_DURATION_SECONDS = 0.015;
 const BOUNDARY_DURATION_SECONDS = 2;
 const REFERENCE_INTERVAL_MS = 1000;
 const CALIBRATION_LOOKAHEAD_MS = 250;
@@ -45,7 +45,7 @@ export class PlaybackCalibrationEngine {
   }
 
   private ensureSynths(): void {
-    this.referenceSynth ??= createClickSynth(-14);
+    this.referenceSynth ??= createClickSynth(-11);
     this.boundarySynth ??= createSignalSynth(
       -8,
       BOUNDARY_DURATION_SECONDS,
@@ -110,10 +110,10 @@ function createClickSynth(volume: number): Tone.Synth {
   return new Tone.Synth({
     oscillator: { type: "square" },
     envelope: {
-      attack: 0.001,
-      decay: 0.018,
+      attack: 0.0005,
+      decay: 0.009,
       sustain: 0,
-      release: 0.006,
+      release: 0.003,
     },
     volume,
   }).toDestination();
