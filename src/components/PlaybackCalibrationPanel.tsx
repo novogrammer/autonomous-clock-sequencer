@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { PlaybackCalibrationEngine } from "../engine/playbackCalibrationEngine";
-import { usePlaybackCalibrationSessionStore } from "../state/playbackCalibrationSessionStore";
+import { usePlaybackCalibrationRuntimeStore } from "../state/playbackCalibrationRuntimeStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
 
 type PlaybackCalibrationAudioStatus = "idle" | "starting" | "ready" | "blocked";
@@ -9,7 +9,7 @@ const PLAYBACK_OFFSET_STEPS_MS = [-1000, -100, -10, -1, 1, 10, 100, 1000] as con
 
 export function PlaybackCalibrationPanel() {
   const { isCalibrating, setCalibrating } =
-    usePlaybackCalibrationSessionStore();
+    usePlaybackCalibrationRuntimeStore();
   const { playbackOffsetMs, setPlaybackOffsetMs } =
     usePlaybackCalibrationStore();
   const engineRef = useRef<PlaybackCalibrationEngine | null>(null);

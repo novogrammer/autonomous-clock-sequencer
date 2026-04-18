@@ -1,12 +1,12 @@
 import { create } from "zustand";
 
-type PlaybackCalibrationSessionState = {
+type PlaybackCalibrationRuntimeState = {
   isCalibrating: boolean;
   setCalibrating: (isCalibrating: boolean) => void;
 };
 
-export const usePlaybackCalibrationSessionStore =
-  create<PlaybackCalibrationSessionState>((set) => ({
+export const usePlaybackCalibrationRuntimeStore =
+  create<PlaybackCalibrationRuntimeState>((set) => ({
     isCalibrating: false,
     setCalibrating: (isCalibrating) => set({ isCalibrating }),
   }));
