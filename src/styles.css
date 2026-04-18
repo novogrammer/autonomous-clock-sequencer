@@ -183,6 +183,8 @@ input {
   margin-top: 6px;
   overflow-wrap: anywhere;
   font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }
 
 .url-box {
