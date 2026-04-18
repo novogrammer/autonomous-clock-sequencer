@@ -38,6 +38,7 @@ function App() {
     ),
   );
   const [audioEnabled, setAudioEnabled] = useState(false);
+  const [metronomeMuted, setMetronomeMuted] = useState(false);
   const [audioStatus, setAudioStatus] = useState<AudioStatus>(
     startAt === null ? "idle" : "locked",
   );
@@ -74,7 +75,14 @@ function App() {
     let isActive = true;
     setAudioStatus("starting");
     engine
-      .start({ bpm, stepsPerBeat, swing, startAt, playbackOffsetMs })
+      .start({
+        bpm,
+        stepsPerBeat,
+        swing,
+        startAt,
+        playbackOffsetMs,
+        metronomeMuted,
+      })
       .then(() => {
         if (isActive) {
           setAudioStatus("ready");
@@ -96,6 +104,7 @@ function App() {
     audioEnabled,
     bpm,
     isPlaying,
+    metronomeMuted,
     playbackOffsetMs,
     startAt,
     stepsPerBeat,
@@ -147,7 +156,13 @@ function App() {
             onClick={handleEnableAudio}
             disabled={!isPlaying || audioEnabled || audioStatus === "starting"}
           >
-            音声を有効化
+            音声を準備
+          </button>
+          <button
+            onClick={() => setMetronomeMuted((isMuted) => !isMuted)}
+            disabled={!isPlaying}
+          >
+            {metronomeMuted ? "メトロノーム音を戻す" : "メトロノーム音をミュート"}
           </button>
           <button onClick={handleStop}>停止</button>
         </div>
