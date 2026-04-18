@@ -6,9 +6,15 @@ import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
 type PlaybackCalibrationAudioStatus = "idle" | "starting" | "ready" | "blocked";
 
 const PLAYBACK_OFFSET_STEPS_MS = [-1000, -100, -10, -1, 1, 10, 100, 1000] as const;
+const CLICK_FREQUENCY_PRESETS_HZ = [1500, 2000, 2500, 3000] as const;
 
 export function PlaybackCalibrationPanel() {
-  const { isCalibrating, setCalibrating } =
+  const {
+    clickFrequencyHz,
+    isCalibrating,
+    setClickFrequencyHz,
+    setCalibrating,
+  } =
     usePlaybackCalibrationRuntimeStore();
   const { playbackOffsetMs, setPlaybackOffsetMs } =
     usePlaybackCalibrationStore();
@@ -43,7 +49,7 @@ export function PlaybackCalibrationPanel() {
     setAudioStatus("starting");
 
     engineRef.current
-      ?.startCalibration(playbackOffsetMs)
+      ?.startCalibration(playbackOffsetMs, clickFrequencyHz)
       .then(() => {
         if (isActive) {
           setAudioStatus("ready");
@@ -60,7 +66,7 @@ export function PlaybackCalibrationPanel() {
     return () => {
       isActive = false;
     };
-  }, [isCalibrating, playbackOffsetMs, setCalibrating]);
+  }, [clickFrequencyHz, isCalibrating, playbackOffsetMs, setCalibrating]);
 
   function stopCalibration() {
     engineRef.current?.stop();
@@ -105,6 +111,31 @@ export function PlaybackCalibrationPanel() {
             ))}
           </div>
 
+          <label>
+            <span>clickFrequencyHz</span>
+            <input
+              type="number"
+              min="800"
+              max="4000"
+              step="100"
+              value={clickFrequencyHz}
+              onChange={(event) =>
+                setClickFrequencyHz(Number(event.target.value))
+              }
+            />
+          </label>
+
+          <div className="frequency-preset-row" aria-label="Click frequency presets">
+            {CLICK_FREQUENCY_PRESETS_HZ.map((frequencyHz) => (
+              <button
+                key={frequencyHz}
+                className={frequencyHz === clickFrequencyHz ? "selected" : ""}
+                onClick={() => setClickFrequencyHz(frequencyHz)}
+              >
+                {frequencyHz}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="time-readout">

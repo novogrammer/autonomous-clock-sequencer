@@ -130,6 +130,12 @@ button.primary {
   color: #ffffff;
 }
 
+button.selected {
+  border-color: #235f68;
+  background: #e4f0f1;
+  color: #17444b;
+}
+
 .controls {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -217,13 +223,15 @@ input {
   align-items: end;
 }
 
-.offset-step-row {
+.offset-step-row,
+.frequency-preset-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.offset-step-row button {
+.offset-step-row button,
+.frequency-preset-row button {
   min-height: 44px;
   padding: 0 12px;
 }

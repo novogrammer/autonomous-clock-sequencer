@@ -12,7 +12,10 @@ export class PlaybackCalibrationEngine {
   private calibrationTimerId: number | null = null;
   private nextCalibrationTimeMs: number | null = null;
 
-  async startCalibration(playbackOffsetMs: number): Promise<void> {
+  async startCalibration(
+    playbackOffsetMs: number,
+    clickFrequencyHz: number,
+  ): Promise<void> {
     await Tone.start();
     this.stopCalibration();
     this.ensureSynths();
@@ -21,9 +24,9 @@ export class PlaybackCalibrationEngine {
       Date.now() + playbackOffsetMs,
       REFERENCE_INTERVAL_MS,
     );
-    this.scheduleCalibration(playbackOffsetMs);
+    this.scheduleCalibration(playbackOffsetMs, clickFrequencyHz);
     this.calibrationTimerId = window.setInterval(() => {
-      this.scheduleCalibration(playbackOffsetMs);
+      this.scheduleCalibration(playbackOffsetMs, clickFrequencyHz);
     }, CALIBRATION_TICK_MS);
   }
 
@@ -53,7 +56,10 @@ export class PlaybackCalibrationEngine {
     );
   }
 
-  private scheduleCalibration(playbackOffsetMs: number): void {
+  private scheduleCalibration(
+    playbackOffsetMs: number,
+    clickFrequencyHz: number,
+  ): void {
     if (
       this.referenceSynth === null ||
       this.boundarySynth === null ||
@@ -73,7 +79,7 @@ export class PlaybackCalibrationEngine {
         const toneTime =
           Tone.now() + Math.max(0, localEventMs - nowMs) / 1000;
         this.referenceSynth.triggerAttackRelease(
-          2000,
+          clickFrequencyHz,
           CLICK_DURATION_SECONDS,
           toneTime,
           0.35,
