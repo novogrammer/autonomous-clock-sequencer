@@ -39,9 +39,8 @@ export class DelayTestEngine {
     this.ensureSynths();
 
     this.nextCalibrationTimeMs = nextCalibrationTimeMs(
-      Date.now(),
+      Date.now() + playbackOffsetMs,
       intervalMs,
-      playbackOffsetMs,
     );
     this.scheduleCalibration(playbackOffsetMs, intervalMs);
     this.calibrationTimerId = window.setInterval(() => {
@@ -101,12 +100,15 @@ export class DelayTestEngine {
     }
 
     const nowMs = Date.now();
-    const horizonMs = nowMs + CALIBRATION_LOOKAHEAD_MS;
+    const correctedNowMs = nowMs + playbackOffsetMs;
+    const horizonMs = correctedNowMs + CALIBRATION_LOOKAHEAD_MS;
 
     while (this.nextCalibrationTimeMs <= horizonMs) {
-      if (this.nextCalibrationTimeMs >= nowMs - intervalMs) {
+      const localEventMs = this.nextCalibrationTimeMs - playbackOffsetMs;
+
+      if (localEventMs >= nowMs - intervalMs) {
         const toneTime =
-          Tone.now() + Math.max(0, this.nextCalibrationTimeMs - nowMs) / 1000;
+          Tone.now() + Math.max(0, localEventMs - nowMs) / 1000;
         this.referenceSynth.triggerAttackRelease(
           "C6",
           CLICK_DURATION_SECONDS,
@@ -120,12 +122,10 @@ export class DelayTestEngine {
 }
 
 function nextCalibrationTimeMs(
-  nowMs: number,
+  correctedNowMs: number,
   intervalMs: number,
-  playbackOffsetMs: number,
 ): number {
-  const base = Math.ceil((nowMs - playbackOffsetMs) / intervalMs) * intervalMs;
-  return base + playbackOffsetMs;
+  return Math.ceil(correctedNowMs / intervalMs) * intervalMs;
 }
 
 function createClickSynth(volume: number): Tone.Synth {

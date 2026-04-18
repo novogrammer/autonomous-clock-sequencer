@@ -4,6 +4,7 @@ import {
   DELAY_PRESETS_MS,
   useDelayTestStore,
 } from "../state/delayTestStore";
+import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
 
 type DelayTestAudioStatus = "idle" | "starting" | "ready" | "blocked";
 
@@ -13,15 +14,15 @@ export function DelayTestPanel() {
   const {
     delayMs,
     isLooping,
-    playbackOffsetMs,
     calibrationIntervalMs,
     isCalibrating,
     setDelayMs,
     setLooping,
-    setPlaybackOffsetMs,
     setCalibrationIntervalMs,
     setCalibrating,
   } = useDelayTestStore();
+  const { playbackOffsetMs, setPlaybackOffsetMs } =
+    usePlaybackCalibrationStore();
   const engineRef = useRef<DelayTestEngine | null>(null);
   const [audioStatus, setAudioStatus] =
     useState<DelayTestAudioStatus>("idle");

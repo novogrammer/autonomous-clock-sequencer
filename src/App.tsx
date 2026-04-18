@@ -5,6 +5,7 @@ import {
 } from "./engine/metronomeEngine";
 import { DelayTestPanel } from "./components/DelayTestPanel";
 import { useMetronomeStore } from "./state/metronomeStore";
+import { usePlaybackCalibrationStore } from "./state/playbackCalibrationStore";
 import { calculatePosition, type TransportPosition } from "./transport/transport";
 import { replaceUrlFromState } from "./url/phase0Url";
 import "./styles.css";
@@ -22,13 +23,19 @@ function App() {
     start,
     stop,
   } = useMetronomeStore();
+  const playbackOffsetMs = usePlaybackCalibrationStore(
+    (state) => state.playbackOffsetMs,
+  );
   const engineRef = useRef<MetronomeEngine | null>(null);
   const urlState = useMemo(
     () => ({ bpm, stepsPerBeat, swing, startAt }),
     [bpm, stepsPerBeat, swing, startAt],
   );
   const [position, setPosition] = useState<TransportPosition>(() =>
-    calculatePosition({ bpm, stepsPerBeat, swing, startAt }, Date.now()),
+    calculatePosition(
+      { bpm, stepsPerBeat, swing, startAt },
+      Date.now() + playbackOffsetMs,
+    ),
   );
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [audioStatus, setAudioStatus] = useState<AudioStatus>(
@@ -43,11 +50,11 @@ function App() {
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
-      setPosition(calculatePosition(config, Date.now()));
+      setPosition(calculatePosition(config, Date.now() + playbackOffsetMs));
     }, 50);
 
     return () => window.clearInterval(timerId);
-  }, [config]);
+  }, [config, playbackOffsetMs]);
 
   useEffect(() => {
     if (!isPlaying || startAt === null) {
@@ -67,7 +74,7 @@ function App() {
     let isActive = true;
     setAudioStatus("starting");
     engine
-      .start({ bpm, stepsPerBeat, swing, startAt })
+      .start({ bpm, stepsPerBeat, swing, startAt, playbackOffsetMs })
       .then(() => {
         if (isActive) {
           setAudioStatus("ready");
@@ -85,7 +92,15 @@ function App() {
       isActive = false;
       engine.stop();
     };
-  }, [audioEnabled, bpm, isPlaying, startAt, stepsPerBeat, swing]);
+  }, [
+    audioEnabled,
+    bpm,
+    isPlaying,
+    playbackOffsetMs,
+    startAt,
+    stepsPerBeat,
+    swing,
+  ]);
 
   async function enableAudio() {
     setAudioStatus("starting");
@@ -101,7 +116,7 @@ function App() {
   }
 
   async function handlePlay() {
-    start();
+    start(Date.now() + playbackOffsetMs);
     await enableAudio();
   }
 
@@ -146,7 +161,9 @@ function App() {
               max="300"
               step="1"
               value={bpm}
-              onChange={(event) => setBpm(Number(event.target.value))}
+              onChange={(event) =>
+                setBpm(Number(event.target.value), Date.now() + playbackOffsetMs)
+              }
             />
           </label>
 

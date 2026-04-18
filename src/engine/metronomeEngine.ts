@@ -8,6 +8,7 @@ import {
 
 type EngineConfig = Omit<TransportConfig, "startAt"> & {
   startAt: number;
+  playbackOffsetMs: number;
 };
 
 const LOOKAHEAD_MS = 140;
@@ -41,7 +42,9 @@ export class MetronomeEngine {
 
     this.nextStep = Math.max(
       0,
-      Math.floor(calculatePosition(config, Date.now()).step),
+      Math.floor(
+        calculatePosition(config, Date.now() + config.playbackOffsetMs).step,
+      ),
     );
     this.schedule();
     this.timerId = window.setInterval(() => this.schedule(), TICK_MS);
@@ -55,7 +58,9 @@ export class MetronomeEngine {
     this.config = config;
     this.nextStep = Math.max(
       0,
-      Math.floor(calculatePosition(config, Date.now()).step),
+      Math.floor(
+        calculatePosition(config, Date.now() + config.playbackOffsetMs).step,
+      ),
     );
   }
 
@@ -81,7 +86,9 @@ export class MetronomeEngine {
     const stepLengthMs = msPerStep(this.config.bpm, this.config.stepsPerBeat);
 
     while (true) {
-      const eventMs = scheduledStepTimeMs(this.config, this.nextStep);
+      const eventMs =
+        scheduledStepTimeMs(this.config, this.nextStep) -
+        this.config.playbackOffsetMs;
       if (eventMs > horizonMs) {
         break;
       }
