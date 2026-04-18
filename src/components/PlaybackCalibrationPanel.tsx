@@ -75,6 +75,8 @@ export function PlaybackCalibrationPanel() {
     setAudioStatus("idle");
   }
 
+  const flashState = getTimeSignalFlashState(currentNowMs + playbackOffsetMs);
+
   return (
     <section className="playback-calibration">
       <div className="section-header">
@@ -147,6 +149,11 @@ export function PlaybackCalibrationPanel() {
           />
         </div>
 
+        <div
+          className={`time-signal-flash time-signal-flash-${flashState}`}
+          aria-label="Time signal visual indicator"
+        />
+
         <div className="transport-row">
           <button
             className="primary"
@@ -183,4 +190,14 @@ function formatLocalTime(nowMs: number): string {
   });
   const milliseconds = String(date.getMilliseconds()).padStart(3, "0");
   return `${time}.${milliseconds}`;
+}
+
+function getTimeSignalFlashState(nowMs: number): "idle" | "second" | "boundary" {
+  const millisecond = Math.floor(nowMs % 1000);
+  if (millisecond >= 120) {
+    return "idle";
+  }
+
+  const second = Math.floor(nowMs / 1000);
+  return second % 10 === 0 ? "boundary" : "second";
 }

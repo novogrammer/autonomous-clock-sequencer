@@ -243,6 +243,33 @@ input {
   margin-top: 16px;
 }
 
+.time-signal-flash {
+  height: 10px;
+  margin-top: 12px;
+  border-radius: 999px;
+  background: #ded8cf;
+  transition:
+    background-color 90ms linear,
+    box-shadow 90ms linear,
+    opacity 90ms linear;
+}
+
+.time-signal-flash-idle {
+  opacity: 0.55;
+}
+
+.time-signal-flash-second {
+  background: #4aa3a8;
+  box-shadow: 0 0 0 3px rgb(74 163 168 / 18%);
+  opacity: 1;
+}
+
+.time-signal-flash-boundary {
+  background: #d88a1d;
+  box-shadow: 0 0 0 5px rgb(216 138 29 / 22%);
+  opacity: 1;
+}
+
 .app-footer {
   margin-top: 18px;
   font-size: 0.9rem;
