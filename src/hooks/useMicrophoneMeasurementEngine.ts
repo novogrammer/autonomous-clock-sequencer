@@ -4,6 +4,10 @@ import {
   type MeasurementClickEvent,
   type MeasurementResult,
 } from "../engine/microphoneMeasurementEngine";
+import {
+  calculateMeasurementStats,
+  type MeasurementStats,
+} from "../measurement/measurementStats";
 
 export type MeasurementStatus = "idle" | "starting" | "ready" | "blocked";
 
@@ -27,11 +31,6 @@ type MicrophoneMeasurementEngineControls = {
   stopMeasurement: () => void;
 };
 
-type MeasurementStats = {
-  averageText: string;
-  stdDevText: string;
-};
-
 const MAX_RESULTS = 12;
 
 export function useMicrophoneMeasurementEngine({
@@ -42,7 +41,7 @@ export function useMicrophoneMeasurementEngine({
   const [status, setStatus] = useState<MeasurementStatus>("idle");
   const [clickCounts, setClickCounts] = useState<ClickCounts>({ a: 0, b: 0 });
   const [results, setResults] = useState<MeasurementResult[]>([]);
-  const stats = useMemo(() => calculateStats(results), [results]);
+  const stats = useMemo(() => calculateMeasurementStats(results), [results]);
   const latestResult = results[0] ?? null;
 
   useEffect(() => {
@@ -99,23 +98,5 @@ export function useMicrophoneMeasurementEngine({
     stats,
     startMeasurement,
     stopMeasurement,
-  };
-}
-
-function calculateStats(results: MeasurementResult[]): MeasurementStats {
-  if (results.length === 0) {
-    return { averageText: "-", stdDevText: "-" };
-  }
-
-  const values = results.map((result) => result.skewMs);
-  const average =
-    values.reduce((total, value) => total + value, 0) / values.length;
-  const variance =
-    values.reduce((total, value) => total + (value - average) ** 2, 0) /
-    values.length;
-
-  return {
-    averageText: `${average.toFixed(1)}ms`,
-    stdDevText: `${Math.sqrt(variance).toFixed(1)}ms`,
   };
 }
