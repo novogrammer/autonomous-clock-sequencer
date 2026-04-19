@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { roundedNowMs } from "../clock/clock";
-import { retimeStartAtForBpmChange } from "../transport/transport";
 import { parsePhase0Url } from "../url/phase0Url";
 
 export type MetronomeState = {
@@ -9,7 +8,7 @@ export type MetronomeState = {
   swing: number;
   startAt: number | null;
   isPlaying: boolean;
-  setBpm: (bpm: number, nowMs?: number) => void;
+  setBpm: (bpm: number) => void;
   setStepsPerBeat: (stepsPerBeat: number) => void;
   setSwing: (swing: number) => void;
   start: (nowMs?: number) => void;
@@ -26,15 +25,7 @@ export const useMetronomeStore = create<MetronomeState>((set) => ({
   ...initialUrlState,
   isPlaying: initialUrlState.startAt !== null,
 
-  setBpm: (bpm, nowMs = roundedNowMs()) =>
-    set((state) => {
-      const nextBpm = clamp(bpm, 20, 300);
-      const startAt = state.isPlaying
-        ? retimeStartAtForBpmChange(state, nextBpm, nowMs)
-        : state.startAt;
-
-      return { bpm: nextBpm, startAt };
-    }),
+  setBpm: (bpm) => set({ bpm: clamp(bpm, 20, 300) }),
 
   setStepsPerBeat: (stepsPerBeat) =>
     set({ stepsPerBeat: Math.round(clamp(stepsPerBeat, 1, 16)) }),

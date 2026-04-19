@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import { nowMs, roundedNowMs, secondsToMs } from "../clock/clock";
+import { roundedNowMs, secondsToMs } from "../clock/clock";
 import {
   useMetronomeEngine,
   type AudioStatus,
@@ -68,7 +68,7 @@ export function MetronomePanel() {
   }
 
   function handleBpmChange(event: ChangeEvent<HTMLInputElement>) {
-    setBpm(Number(event.target.value), nowMs());
+    setBpm(Number(event.target.value));
   }
 
   function handleStepsPerBeatChange(event: ChangeEvent<HTMLInputElement>) {

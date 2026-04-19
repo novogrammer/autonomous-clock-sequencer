@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { secondsToMs } from "../clock/clock";
 import {
   calculatePosition,
-  retimeStartAtForBpmChange,
   scheduledStepTimeMs,
 } from "./transport";
 
@@ -36,19 +35,16 @@ describe("transport", () => {
     expect(position.beatInLoop).toBe(0);
   });
 
-  it("BPM変更時に現在の位相を維持する", () => {
-    const oldConfig = { bpm: 120, stepsPerBeat: 4, swing: 0, startAt };
+  it("BPM変更時もstartAtを変えずに位置を再計算する", () => {
     const nowMs = startAt + secondsToMs(1.5);
-    const nextStartAt = retimeStartAtForBpmChange(oldConfig, 60, nowMs);
-
-    expect(nextStartAt).toBe(secondsToMs(98.5));
-
-    const before = calculatePosition(oldConfig, nowMs);
-    const after = calculatePosition(
-      { ...oldConfig, bpm: 60, startAt: nextStartAt },
+    const position = calculatePosition(
+      { bpm: 60, stepsPerBeat: 4, swing: 0, startAt },
       nowMs,
     );
-    expect(after.phaseBeats).toBe(before.phaseBeats);
+
+    expect(position.phaseBeats).toBe(1.5);
+    expect(position.beat).toBe(1);
+    expect(position.step).toBe(6);
   });
 
   it("swing有効時に奇数stepを遅らせる", () => {

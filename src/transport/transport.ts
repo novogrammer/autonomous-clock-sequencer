@@ -65,20 +65,6 @@ export function calculatePosition(
   };
 }
 
-export function retimeStartAtForBpmChange(
-  oldConfig: TransportConfig,
-  newBpm: number,
-  nowMs: number,
-): number | null {
-  if (oldConfig.startAt === null) {
-    return null;
-  }
-
-  const currentPosition = calculatePosition(oldConfig, nowMs);
-  const elapsedAtNewBpm = currentPosition.phaseBeats * msPerBeat(newBpm);
-  return Math.round(nowMs - elapsedAtNewBpm);
-}
-
 export function scheduledStepTimeMs(
   config: Pick<TransportConfig, "bpm" | "stepsPerBeat" | "swing" | "startAt">,
   step: number,

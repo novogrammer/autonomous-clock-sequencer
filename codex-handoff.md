@@ -8,7 +8,7 @@ Phase 0 は実装済みで、以下が動く状態になっている。
 
 - `startAt` 基準のメトロノーム再生
 - BPM / stepsPerBeat / swing の操作
-- BPM 変更時の位相維持
+- BPM 変更時は `startAt` を維持したまま位置を再計算
 - URL からの state 復元
 - state 変更時の URL 更新
 - Tone.js によるメトロノーム音
@@ -79,9 +79,9 @@ Phase 0 は実装済みで、以下が動く状態になっている。
 ### BPM 変更
 
 - BPM 変更は即時反映する
-- 現在の再生位相を維持する
-- そのため `startAt` を逆算し直す
-- この計算にはローカル補正値を混ぜない
+- `startAt` は再計算しない
+- Unix time 基準の共有グリッドを優先する
+- 操作した端末の現在位相維持より、同じ URL の各端末で同じグリッドになることを優先する
 
 ### URL 更新
 
@@ -149,7 +149,7 @@ npm test
 - `src/transport/transport.test.ts`
   - `startAt` からの beat / step 計算
   - loop 内位置
-  - BPM 変更時の位相維持
+  - BPM 変更時も `startAt` を変えない位置計算
   - swing による奇数 step 遅延
 
 - `src/calibration/timeSignal.test.ts`
@@ -189,7 +189,7 @@ npm run build
 確認したいこと:
 
 1. メトロノームの再生・停止
-2. BPM 変更時に位相が不自然に飛ばないこと
+2. BPM 変更時に `startAt` が変わらず、共有グリッド基準で位置が再計算されること
 3. URL に `bpm`, `stepsPerBeat`, `swing`, `startAt` だけが共有対象として入ること
 4. `playbackOffsetMs` が URL に混ざらないこと
 5. playback calibration が blocked にならず開始・停止できること
