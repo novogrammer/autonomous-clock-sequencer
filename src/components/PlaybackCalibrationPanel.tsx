@@ -1,3 +1,7 @@
+import {
+  formatLocalTime,
+  getTimeSignalFlashState,
+} from "../calibration/timeSignal";
 import { useCurrentNowMs } from "../hooks/useCurrentNowMs";
 import { usePlaybackCalibrationEngine } from "../hooks/usePlaybackCalibrationEngine";
 import { usePlaybackCalibrationRuntimeStore } from "../state/playbackCalibrationRuntimeStore";
@@ -120,26 +124,4 @@ export function PlaybackCalibrationPanel() {
       </div>
     </section>
   );
-}
-
-function formatLocalTime(nowMs: number): string {
-  const date = new Date(nowMs);
-  const time = date.toLocaleTimeString("ja-JP", {
-    hour12: false,
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  });
-  const milliseconds = String(date.getMilliseconds()).padStart(3, "0");
-  return `${time}.${milliseconds}`;
-}
-
-function getTimeSignalFlashState(nowMs: number): "idle" | "second" | "boundary" {
-  const millisecond = Math.floor(nowMs % 1000);
-  if (millisecond >= 120) {
-    return "idle";
-  }
-
-  const second = Math.floor(nowMs / 1000);
-  return second % 10 === 0 ? "boundary" : "second";
 }
