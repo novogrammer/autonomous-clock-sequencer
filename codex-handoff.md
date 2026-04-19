@@ -1,69 +1,36 @@
 # codex-handoff.md
 
-## 今回の作業対象
+## 現在の状態
 
-今回は **Phase 0** を実装する。  
-最終目標はシーケンサーだが、いきなり pattern / kit / 3トラック UI は作らない。
+このリポジトリは **Phase 0** として、メトロノームを中心に `startAt` 基準の時間モデルを検証している。
 
-まずは **メトロノームだけで時間モデルを検証する**。
+Phase 0 は実装済みで、以下が動く状態になっている。
 
-この Phase 0 は捨て実装ではない。  
-後の Phase 1 以降に接続できる土台として作る。
-
----
-
-## 最終的に目指しているもの
-
-- Webブラウザで動くシーケンサー
-- スマホでも動く
-- 再生中の通信はしない
-- URL を共有することで各端末が同じ記述を読む
-- `startAt` を基準に各端末がローカルで再生位置を計算する
-- 将来的に `pattern` と `kit` を URL に載せる
-- QRコードは URL の配布手段として使う
-
-ただし今回は、そこへ到達する前段階として、時間モデルだけ検証する。
-
----
-
-## Phase 0 の目的
-
-確認したいのは以下。
-
-1. `startAt` 基準の時間モデルが破綻しないか
-2. 同じ URL を複数端末で開いたとき、近い拍位置になるか
-3. BPM変更時に `startAt` を逆算し直す方式が自然に動くか
-4. Tone.js でスマホを含めて最低限安定するか
-5. 後からシーケンサーへ拡張できる構造になっているか
-
----
-
-## Phase 0 で実装するもの
-
-- メトロノーム再生
-- React UI
-- Zustand store
-- Tone.js によるクリック音
-- BPM 入力
-- stepsPerBeat 入力
-- swing 入力
-- 再生 / 停止
-- 現在位置の簡易表示
+- `startAt` 基準のメトロノーム再生
+- BPM / stepsPerBeat / swing の操作
+- BPM 変更時の位相維持
 - URL からの state 復元
 - state 変更時の URL 更新
+- Tone.js によるメトロノーム音
+- playback calibration
+- microphone measurement
+- Vitest による純粋ロジックのテスト
+
+直近の手元確認では、画面上の基本動作はぱっと見で動いている。
 
 ---
 
-## Phase 0 で実装しないもの
+## 目指しているもの
 
-- pattern UI
-- kit UI
-- 3トラック UI
-- QRコード表示
-- URLコピーUIの作り込み
-- デザイン作り込み
-- 複雑な音色編集
-- 複数ページ構成
+最終的には、Web ブラウザで動く自律同期型シーケンサーを目指す。
+
+- 再生中の通信はしない
+- URL を共有することで各端末が同じ記述を読む
+- 各端末は `startAt` を基準にローカルで現在位置を計算する
+- 将来的に `pattern` と `kit` を URL に載せる
+- QR コードは URL の配布手段として扱う
+
+まだ pattern / kit / QR コードは実装していない。
 
 ---
 
@@ -73,12 +40,60 @@
 - TypeScript
 - Zustand
 - Tone.js
+- Vitest
+- Vite
 
 ---
 
-## URL パラメーター
+## 現在の構成
 
-Phase 0 で使用するもの:
+- `src/transport`: `startAt` 基準の時間計算
+- `src/engine`: Tone.js / Web Audio を使う実行系
+- `src/hooks`: React state と engine の接続、副作用管理
+- `src/state`: Zustand store
+- `src/url`: Phase 0 URL の parse / build
+- `src/calibration`: calibration 表示用の純粋ロジック
+- `src/measurement`: measurement 表示用の純粋ロジック
+- `src/components`: UI
+
+責務分離の方針として、React / Zustand 側には Tone.js や AudioNode の実行オブジェクトを持たせない。実行系は `engine`、React との接続は `hooks` に寄せている。
+
+---
+
+## 重要な設計メモ
+
+### `startAt`
+
+- `startAt` は共有 URL に載る絶対時刻
+- Unix time ミリ秒で扱う
+- 再生位置は `startAt` と現在時刻から都度計算する
+- `startAt` が過去でも、その値を基準に現在位置を計算してよい
+
+### `playbackOffsetMs`
+
+- `playbackOffsetMs` は端末ごとのローカル再生補正値
+- URL には載せない
+- `startAt` に混ぜない
+- 音声スケジューリングと表示確認にだけ使う
+
+### BPM 変更
+
+- BPM 変更は即時反映する
+- 現在の再生位相を維持する
+- そのため `startAt` を逆算し直す
+- この計算にはローカル補正値を混ぜない
+
+### URL 更新
+
+- 通常の URL 更新は `history.replaceState()` を使う
+- `pushState()` は基本使わない
+- 操作ごとに履歴を増やさない
+
+---
+
+## Phase 0 の URL パラメーター
+
+現在使うもの:
 
 - `bpm`
 - `stepsPerBeat`
@@ -87,144 +102,113 @@ Phase 0 で使用するもの:
 
 例:
 
-`?bpm=120&stepsPerBeat=4&swing=0&startAt=1776412800000`
+```text
+?bpm=120&stepsPerBeat=4&swing=0&startAt=1776412800000
+```
 
-### 意味
-- `bpm`: テンポ
-- `stepsPerBeat`: 1拍あたりの分割数
-- `swing`: 0 はストレート、0より大きい値は swing 有効
-- `startAt`: 再生基準時刻（Unix time ミリ秒）
+将来使う想定のもの:
 
----
-
-## URL 復元
-
-- 初回ロード時に `location.search` を読む
-- query param をパースして Zustand state を復元する
-
----
-
-## URL 更新
-
-- state が変化したら `history.replaceState()` で URL を更新する
-- `pushState()` は基本使わない
-- 毎操作で履歴を増やさない
-
----
-
-## startAt 方針
-
-- `startAt` は時間モデルの中心
-- `startAt` があれば、それを基準に現在位置を計算する
-- `startAt` がない状態で再生開始したら、その時点の現在時刻を `startAt` に設定する
-- `startAt` は URL に反映する
-- `startAt` が過去でも、その時刻を基準に現在位置を計算してよい
-
----
-
-## BPM 変更方針
-
-- BPM変更は即時反映
-- ただし現在の再生位相は維持する
-- そのため `startAt` を逆算し直す
-- 既存の先読み予約は捨てて再スケジュールする
-
----
-
-## swing 方針
-
-- `swing=0` はストレート
-- `swing>0` は swing 有効
-- UI から変更できてよい
-- 後の Phase 1 でもこの表現を引き継ぐ
-
-### 初期値
-- `swing` の初期値は `0`
-
----
-
-## 設計の希望
-
-### Transport 層
-- 絶対時刻から現在位置を計算する
-- 音は鳴らさない
-- `startAt`, `bpm`, `stepsPerBeat`, `swing` を扱う
-
-### Scheduler / Engine 層
-- Tone.js を使ってクリック音を鳴らす
-- 先読みスケジューリングを行う
-- React state に生インスタンスを深く持たない
-
-### State 層
-- Zustand を使う
-- URL と相互変換しやすい値を持つ
-- シリアライズ不能なオブジェクトは避ける
-
-### UI 層
-- 簡素でよい
-- 検証重視
-
----
-
-## Phase 0 のUI希望
-
-最低限以下を置く。
-
-- 再生ボタン
-- 停止ボタン
-- BPM入力
-- stepsPerBeat入力
-- swing入力
-- 現在位置の表示
-- 現在URLが確認できる状態
-
-見た目の作り込みは不要。
-
----
-
-## 将来を見越した前提
-
-今回は実装しないが、後で以下を追加する想定なので、構造上は意識してほしい。
-
-### 将来の URL パラメーター
 - `loopLength`
 - `kit`
 - `pattern`
 
-### 将来の kit / pattern 方針
-- `kit` は URL 解釈ルール
-- `pattern` は `_` 区切りの `0/1` 文字列群
+---
+
+## 将来の kit / pattern 方針
+
+まだ実装しないが、以下を前提にしている。
+
+- `kit` は URL の解釈ルール
+- `kit` はトラック数、トラック順、各トラックの意味を定義する
 - 互換性が壊れる kit 変更は別 ID にする
+- `pattern` は 1 つの文字列
+- 各トラックは kit で定義された順番に並ぶ
+- 各トラックは `0/1` 文字列
+- 区切りは `_`
 
 例:
-`pattern=1000100010001000_0000100000001000_1010101010101010`
 
-Phase 0 ではまだこれを実装しないが、後から足しやすい構造にしてほしい。
+```text
+pattern=1000100010001000_0000100000001000_1010101010101010
+```
 
----
-
-## 実装優先順位
-
-1. Zustand store の最小構造
-2. URL <-> state 変換
-3. Transport の最小実装
-4. Tone.js でのメトロノーム再生
-5. BPM / swing / startAt 連動
-6. UI
-7. 検証しやすい表示の追加
+pattern 読み込み時は、足りなければ補完、長すぎれば切り捨て、不正文字は警告しつつ `0` 扱いにする。エラーで停止しない。
 
 ---
 
-## 期待すること
+## テスト
 
-- Phase 0 を動く形で実装する
-- 後からシーケンサーへ拡張しやすい構造にする
-- 不要な機能を入れすぎない
-- 時間モデルの検証を優先する
+実行:
 
-## 期待しないこと
+```bash
+npm test
+```
 
-- 完成版UI
-- 3トラックシーケンサーの先行実装
-- kit / pattern の本実装
-- QRコードまわりの作り込み
+現在のテスト対象:
+
+- `src/transport/transport.test.ts`
+  - `startAt` からの beat / step 計算
+  - loop 内位置
+  - BPM 変更時の位相維持
+  - swing による奇数 step 遅延
+
+- `src/calibration/timeSignal.test.ts`
+  - 10 秒境界の flash state
+  - 通常秒の flash state
+  - 120ms 以降の idle
+
+- `src/measurement/measurementStats.test.ts`
+  - 結果なし
+  - 平均
+  - 標準偏差
+
+ビルド:
+
+```bash
+npm run build
+```
+
+---
+
+## 直近で行った整理
+
+- `MetronomePanel` の副作用を hooks に分離
+- `PlaybackCalibrationPanel` の engine lifecycle を hook に分離
+- `MicrophoneMeasurementPanel` の engine lifecycle と測定結果 state を hook に分離
+- `Readout` を共通コンポーネント化
+- calibration の時刻表示ロジックを `src/calibration` に分離
+- measurement の統計計算を `src/measurement` に分離
+- 数値入力の変更処理を名前付き handler に整理
+
+---
+
+## 次の候補
+
+優先度が高いのは、追加リファクタリングより実機・ブラウザ確認。
+
+確認したいこと:
+
+1. メトロノームの再生・停止
+2. BPM 変更時に位相が不自然に飛ばないこと
+3. URL に `bpm`, `stepsPerBeat`, `swing`, `startAt` だけが共有対象として入ること
+4. `playbackOffsetMs` が URL に混ざらないこと
+5. playback calibration が blocked にならず開始・停止できること
+6. microphone measurement がマイク許可後に ready になり、停止できること
+
+その後の実装候補:
+
+- Phase 0 の検証手順を README に追記する
+- `loopLength` の扱いを state / URL に追加するか検討する
+- Phase 1 として pattern / kit の最小 URL モデルを設計する
+- QR コードは URL 配布手段として後で追加する
+
+---
+
+## まだやらないこと
+
+- pattern UI
+- kit UI
+- 3トラックシーケンサー UI
+- QR コード表示
+- 複雑な音色編集
+- 完成版としてのデザイン作り込み
