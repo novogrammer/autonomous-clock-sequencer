@@ -7,6 +7,7 @@ import { useMetronomePosition } from "../hooks/useMetronomePosition";
 import { useMetronomeUrlSync } from "../hooks/useMetronomeUrlSync";
 import { useMetronomeStore } from "../state/metronomeStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
+import { Readout } from "./Readout";
 
 export function MetronomePanel() {
   const {
@@ -157,13 +158,4 @@ function StatusBadge({
 }) {
   const label = isPlaying ? audioStatus : "stopped";
   return <span className={`status status-${label}`}>{label}</span>;
-}
-
-function Readout({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="readout">
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </div>
-  );
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMicrophoneMeasurementEngine } from "../hooks/useMicrophoneMeasurementEngine";
+import { Readout } from "./Readout";
 
 const DEFAULT_FREQUENCY_A_HZ = 1500;
 const DEFAULT_FREQUENCY_B_HZ = 2500;
@@ -82,14 +83,5 @@ export function MicrophoneMeasurementPanel() {
         </div>
       </div>
     </section>
-  );
-}
-
-function Readout({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="readout">
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </div>
   );
 }

@@ -2,6 +2,7 @@ import { useCurrentNowMs } from "../hooks/useCurrentNowMs";
 import { usePlaybackCalibrationEngine } from "../hooks/usePlaybackCalibrationEngine";
 import { usePlaybackCalibrationRuntimeStore } from "../state/playbackCalibrationRuntimeStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
+import { Readout } from "./Readout";
 
 const PLAYBACK_OFFSET_STEPS_MS = [-1000, -100, -10, -1, 1, 10, 100, 1000] as const;
 const CLICK_FREQUENCY_PRESETS_HZ = [1500, 2000, 2500, 3000] as const;
@@ -118,15 +119,6 @@ export function PlaybackCalibrationPanel() {
         </div>
       </div>
     </section>
-  );
-}
-
-function Readout({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="readout">
-      <span>{label}</span>
-      <strong>{value}</strong>
-    </div>
   );
 }
 
