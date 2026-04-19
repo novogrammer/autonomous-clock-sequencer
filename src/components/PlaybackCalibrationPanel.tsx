@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import {
   formatLocalTime,
   getTimeSignalFlashState,
@@ -32,6 +33,14 @@ export function PlaybackCalibrationPanel() {
 
   const flashState = getTimeSignalFlashState(currentNowMs + playbackOffsetMs);
 
+  function handlePlaybackOffsetChange(event: ChangeEvent<HTMLInputElement>) {
+    setPlaybackOffsetMs(Number(event.target.value));
+  }
+
+  function handleClickFrequencyChange(event: ChangeEvent<HTMLInputElement>) {
+    setClickFrequencyHz(Number(event.target.value));
+  }
+
   return (
     <section className="playback-calibration">
       <div className="section-header">
@@ -52,9 +61,7 @@ export function PlaybackCalibrationPanel() {
               max="10000"
               step="1"
               value={playbackOffsetMs}
-              onChange={(event) =>
-                setPlaybackOffsetMs(Number(event.target.value))
-              }
+              onChange={handlePlaybackOffsetChange}
             />
           </label>
 
@@ -77,9 +84,7 @@ export function PlaybackCalibrationPanel() {
               max="4000"
               step="100"
               value={clickFrequencyHz}
-              onChange={(event) =>
-                setClickFrequencyHz(Number(event.target.value))
-              }
+              onChange={handleClickFrequencyChange}
             />
           </label>
 

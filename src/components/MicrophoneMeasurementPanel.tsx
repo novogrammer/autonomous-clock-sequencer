@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import { useState } from "react";
 import { useMicrophoneMeasurementEngine } from "../hooks/useMicrophoneMeasurementEngine";
 import { Readout } from "./Readout";
@@ -17,6 +18,14 @@ export function MicrophoneMeasurementPanel() {
     startMeasurement,
     stopMeasurement,
   } = useMicrophoneMeasurementEngine({ frequencyAHz, frequencyBHz });
+
+  function handleFrequencyAChange(event: ChangeEvent<HTMLInputElement>) {
+    setFrequencyAHz(Number(event.target.value));
+  }
+
+  function handleFrequencyBChange(event: ChangeEvent<HTMLInputElement>) {
+    setFrequencyBHz(Number(event.target.value));
+  }
 
   return (
     <section className="microphone-measurement">
@@ -39,7 +48,7 @@ export function MicrophoneMeasurementPanel() {
               step="100"
               value={frequencyAHz}
               disabled={status === "ready" || status === "starting"}
-              onChange={(event) => setFrequencyAHz(Number(event.target.value))}
+              onChange={handleFrequencyAChange}
             />
           </label>
 
@@ -52,7 +61,7 @@ export function MicrophoneMeasurementPanel() {
               step="100"
               value={frequencyBHz}
               disabled={status === "ready" || status === "starting"}
-              onChange={(event) => setFrequencyBHz(Number(event.target.value))}
+              onChange={handleFrequencyBChange}
             />
           </label>
         </div>

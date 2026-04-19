@@ -1,3 +1,4 @@
+import type { ChangeEvent } from "react";
 import { nowMs, roundedNowMs } from "../clock/clock";
 import {
   useMetronomeEngine,
@@ -66,6 +67,18 @@ export function MetronomePanel() {
     stop();
   }
 
+  function handleBpmChange(event: ChangeEvent<HTMLInputElement>) {
+    setBpm(Number(event.target.value), nowMs());
+  }
+
+  function handleStepsPerBeatChange(event: ChangeEvent<HTMLInputElement>) {
+    setStepsPerBeat(Number(event.target.value));
+  }
+
+  function handleSwingChange(event: ChangeEvent<HTMLInputElement>) {
+    setSwing(Number(event.target.value));
+  }
+
   return (
     <>
       <div className="header">
@@ -101,9 +114,7 @@ export function MetronomePanel() {
             max="300"
             step="1"
             value={bpm}
-            onChange={(event) =>
-              setBpm(Number(event.target.value), nowMs())
-            }
+            onChange={handleBpmChange}
           />
         </label>
 
@@ -115,7 +126,7 @@ export function MetronomePanel() {
             max="16"
             step="1"
             value={stepsPerBeat}
-            onChange={(event) => setStepsPerBeat(Number(event.target.value))}
+            onChange={handleStepsPerBeatChange}
           />
         </label>
 
@@ -127,7 +138,7 @@ export function MetronomePanel() {
             max="0.95"
             step="0.05"
             value={swing}
-            onChange={(event) => setSwing(Number(event.target.value))}
+            onChange={handleSwingChange}
           />
         </label>
       </div>
