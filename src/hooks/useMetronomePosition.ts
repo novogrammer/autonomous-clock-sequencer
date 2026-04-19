@@ -14,12 +14,11 @@ export function useMetronomePosition({
   bpm,
   stepsPerBeat,
   swing,
-  startAt,
   playbackOffsetMs,
 }: MetronomePositionParams): TransportPosition {
   const config = useMemo(
-    () => ({ bpm, stepsPerBeat, swing, startAt }),
-    [bpm, stepsPerBeat, swing, startAt],
+    () => ({ bpm, stepsPerBeat, swing }),
+    [bpm, stepsPerBeat, swing],
   );
   const [position, setPosition] = useState<TransportPosition>(() =>
     calculatePosition(config, nowMs() + playbackOffsetMs),

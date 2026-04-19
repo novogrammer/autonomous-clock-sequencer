@@ -7,14 +7,12 @@ import type { TransportConfig } from "../transport/transport";
 
 export type AudioStatus = "idle" | "locked" | "starting" | "ready" | "blocked";
 
-type EngineConfig = Omit<TransportConfig, "startAt"> & {
-  startAt: number;
+type EngineConfig = TransportConfig & {
   playbackOffsetMs: number;
   metronomeMuted: boolean;
 };
 
-type MetronomeEngineParams = Omit<TransportConfig, "startAt"> & {
-  startAt: number | null;
+type MetronomeEngineParams = TransportConfig & {
   isPlaying: boolean;
   playbackOffsetMs: number;
 };
@@ -31,32 +29,28 @@ export function useMetronomeEngine({
   bpm,
   stepsPerBeat,
   swing,
-  startAt,
   isPlaying,
   playbackOffsetMs,
 }: MetronomeEngineParams): MetronomeEngineControls {
   const engineRef = useRef<MetronomeEngine | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [metronomeMuted, setMetronomeMuted] = useState(false);
-  const [audioStatus, setAudioStatus] = useState<AudioStatus>(
-    startAt === null ? "idle" : "locked",
-  );
+  const [audioStatus, setAudioStatus] = useState<AudioStatus>("idle");
   const engineConfig = useMemo(
-    () => createEngineConfig({
+    () => ({
       bpm,
       stepsPerBeat,
       swing,
-      startAt,
       playbackOffsetMs,
       metronomeMuted,
     }),
-    [bpm, metronomeMuted, playbackOffsetMs, startAt, stepsPerBeat, swing],
+    [bpm, metronomeMuted, playbackOffsetMs, stepsPerBeat, swing],
   );
-  const engineConfigRef = useRef<typeof engineConfig>(null);
+  const engineConfigRef = useRef<EngineConfig>(engineConfig);
   engineConfigRef.current = engineConfig;
 
   useEffect(() => {
-    if (!isPlaying || startAt === null) {
+    if (!isPlaying) {
       engineRef.current?.stop();
       setAudioStatus("idle");
       return;
@@ -68,17 +62,12 @@ export function useMetronomeEngine({
       return;
     }
 
-    const initialEngineConfig = engineConfigRef.current;
-    if (initialEngineConfig === null) {
-      return;
-    }
-
     const engine = engineRef.current ?? new MetronomeEngine();
     engineRef.current = engine;
     let isActive = true;
     setAudioStatus("starting");
     engine
-      .start(initialEngineConfig)
+      .start(engineConfigRef.current)
       .then(() => {
         if (isActive) {
           setAudioStatus("ready");
@@ -96,10 +85,10 @@ export function useMetronomeEngine({
       isActive = false;
       engine.stop();
     };
-  }, [audioEnabled, isPlaying, startAt]);
+  }, [audioEnabled, isPlaying]);
 
   useEffect(() => {
-    if (!isPlaying || !audioEnabled || engineConfig === null) {
+    if (!isPlaying || !audioEnabled) {
       return;
     }
 
@@ -129,29 +118,5 @@ export function useMetronomeEngine({
     metronomeMuted,
     enableAudio,
     toggleMetronomeMuted,
-  };
-}
-
-function createEngineConfig({
-  bpm,
-  stepsPerBeat,
-  swing,
-  startAt,
-  playbackOffsetMs,
-  metronomeMuted,
-}: Omit<EngineConfig, "startAt"> & {
-  startAt: number | null;
-}): EngineConfig | null {
-  if (startAt === null) {
-    return null;
-  }
-
-  return {
-    bpm,
-    stepsPerBeat,
-    swing,
-    startAt,
-    playbackOffsetMs,
-    metronomeMuted,
   };
 }

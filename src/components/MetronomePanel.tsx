@@ -15,7 +15,6 @@ export function MetronomePanel() {
     bpm,
     stepsPerBeat,
     swing,
-    startAt,
     isPlaying,
     setBpm,
     setStepsPerBeat,
@@ -30,7 +29,6 @@ export function MetronomePanel() {
     bpm,
     stepsPerBeat,
     swing,
-    startAt,
     playbackOffsetMs,
   });
   const currentUrl = useMetronomeUrlSync({
@@ -48,7 +46,6 @@ export function MetronomePanel() {
     bpm,
     stepsPerBeat,
     swing,
-    startAt,
     isPlaying,
     playbackOffsetMs,
   });
@@ -143,7 +140,6 @@ export function MetronomePanel() {
       </div>
 
       <div className="position-grid">
-        <Readout label="startAt" value={String(startAt)} />
         <Readout
           label="elapsed"
           value={`${(position.elapsedMs / secondsToMs(1)).toFixed(2)}s`}

@@ -5,7 +5,6 @@ export type MetronomeState = {
   bpm: number;
   stepsPerBeat: number;
   swing: number;
-  startAt: number;
   isPlaying: boolean;
   setBpm: (bpm: number) => void;
   setStepsPerBeat: (stepsPerBeat: number) => void;
@@ -15,8 +14,6 @@ export type MetronomeState = {
   hydrateFromUrl: (search: string) => void;
 };
 
-const FIXED_START_AT_MS = 0;
-
 const initialUrlState =
   typeof window === "undefined"
     ? { bpm: 120, stepsPerBeat: 4, swing: 0 }
@@ -24,7 +21,6 @@ const initialUrlState =
 
 export const useMetronomeStore = create<MetronomeState>((set) => ({
   ...initialUrlState,
-  startAt: FIXED_START_AT_MS,
   isPlaying: false,
 
   setBpm: (bpm) => set({ bpm: clamp(bpm, 20, 300) }),
@@ -37,14 +33,13 @@ export const useMetronomeStore = create<MetronomeState>((set) => ({
   start: () =>
     set({
       isPlaying: true,
-      startAt: FIXED_START_AT_MS,
     }),
 
-  stop: () => set({ isPlaying: false, startAt: FIXED_START_AT_MS }),
+  stop: () => set({ isPlaying: false }),
 
   hydrateFromUrl: (search) => {
     const next = parsePhase0Url(search);
-    set({ ...next, startAt: FIXED_START_AT_MS, isPlaying: false });
+    set({ ...next, isPlaying: false });
   },
 }));
 

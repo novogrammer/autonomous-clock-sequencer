@@ -6,9 +6,9 @@
 
 Phase 0 は実装済みで、以下が動く状態になっている。
 
-- `startAt=0` 基準のメトロノーム再生
+- Unix epoch 基準のメトロノーム再生
 - BPM / stepsPerBeat / swing の操作
-- BPM 変更時は `startAt=0` のまま位置を再計算
+- BPM 変更時は Unix epoch 基準の共有グリッドとして位置を再計算
 - URL からの state 復元
 - state 変更時の URL 更新
 - Tone.js によるメトロノーム音
@@ -26,7 +26,7 @@ Phase 0 は実装済みで、以下が動く状態になっている。
 
 - 再生中の通信はしない
 - URL を共有することで各端末が同じ記述を読む
-- 各端末は `startAt=0` を基準にローカルで現在位置を計算する
+- 各端末は Unix epoch から続く共通グリッドとして現在位置を計算する
 - 将来的に `pattern` と `kit` を URL に載せる
 - QR コードは URL の配布手段として扱う
 
@@ -62,26 +62,22 @@ Phase 0 は実装済みで、以下が動く状態になっている。
 
 ## 重要な設計メモ
 
-### `startAt`
+### 時間基準
 
-- `startAt` は再生基準時刻
-- Phase 0 では `0` 固定
-- Unix time ミリ秒で扱う
-- URL には載せない
-- 再生位置は `startAt` と現在時刻から都度計算する
-- `startAt` が過去でも、その値を基準に現在位置を計算してよい
+- 再生位置は Unix epoch から続く共通グリッドとして計算する
+- 再生開始時刻を state や URL には持たない
+- 各端末は現在の Unix time ミリ秒から現在位置を計算する
 
 ### `playbackOffsetMs`
 
 - `playbackOffsetMs` は端末ごとのローカル再生補正値
 - URL には載せない
-- `startAt` に混ぜない
+- 共有グリッドには混ぜない
 - 音声スケジューリングと表示確認にだけ使う
 
 ### BPM 変更
 
 - BPM 変更は即時反映する
-- `startAt` は再計算しない
 - Unix time 基準の共有グリッドを優先する
 - 操作した端末の現在位相維持より、同じ URL の各端末で同じグリッドになることを優先する
 
@@ -148,9 +144,9 @@ npm test
 現在のテスト対象:
 
 - `src/transport/transport.test.ts`
-  - `startAt` からの beat / step 計算
+  - Unix epoch からの beat / step 計算
   - loop 内位置
-  - BPM 変更時も `startAt=0` を変えない位置計算
+  - BPM 変更時の Unix epoch 基準の位置計算
   - swing による奇数 step 遅延
 
 - `src/calibration/timeSignal.test.ts`
@@ -190,7 +186,7 @@ npm run build
 確認したいこと:
 
 1. メトロノームの再生・停止
-2. BPM 変更時に `startAt=0` のまま、共有グリッド基準で位置が再計算されること
+2. BPM 変更時に共有グリッド基準で位置が再計算されること
 3. URL に `bpm`, `stepsPerBeat`, `swing` だけが共有対象として入ること
 4. `playbackOffsetMs` が URL に混ざらないこと
 5. playback calibration が blocked にならず開始・停止できること

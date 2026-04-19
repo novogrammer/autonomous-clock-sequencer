@@ -7,8 +7,7 @@ import {
   type TransportConfig,
 } from "../transport/transport";
 
-type EngineConfig = Omit<TransportConfig, "startAt"> & {
-  startAt: number;
+type EngineConfig = TransportConfig & {
   playbackOffsetMs: number;
   metronomeMuted: boolean;
 };

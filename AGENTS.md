@@ -27,7 +27,7 @@
 
 ### 1. 時間モデルを中核にする
 このアプリの中心は、絶対時刻基準で再生位置を計算すること。  
-Phase 0 では `startAt=0` を基準に置き、現在位置を都度計算する。
+Unix epoch から続く共通グリッドとして、現在位置を都度計算する。
 
 ### 2. UI と音声エンジンを分離する
 React / Zustand 側に Tone.js の生インスタンスや AudioNode を深く持たない。  
@@ -47,7 +47,7 @@ Phase 0 はメトロノームだけだが、後で `pattern` や `kit` を追加
 
 ### Transport 層
 - 絶対時刻から拍位置や step 位置を計算する
-- `startAt`, `bpm`, `stepsPerBeat`, `swing` を扱う
+- `bpm`, `stepsPerBeat`, `swing` を扱う
 - 音は鳴らさない
 
 ### Scheduler / Engine 層
@@ -112,16 +112,13 @@ Phase 0 で主に使うもの:
 
 ## 時間モデル方針
 
-### startAt
-- `startAt` は再生基準時刻
-- Phase 0 では `0` 固定
-- Unix time ミリ秒で扱う
-- URL には含めない
-- `startAt` が過去でも、その値を基準に現在位置を計算してよい
+### 時間基準
+- 再生位置は Unix epoch から続く共通グリッドとして計算する
+- 再生開始時刻を state や URL には持たない
+- 各端末は現在の Unix time ミリ秒から現在位置を計算する
 
 ### BPM 変更
 - BPM変更は即時反映
-- `startAt` は再計算しない
 - Unix time 基準の共有グリッドを優先する
 - 既存の先読み予約は捨てて再スケジュールする
 

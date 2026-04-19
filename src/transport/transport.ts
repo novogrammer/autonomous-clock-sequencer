@@ -4,7 +4,6 @@ export type TransportConfig = {
   bpm: number;
   stepsPerBeat: number;
   swing: number;
-  startAt: number | null;
 };
 
 export type TransportPosition = {
@@ -33,20 +32,7 @@ export function calculatePosition(
   nowMs: number,
   loopLength = DEFAULT_LOOP_LENGTH,
 ): TransportPosition {
-  if (config.startAt === null) {
-    return {
-      elapsedMs: 0,
-      beat: 0,
-      beatInLoop: 0,
-      step: 0,
-      stepInBeat: 0,
-      stepInLoop: 0,
-      phaseBeats: 0,
-      loopLength,
-    };
-  }
-
-  const elapsedMs = Math.max(0, nowMs - config.startAt);
+  const elapsedMs = Math.max(0, nowMs);
   const phaseBeats = elapsedMs / msPerBeat(config.bpm);
   const beat = Math.floor(phaseBeats);
   const rawStep = Math.floor(phaseBeats * config.stepsPerBeat);
@@ -66,15 +52,11 @@ export function calculatePosition(
 }
 
 export function scheduledStepTimeMs(
-  config: Pick<TransportConfig, "bpm" | "stepsPerBeat" | "swing" | "startAt">,
+  config: Pick<TransportConfig, "bpm" | "stepsPerBeat" | "swing">,
   step: number,
 ): number {
-  if (config.startAt === null) {
-    throw new Error("Cannot schedule without startAt");
-  }
-
   const baseStepMs = msPerStep(config.bpm, config.stepsPerBeat);
-  const straightMs = config.startAt + step * baseStepMs;
+  const straightMs = step * baseStepMs;
   if (config.swing <= 0 || config.stepsPerBeat < 2 || step % 2 === 0) {
     return straightMs;
   }

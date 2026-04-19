@@ -28,7 +28,6 @@ export function buildPhase0Url(state: Phase0UrlState): string {
   url.searchParams.set("bpm", formatNumber(state.bpm));
   url.searchParams.set("stepsPerBeat", String(state.stepsPerBeat));
   url.searchParams.set("swing", formatNumber(state.swing));
-  url.searchParams.delete("startAt");
 
   return `${url.pathname}?${url.searchParams.toString()}${url.hash}`;
 }
