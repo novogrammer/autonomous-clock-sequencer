@@ -7,6 +7,12 @@ import type { TransportConfig } from "../transport/transport";
 
 export type AudioStatus = "idle" | "locked" | "starting" | "ready" | "blocked";
 
+type EngineConfig = Omit<TransportConfig, "startAt"> & {
+  startAt: number;
+  playbackOffsetMs: number;
+  metronomeMuted: boolean;
+};
+
 type MetronomeEngineParams = Omit<TransportConfig, "startAt"> & {
   startAt: number | null;
   isPlaying: boolean;
@@ -34,17 +40,14 @@ export function useMetronomeEngine({
     startAt === null ? "idle" : "locked",
   );
   const engineConfig = useMemo(
-    () =>
-      startAt === null
-        ? null
-        : {
-            bpm,
-            stepsPerBeat,
-            swing,
-            startAt,
-            playbackOffsetMs,
-            metronomeMuted,
-          },
+    () => createEngineConfig({
+      bpm,
+      stepsPerBeat,
+      swing,
+      startAt,
+      playbackOffsetMs,
+      metronomeMuted,
+    }),
     [bpm, metronomeMuted, playbackOffsetMs, startAt, stepsPerBeat, swing],
   );
   const engineConfigRef = useRef<typeof engineConfig>(null);
@@ -124,5 +127,29 @@ export function useMetronomeEngine({
     metronomeMuted,
     enableAudio,
     toggleMetronomeMuted,
+  };
+}
+
+function createEngineConfig({
+  bpm,
+  stepsPerBeat,
+  swing,
+  startAt,
+  playbackOffsetMs,
+  metronomeMuted,
+}: Omit<EngineConfig, "startAt"> & {
+  startAt: number | null;
+}): EngineConfig | null {
+  if (startAt === null) {
+    return null;
+  }
+
+  return {
+    bpm,
+    stepsPerBeat,
+    swing,
+    startAt,
+    playbackOffsetMs,
+    metronomeMuted,
   };
 }
