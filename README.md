@@ -54,6 +54,17 @@ npm run build
 
 このリポジトリでは nodenv のローカルバージョンとして Node.js `22.16.0` を指定しています。
 
+## 構成
+
+- `src/transport`: `startAt` 基準の時間計算
+- `src/engine`: Tone.js / Web Audio を使う実行系
+- `src/hooks`: React state と engine の接続、副作用管理
+- `src/state`: Zustand store
+- `src/url`: Phase 0 URL の parse / build
+- `src/calibration`: calibration 表示用の純粋ロジック
+- `src/measurement`: measurement 表示用の純粋ロジック
+- `src/components`: UI
+
 ## メモ
 
 共有 URL を別タブや別ブラウザで開くと、`startAt` を基準に再生位置は復元されます。
