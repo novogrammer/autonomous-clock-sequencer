@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { MicrophoneMeasurementPanel } from "./MicrophoneMeasurementPanel";
 import { PlaybackCalibrationPanel } from "./PlaybackCalibrationPanel";
 
 export function CalibrationPanel() {
+  const [isOpen, setOpen] = useState(false);
+
   return (
     <section className="calibration-section">
       <div className="section-header">
@@ -9,12 +12,17 @@ export function CalibrationPanel() {
           <p className="eyebrow">Calibration</p>
           <h2>Calibration</h2>
         </div>
+        <button onClick={() => setOpen((current) => !current)}>
+          {isOpen ? "隠す" : "表示"}
+        </button>
       </div>
 
-      <div className="calibration-tools">
-        <PlaybackCalibrationPanel />
-        <MicrophoneMeasurementPanel />
-      </div>
+      {isOpen && (
+        <div className="calibration-tools">
+          <PlaybackCalibrationPanel />
+          <MicrophoneMeasurementPanel />
+        </div>
+      )}
     </section>
   );
 }
