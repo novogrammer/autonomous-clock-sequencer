@@ -1,70 +1,21 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  MicrophoneMeasurementEngine,
-  type MeasurementClickEvent,
-  type MeasurementResult,
-} from "../engine/microphoneMeasurementEngine";
-
-type MeasurementStatus = "idle" | "starting" | "ready" | "blocked";
+import { useState } from "react";
+import { useMicrophoneMeasurementEngine } from "../hooks/useMicrophoneMeasurementEngine";
 
 const DEFAULT_FREQUENCY_A_HZ = 1500;
 const DEFAULT_FREQUENCY_B_HZ = 2500;
-const MAX_RESULTS = 12;
 
 export function MicrophoneMeasurementPanel() {
-  const engineRef = useRef<MicrophoneMeasurementEngine | null>(null);
-  const [status, setStatus] = useState<MeasurementStatus>("idle");
   const [frequencyAHz, setFrequencyAHz] = useState(DEFAULT_FREQUENCY_A_HZ);
   const [frequencyBHz, setFrequencyBHz] = useState(DEFAULT_FREQUENCY_B_HZ);
-  const [clickCounts, setClickCounts] = useState({ a: 0, b: 0 });
-  const [results, setResults] = useState<MeasurementResult[]>([]);
-
-  const stats = useMemo(() => calculateStats(results), [results]);
-  const latestResult = results[0] ?? null;
-
-  useEffect(() => {
-    engineRef.current = new MicrophoneMeasurementEngine();
-
-    return () => {
-      engineRef.current?.stop();
-      engineRef.current = null;
-    };
-  }, []);
-
-  async function startMeasurement() {
-    setStatus("starting");
-    setClickCounts({ a: 0, b: 0 });
-    setResults([]);
-
-    try {
-      await engineRef.current?.start({
-        frequencyAHz,
-        frequencyBHz,
-        onClick: handleClick,
-        onResult: handleResult,
-      });
-      setStatus("ready");
-    } catch (error) {
-      console.error(error);
-      setStatus("blocked");
-    }
-  }
-
-  function stopMeasurement() {
-    engineRef.current?.stop();
-    setStatus("idle");
-  }
-
-  function handleClick(event: MeasurementClickEvent) {
-    setClickCounts((counts) => ({
-      ...counts,
-      [event.target]: counts[event.target] + 1,
-    }));
-  }
-
-  function handleResult(result: MeasurementResult) {
-    setResults((currentResults) => [result, ...currentResults].slice(0, MAX_RESULTS));
-  }
+  const {
+    status,
+    clickCounts,
+    results,
+    latestResult,
+    stats,
+    startMeasurement,
+    stopMeasurement,
+  } = useMicrophoneMeasurementEngine({ frequencyAHz, frequencyBHz });
 
   return (
     <section className="microphone-measurement">
@@ -141,25 +92,4 @@ function Readout({ label, value }: { label: string; value: string }) {
       <strong>{value}</strong>
     </div>
   );
-}
-
-function calculateStats(results: MeasurementResult[]): {
-  averageText: string;
-  stdDevText: string;
-} {
-  if (results.length === 0) {
-    return { averageText: "-", stdDevText: "-" };
-  }
-
-  const values = results.map((result) => result.skewMs);
-  const average =
-    values.reduce((total, value) => total + value, 0) / values.length;
-  const variance =
-    values.reduce((total, value) => total + (value - average) ** 2, 0) /
-    values.length;
-
-  return {
-    averageText: `${average.toFixed(1)}ms`,
-    stdDevText: `${Math.sqrt(variance).toFixed(1)}ms`,
-  };
 }
