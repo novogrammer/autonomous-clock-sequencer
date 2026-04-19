@@ -2,13 +2,13 @@
 
 ## 現在の状態
 
-このリポジトリは **Phase 0** として、メトロノームを中心に `startAt` 基準の時間モデルを検証している。
+このリポジトリは **Phase 0** として、メトロノームを中心に Unix epoch 基準の時間モデルを検証している。
 
 Phase 0 は実装済みで、以下が動く状態になっている。
 
-- `startAt` 基準のメトロノーム再生
+- `startAt=0` 基準のメトロノーム再生
 - BPM / stepsPerBeat / swing の操作
-- BPM 変更時は `startAt` を維持したまま位置を再計算
+- BPM 変更時は `startAt=0` のまま位置を再計算
 - URL からの state 復元
 - state 変更時の URL 更新
 - Tone.js によるメトロノーム音
@@ -26,7 +26,7 @@ Phase 0 は実装済みで、以下が動く状態になっている。
 
 - 再生中の通信はしない
 - URL を共有することで各端末が同じ記述を読む
-- 各端末は `startAt` を基準にローカルで現在位置を計算する
+- 各端末は `startAt=0` を基準にローカルで現在位置を計算する
 - 将来的に `pattern` と `kit` を URL に載せる
 - QR コードは URL の配布手段として扱う
 
@@ -47,7 +47,7 @@ Phase 0 は実装済みで、以下が動く状態になっている。
 
 ## 現在の構成
 
-- `src/transport`: `startAt` 基準の時間計算
+- `src/transport`: Unix epoch 基準の時間計算
 - `src/engine`: Tone.js / Web Audio を使う実行系
 - `src/hooks`: React state と engine の接続、副作用管理
 - `src/state`: Zustand store
@@ -64,8 +64,10 @@ Phase 0 は実装済みで、以下が動く状態になっている。
 
 ### `startAt`
 
-- `startAt` は共有 URL に載る絶対時刻
+- `startAt` は再生基準時刻
+- Phase 0 では `0` 固定
 - Unix time ミリ秒で扱う
+- URL には載せない
 - 再生位置は `startAt` と現在時刻から都度計算する
 - `startAt` が過去でも、その値を基準に現在位置を計算してよい
 
@@ -98,12 +100,11 @@ Phase 0 は実装済みで、以下が動く状態になっている。
 - `bpm`
 - `stepsPerBeat`
 - `swing`
-- `startAt`
 
 例:
 
 ```text
-?bpm=120&stepsPerBeat=4&swing=0&startAt=1776412800000
+?bpm=120&stepsPerBeat=4&swing=0
 ```
 
 将来使う想定のもの:
@@ -149,7 +150,7 @@ npm test
 - `src/transport/transport.test.ts`
   - `startAt` からの beat / step 計算
   - loop 内位置
-  - BPM 変更時も `startAt` を変えない位置計算
+  - BPM 変更時も `startAt=0` を変えない位置計算
   - swing による奇数 step 遅延
 
 - `src/calibration/timeSignal.test.ts`
@@ -189,8 +190,8 @@ npm run build
 確認したいこと:
 
 1. メトロノームの再生・停止
-2. BPM 変更時に `startAt` が変わらず、共有グリッド基準で位置が再計算されること
-3. URL に `bpm`, `stepsPerBeat`, `swing`, `startAt` だけが共有対象として入ること
+2. BPM 変更時に `startAt=0` のまま、共有グリッド基準で位置が再計算されること
+3. URL に `bpm`, `stepsPerBeat`, `swing` だけが共有対象として入ること
 4. `playbackOffsetMs` が URL に混ざらないこと
 5. playback calibration が blocked にならず開始・停止できること
 6. microphone measurement がマイク許可後に ready になり、停止できること

@@ -5,13 +5,13 @@ import {
   scheduledStepTimeMs,
 } from "./transport";
 
-const startAt = secondsToMs(100);
+const startAt = 0;
 
 describe("transport", () => {
   it("startAtから拍位置とstep位置を計算する", () => {
     const position = calculatePosition(
       { bpm: 120, stepsPerBeat: 4, swing: 0, startAt },
-      startAt + secondsToMs(1),
+      secondsToMs(1),
     );
 
     expect(position.elapsedMs).toBe(secondsToMs(1));
@@ -25,7 +25,7 @@ describe("transport", () => {
   it("デフォルトloop内のstep位置とbeat位置を計算する", () => {
     const position = calculatePosition(
       { bpm: 120, stepsPerBeat: 4, swing: 0, startAt },
-      startAt + secondsToMs(2.25),
+      secondsToMs(2.25),
     );
 
     expect(position.beat).toBe(4);
@@ -36,7 +36,7 @@ describe("transport", () => {
   });
 
   it("BPM変更時もstartAtを変えずに位置を再計算する", () => {
-    const nowMs = startAt + secondsToMs(1.5);
+    const nowMs = secondsToMs(1.5);
     const position = calculatePosition(
       { bpm: 60, stepsPerBeat: 4, swing: 0, startAt },
       nowMs,

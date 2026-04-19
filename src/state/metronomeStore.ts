@@ -1,29 +1,31 @@
 import { create } from "zustand";
-import { roundedNowMs } from "../clock/clock";
 import { parsePhase0Url } from "../url/phase0Url";
 
 export type MetronomeState = {
   bpm: number;
   stepsPerBeat: number;
   swing: number;
-  startAt: number | null;
+  startAt: number;
   isPlaying: boolean;
   setBpm: (bpm: number) => void;
   setStepsPerBeat: (stepsPerBeat: number) => void;
   setSwing: (swing: number) => void;
-  start: (nowMs?: number) => void;
+  start: () => void;
   stop: () => void;
   hydrateFromUrl: (search: string) => void;
 };
 
+const FIXED_START_AT_MS = 0;
+
 const initialUrlState =
   typeof window === "undefined"
-    ? { bpm: 120, stepsPerBeat: 4, swing: 0, startAt: null }
+    ? { bpm: 120, stepsPerBeat: 4, swing: 0 }
     : parsePhase0Url(window.location.search);
 
 export const useMetronomeStore = create<MetronomeState>((set) => ({
   ...initialUrlState,
-  isPlaying: initialUrlState.startAt !== null,
+  startAt: FIXED_START_AT_MS,
+  isPlaying: false,
 
   setBpm: (bpm) => set({ bpm: clamp(bpm, 20, 300) }),
 
@@ -32,17 +34,17 @@ export const useMetronomeStore = create<MetronomeState>((set) => ({
 
   setSwing: (swing) => set({ swing: clamp(swing, 0, 0.95) }),
 
-  start: (nowMs = roundedNowMs()) =>
-    set((state) => ({
+  start: () =>
+    set({
       isPlaying: true,
-      startAt: state.startAt ?? nowMs,
-    })),
+      startAt: FIXED_START_AT_MS,
+    }),
 
-  stop: () => set({ isPlaying: false, startAt: null }),
+  stop: () => set({ isPlaying: false, startAt: FIXED_START_AT_MS }),
 
   hydrateFromUrl: (search) => {
     const next = parsePhase0Url(search);
-    set({ ...next, isPlaying: next.startAt !== null });
+    set({ ...next, startAt: FIXED_START_AT_MS, isPlaying: false });
   },
 }));
 

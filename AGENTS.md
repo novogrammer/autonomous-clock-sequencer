@@ -27,7 +27,7 @@
 
 ### 1. 時間モデルを中核にする
 このアプリの中心は、絶対時刻基準で再生位置を計算すること。  
-`startAt` を中核に置き、現在位置を都度計算する。
+Phase 0 では `startAt=0` を基準に置き、現在位置を都度計算する。
 
 ### 2. UI と音声エンジンを分離する
 React / Zustand 側に Tone.js の生インスタンスや AudioNode を深く持たない。  
@@ -76,13 +76,11 @@ Phase 0 はメトロノームだけだが、後で `pattern` や `kit` を追加
 - `kit`
 - `pattern`
 - `swing`
-- `startAt`
 
 Phase 0 で主に使うもの:
 - `bpm`
 - `stepsPerBeat`
 - `swing`
-- `startAt`
 
 ---
 
@@ -116,8 +114,9 @@ Phase 0 で主に使うもの:
 
 ### startAt
 - `startAt` は再生基準時刻
+- Phase 0 では `0` 固定
 - Unix time ミリ秒で扱う
-- URL に含める
+- URL には含めない
 - `startAt` が過去でも、その値を基準に現在位置を計算してよい
 
 ### BPM 変更

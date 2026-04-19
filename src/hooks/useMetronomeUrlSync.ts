@@ -8,9 +8,8 @@ export function useMetronomeUrlSync(state: Phase0UrlState): string {
       bpm: state.bpm,
       stepsPerBeat: state.stepsPerBeat,
       swing: state.swing,
-      startAt: state.startAt,
     }),
-    [state.bpm, state.stepsPerBeat, state.startAt, state.swing],
+    [state.bpm, state.stepsPerBeat, state.swing],
   );
   const [href, setHref] = useState(() => window.location.href);
 

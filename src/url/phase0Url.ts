@@ -2,14 +2,13 @@ import type { MetronomeState } from "../state/metronomeStore";
 
 export type Phase0UrlState = Pick<
   MetronomeState,
-  "bpm" | "stepsPerBeat" | "swing" | "startAt"
+  "bpm" | "stepsPerBeat" | "swing"
 >;
 
 const DEFAULTS: Phase0UrlState = {
   bpm: 120,
   stepsPerBeat: 4,
   swing: 0,
-  startAt: null,
 };
 
 export function parsePhase0Url(search: string): Phase0UrlState {
@@ -21,7 +20,6 @@ export function parsePhase0Url(search: string): Phase0UrlState {
       readNumber(params, "stepsPerBeat", DEFAULTS.stepsPerBeat, 1, 16),
     ),
     swing: readNumber(params, "swing", DEFAULTS.swing, 0, 0.95),
-    startAt: readNullableInteger(params, "startAt"),
   };
 }
 
@@ -30,12 +28,7 @@ export function buildPhase0Url(state: Phase0UrlState): string {
   url.searchParams.set("bpm", formatNumber(state.bpm));
   url.searchParams.set("stepsPerBeat", String(state.stepsPerBeat));
   url.searchParams.set("swing", formatNumber(state.swing));
-
-  if (state.startAt === null) {
-    url.searchParams.delete("startAt");
-  } else {
-    url.searchParams.set("startAt", String(state.startAt));
-  }
+  url.searchParams.delete("startAt");
 
   return `${url.pathname}?${url.searchParams.toString()}${url.hash}`;
 }
@@ -66,23 +59,6 @@ function readNumber(
   }
 
   return clamp(value, min, max);
-}
-
-function readNullableInteger(
-  params: URLSearchParams,
-  key: string,
-): number | null {
-  const raw = params.get(key);
-  if (raw === null || raw.trim() === "") {
-    return null;
-  }
-
-  const value = Number(raw);
-  if (!Number.isFinite(value)) {
-    return null;
-  }
-
-  return Math.round(value);
 }
 
 function clamp(value: number, min: number, max: number): number {
