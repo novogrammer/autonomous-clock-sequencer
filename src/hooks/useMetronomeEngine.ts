@@ -9,7 +9,6 @@ export type AudioStatus = "idle" | "locked" | "starting" | "ready" | "blocked";
 
 type EngineConfig = TransportConfig & {
   playbackOffsetMs: number;
-  metronomeMuted: boolean;
 };
 
 type MetronomeEngineParams = TransportConfig & {
@@ -18,11 +17,8 @@ type MetronomeEngineParams = TransportConfig & {
 };
 
 type MetronomeEngineControls = {
-  audioEnabled: boolean;
   audioStatus: AudioStatus;
-  metronomeMuted: boolean;
-  enableAudio: () => Promise<void>;
-  toggleMetronomeMuted: () => void;
+  enableAudio: () => Promise<boolean>;
 };
 
 export function useMetronomeEngine({
@@ -34,7 +30,6 @@ export function useMetronomeEngine({
 }: MetronomeEngineParams): MetronomeEngineControls {
   const engineRef = useRef<MetronomeEngine | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
-  const [metronomeMuted, setMetronomeMuted] = useState(false);
   const [audioStatus, setAudioStatus] = useState<AudioStatus>("idle");
   const engineConfig = useMemo(
     () => ({
@@ -42,9 +37,8 @@ export function useMetronomeEngine({
       stepsPerBeat,
       swing,
       playbackOffsetMs,
-      metronomeMuted,
     }),
-    [bpm, metronomeMuted, playbackOffsetMs, stepsPerBeat, swing],
+    [bpm, playbackOffsetMs, stepsPerBeat, swing],
   );
   const engineConfigRef = useRef<EngineConfig>(engineConfig);
   engineConfigRef.current = engineConfig;
@@ -95,28 +89,23 @@ export function useMetronomeEngine({
     engineRef.current?.update(engineConfig);
   }, [audioEnabled, engineConfig, isPlaying]);
 
-  async function enableAudio(): Promise<void> {
+  async function enableAudio(): Promise<boolean> {
     setAudioStatus("starting");
 
     try {
       await unlockMetronomeAudio();
       setAudioEnabled(true);
+      return true;
     } catch (error) {
       console.error(error);
       setAudioEnabled(false);
       setAudioStatus("blocked");
+      return false;
     }
   }
 
-  function toggleMetronomeMuted(): void {
-    setMetronomeMuted((isMuted) => !isMuted);
-  }
-
   return {
-    audioEnabled,
     audioStatus,
-    metronomeMuted,
     enableAudio,
-    toggleMetronomeMuted,
   };
 }

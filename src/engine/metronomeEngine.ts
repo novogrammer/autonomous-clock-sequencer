@@ -9,7 +9,6 @@ import {
 
 type EngineConfig = TransportConfig & {
   playbackOffsetMs: number;
-  metronomeMuted: boolean;
 };
 
 const LOOKAHEAD_MS = 140;
@@ -94,7 +93,7 @@ export class MetronomeEngine {
         break;
       }
 
-      if (eventMs >= currentNowMs - stepLengthMs && !this.config.metronomeMuted) {
+      if (eventMs >= currentNowMs - stepLengthMs) {
         const toneTime =
           Tone.now() + Math.max(0, eventMs - currentNowMs) / secondsToMs(1);
         const stepInBeat = this.nextStep % this.config.stepsPerBeat;

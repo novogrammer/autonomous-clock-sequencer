@@ -37,11 +37,8 @@ export function MetronomePanel() {
     swing,
   });
   const {
-    audioEnabled,
     audioStatus,
-    metronomeMuted,
     enableAudio,
-    toggleMetronomeMuted,
   } = useMetronomeEngine({
     bpm,
     stepsPerBeat,
@@ -51,12 +48,10 @@ export function MetronomePanel() {
   });
 
   async function handlePlay() {
-    start();
-    await enableAudio();
-  }
-
-  async function handleEnableAudio() {
-    await enableAudio();
+    const audioReady = await enableAudio();
+    if (audioReady) {
+      start();
+    }
   }
 
   function handleStop() {
@@ -86,17 +81,12 @@ export function MetronomePanel() {
       </div>
 
       <div className="transport-row">
-        <button className="primary" onClick={handlePlay} disabled={isPlaying}>
-          再生
-        </button>
         <button
-          onClick={handleEnableAudio}
-          disabled={!isPlaying || audioEnabled || audioStatus === "starting"}
+          className="primary"
+          onClick={handlePlay}
+          disabled={isPlaying || audioStatus === "starting"}
         >
-          音声を準備
-        </button>
-        <button onClick={toggleMetronomeMuted} disabled={!isPlaying}>
-          {metronomeMuted ? "メトロノーム音を戻す" : "メトロノーム音をミュート"}
+          再生
         </button>
         <button onClick={handleStop}>停止</button>
       </div>
