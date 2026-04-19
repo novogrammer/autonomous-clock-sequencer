@@ -1,22 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from "react";
 import { nowMs, roundedNowMs } from "../clock/clock";
 import {
-  MetronomeEngine,
-  unlockMetronomeAudio,
-} from "../engine/metronomeEngine";
+  useMetronomeEngine,
+  type AudioStatus,
+} from "../hooks/useMetronomeEngine";
+import { useMetronomePosition } from "../hooks/useMetronomePosition";
+import { useMetronomeUrlSync } from "../hooks/useMetronomeUrlSync";
 import { useMetronomeStore } from "../state/metronomeStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
-import { calculatePosition, type TransportPosition } from "../transport/transport";
-import { replaceUrlFromState } from "../url/phase0Url";
-
-type UrlState = {
-  bpm: number;
-  stepsPerBeat: number;
-  swing: number;
-  startAt: number | null;
-};
-
-type AudioStatus = "idle" | "locked" | "starting" | "ready" | "blocked";
 
 export function MetronomePanel() {
   const {
@@ -34,120 +24,33 @@ export function MetronomePanel() {
   const playbackOffsetMs = usePlaybackCalibrationStore(
     (state) => state.playbackOffsetMs,
   );
-  const engineRef = useRef<MetronomeEngine | null>(null);
-  const urlState = useMemo(
-    () => ({ bpm, stepsPerBeat, swing, startAt }),
-    [bpm, stepsPerBeat, swing, startAt],
-  );
-  const [position, setPosition] = useState<TransportPosition>(() =>
-    calculatePosition(
-      { bpm, stepsPerBeat, swing, startAt },
-      nowMs() + playbackOffsetMs,
-    ),
-  );
-  const [audioEnabled, setAudioEnabled] = useState(false);
-  const [metronomeMuted, setMetronomeMuted] = useState(false);
-  const [audioStatus, setAudioStatus] = useState<AudioStatus>(
-    startAt === null ? "idle" : "locked",
-  );
-  const currentUrl = useCurrentUrl(urlState);
-
-  const config = useMemo(
-    () => ({ bpm, stepsPerBeat, swing, startAt }),
-    [bpm, stepsPerBeat, swing, startAt],
-  );
-  const engineConfig = useMemo(
-    () =>
-      startAt === null
-        ? null
-        : {
-            bpm,
-            stepsPerBeat,
-            swing,
-            startAt,
-            playbackOffsetMs,
-            metronomeMuted,
-          },
-    [bpm, metronomeMuted, playbackOffsetMs, startAt, stepsPerBeat, swing],
-  );
-  const engineConfigRef = useRef<typeof engineConfig>(null);
-  engineConfigRef.current = engineConfig;
-
-  useEffect(() => {
-    const timerId = window.setInterval(() => {
-      setPosition(calculatePosition(config, nowMs() + playbackOffsetMs));
-    }, 50);
-
-    return () => window.clearInterval(timerId);
-  }, [config, playbackOffsetMs]);
-
-  useEffect(() => {
-    if (!isPlaying || startAt === null) {
-      engineRef.current?.stop();
-      setAudioStatus("idle");
-      return;
-    }
-
-    if (!audioEnabled) {
-      engineRef.current?.stop();
-      setAudioStatus("locked");
-      return;
-    }
-
-    const initialEngineConfig = engineConfigRef.current;
-    if (initialEngineConfig === null) {
-      return;
-    }
-
-    const engine = engineRef.current ?? new MetronomeEngine();
-    engineRef.current = engine;
-    let isActive = true;
-    setAudioStatus("starting");
-    engine
-      .start(initialEngineConfig)
-      .then(() => {
-        if (isActive) {
-          setAudioStatus("ready");
-        }
-      })
-      .catch((error: unknown) => {
-        console.error(error);
-        if (isActive) {
-          setAudioEnabled(false);
-          setAudioStatus("blocked");
-        }
-      });
-
-    return () => {
-      isActive = false;
-      engine.stop();
-    };
-  }, [
-    audioEnabled,
-    isPlaying,
+  const position = useMetronomePosition({
+    bpm,
+    stepsPerBeat,
+    swing,
     startAt,
-  ]);
-
-  useEffect(() => {
-    if (!isPlaying || !audioEnabled || engineConfig === null) {
-      return;
-    }
-
-    engineRef.current?.update(engineConfig);
-  }, [audioEnabled, engineConfig, isPlaying]);
-
-  async function enableAudio() {
-    setAudioStatus("starting");
-
-    try {
-      await unlockMetronomeAudio();
-      setAudioEnabled(true);
-    } catch (error) {
-      console.error(error);
-      setAudioEnabled(false);
-      setAudioStatus("blocked");
-    }
-  }
+    playbackOffsetMs,
+  });
+  const currentUrl = useMetronomeUrlSync({
+    bpm,
+    stepsPerBeat,
+    swing,
+    startAt,
+  });
+  const {
+    audioEnabled,
+    audioStatus,
+    metronomeMuted,
+    enableAudio,
+    toggleMetronomeMuted,
+  } = useMetronomeEngine({
+    bpm,
+    stepsPerBeat,
+    swing,
+    startAt,
+    isPlaying,
+    playbackOffsetMs,
+  });
 
   async function handlePlay() {
     start(roundedNowMs());
@@ -182,10 +85,7 @@ export function MetronomePanel() {
         >
           音声を準備
         </button>
-        <button
-          onClick={() => setMetronomeMuted((isMuted) => !isMuted)}
-          disabled={!isPlaying}
-        >
+        <button onClick={toggleMetronomeMuted} disabled={!isPlaying}>
           {metronomeMuted ? "メトロノーム音を戻す" : "メトロノーム音をミュート"}
         </button>
         <button onClick={handleStop}>停止</button>
@@ -246,17 +146,6 @@ export function MetronomePanel() {
       </div>
     </>
   );
-}
-
-function useCurrentUrl(state: UrlState): string {
-  const [href, setHref] = useState(() => window.location.href);
-
-  useEffect(() => {
-    replaceUrlFromState(state);
-    setHref(window.location.href);
-  }, [state]);
-
-  return href;
 }
 
 function StatusBadge({
