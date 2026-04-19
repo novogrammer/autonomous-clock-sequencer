@@ -7,36 +7,64 @@ const REFERENCE_INTERVAL_MS = 1000;
 const CALIBRATION_LOOKAHEAD_MS = 250;
 const CALIBRATION_TICK_MS = 40;
 
+type PlaybackCalibrationConfig = {
+  playbackOffsetMs: number;
+  clickFrequencyHz: number;
+};
+
+export async function unlockPlaybackCalibrationAudio(): Promise<void> {
+  await Tone.start();
+}
+
 export class PlaybackCalibrationEngine {
   private referenceSynth: Tone.Synth | null = null;
   private boundarySynth: Tone.Synth | null = null;
   private calibrationTimerId: number | null = null;
   private nextCalibrationTimeMs: number | null = null;
+  private config: PlaybackCalibrationConfig | null = null;
 
-  async startCalibration(
+  isCalibrating(): boolean {
+    return this.config !== null;
+  }
+
+  startCalibration(
     playbackOffsetMs: number,
     clickFrequencyHz: number,
-  ): Promise<void> {
-    await Tone.start();
+  ): void {
     this.stopCalibration();
     this.ensureSynths();
+    this.config = { playbackOffsetMs, clickFrequencyHz };
 
     this.nextCalibrationTimeMs = nextCalibrationTimeMs(
       nowMs() + playbackOffsetMs,
       REFERENCE_INTERVAL_MS,
     );
-    this.scheduleCalibration(playbackOffsetMs, clickFrequencyHz);
+    this.scheduleCalibration();
     this.calibrationTimerId = window.setInterval(() => {
-      this.scheduleCalibration(playbackOffsetMs, clickFrequencyHz);
+      this.scheduleCalibration();
     }, CALIBRATION_TICK_MS);
+  }
+
+  updateCalibration(
+    playbackOffsetMs: number,
+    clickFrequencyHz: number,
+  ): void {
+    if (this.config === null) {
+      return;
+    }
+
+    this.recreateSynths();
+    this.config = { playbackOffsetMs, clickFrequencyHz };
+    this.nextCalibrationTimeMs = nextCalibrationTimeMs(
+      nowMs() + playbackOffsetMs,
+      REFERENCE_INTERVAL_MS,
+    );
+    this.scheduleCalibration();
   }
 
   stop(): void {
     this.stopCalibration();
-    this.referenceSynth?.dispose();
-    this.boundarySynth?.dispose();
-    this.referenceSynth = null;
-    this.boundarySynth = null;
+    this.disposeSynths();
   }
 
   private stopCalibration(): void {
@@ -46,6 +74,7 @@ export class PlaybackCalibrationEngine {
     }
 
     this.nextCalibrationTimeMs = null;
+    this.config = null;
   }
 
   private ensureSynths(): void {
@@ -57,18 +86,29 @@ export class PlaybackCalibrationEngine {
     );
   }
 
-  private scheduleCalibration(
-    playbackOffsetMs: number,
-    clickFrequencyHz: number,
-  ): void {
+  private recreateSynths(): void {
+    this.disposeSynths();
+    this.ensureSynths();
+  }
+
+  private disposeSynths(): void {
+    this.referenceSynth?.dispose();
+    this.boundarySynth?.dispose();
+    this.referenceSynth = null;
+    this.boundarySynth = null;
+  }
+
+  private scheduleCalibration(): void {
     if (
       this.referenceSynth === null ||
       this.boundarySynth === null ||
-      this.nextCalibrationTimeMs === null
+      this.nextCalibrationTimeMs === null ||
+      this.config === null
     ) {
       return;
     }
 
+    const { playbackOffsetMs, clickFrequencyHz } = this.config;
     const currentNowMs = nowMs();
     const correctedNowMs = currentNowMs + playbackOffsetMs;
     const horizonMs = correctedNowMs + CALIBRATION_LOOKAHEAD_MS;

@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { nowMs } from "../clock/clock";
-import { PlaybackCalibrationEngine } from "../engine/playbackCalibrationEngine";
+import {
+  PlaybackCalibrationEngine,
+  unlockPlaybackCalibrationAudio,
+} from "../engine/playbackCalibrationEngine";
 import { usePlaybackCalibrationRuntimeStore } from "../state/playbackCalibrationRuntimeStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
 
@@ -43,31 +46,47 @@ export function PlaybackCalibrationPanel() {
 
   useEffect(() => {
     if (!isCalibrating) {
+      engineRef.current?.stop();
       return;
     }
 
-    let isActive = true;
+    const engine = engineRef.current;
+    if (engine === null) {
+      return;
+    }
+
+    try {
+      if (engine.isCalibrating()) {
+        engine.updateCalibration(playbackOffsetMs, clickFrequencyHz);
+      } else {
+        engine.startCalibration(playbackOffsetMs, clickFrequencyHz);
+      }
+      setAudioStatus("ready");
+    } catch (error) {
+      console.error(error);
+      engine.stop();
+      setCalibrating(false);
+      setAudioStatus("blocked");
+    }
+  }, [
+    clickFrequencyHz,
+    isCalibrating,
+    playbackOffsetMs,
+    setCalibrating,
+  ]);
+
+  async function startCalibration() {
     setAudioStatus("starting");
 
-    engineRef.current
-      ?.startCalibration(playbackOffsetMs, clickFrequencyHz)
-      .then(() => {
-        if (isActive) {
-          setAudioStatus("ready");
-        }
-      })
-      .catch((error: unknown) => {
-        console.error(error);
-        if (isActive) {
-          setCalibrating(false);
-          setAudioStatus("blocked");
-        }
-      });
-
-    return () => {
-      isActive = false;
-    };
-  }, [clickFrequencyHz, isCalibrating, playbackOffsetMs, setCalibrating]);
+    try {
+      await unlockPlaybackCalibrationAudio();
+      setCalibrating(true);
+    } catch (error) {
+      console.error(error);
+      setCalibrating(false);
+      setAudioStatus("blocked");
+    }
+  }
 
   function stopCalibration() {
     engineRef.current?.stop();
@@ -157,8 +176,8 @@ export function PlaybackCalibrationPanel() {
         <div className="transport-row">
           <button
             className="primary"
-            onClick={() => setCalibrating(true)}
-            disabled={isCalibrating}
+            onClick={startCalibration}
+            disabled={isCalibrating || audioStatus === "starting"}
           >
             時報開始
           </button>
