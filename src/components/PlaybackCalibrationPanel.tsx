@@ -1,13 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { nowMs } from "../clock/clock";
-import {
-  PlaybackCalibrationEngine,
-  unlockPlaybackCalibrationAudio,
-} from "../engine/playbackCalibrationEngine";
+import { useCurrentNowMs } from "../hooks/useCurrentNowMs";
+import { usePlaybackCalibrationEngine } from "../hooks/usePlaybackCalibrationEngine";
 import { usePlaybackCalibrationRuntimeStore } from "../state/playbackCalibrationRuntimeStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
-
-type PlaybackCalibrationAudioStatus = "idle" | "starting" | "ready" | "blocked";
 
 const PLAYBACK_OFFSET_STEPS_MS = [-1000, -100, -10, -1, 1, 10, 100, 1000] as const;
 const CLICK_FREQUENCY_PRESETS_HZ = [1500, 2000, 2500, 3000] as const;
@@ -22,77 +16,14 @@ export function PlaybackCalibrationPanel() {
     usePlaybackCalibrationRuntimeStore();
   const { playbackOffsetMs, setPlaybackOffsetMs } =
     usePlaybackCalibrationStore();
-  const engineRef = useRef<PlaybackCalibrationEngine | null>(null);
-  const [audioStatus, setAudioStatus] =
-    useState<PlaybackCalibrationAudioStatus>("idle");
-  const [currentNowMs, setCurrentNowMs] = useState(() => nowMs());
-
-  useEffect(() => {
-    engineRef.current = new PlaybackCalibrationEngine();
-
-    return () => {
-      engineRef.current?.stop();
-      engineRef.current = null;
-    };
-  }, []);
-
-  useEffect(() => {
-    const timerId = window.setInterval(() => {
-      setCurrentNowMs(nowMs());
-    }, 50);
-
-    return () => window.clearInterval(timerId);
-  }, []);
-
-  useEffect(() => {
-    if (!isCalibrating) {
-      engineRef.current?.stop();
-      return;
-    }
-
-    const engine = engineRef.current;
-    if (engine === null) {
-      return;
-    }
-
-    try {
-      if (engine.isCalibrating()) {
-        engine.updateCalibration(playbackOffsetMs, clickFrequencyHz);
-      } else {
-        engine.startCalibration(playbackOffsetMs, clickFrequencyHz);
-      }
-      setAudioStatus("ready");
-    } catch (error) {
-      console.error(error);
-      engine.stop();
-      setCalibrating(false);
-      setAudioStatus("blocked");
-    }
-  }, [
-    clickFrequencyHz,
-    isCalibrating,
-    playbackOffsetMs,
-    setCalibrating,
-  ]);
-
-  async function startCalibration() {
-    setAudioStatus("starting");
-
-    try {
-      await unlockPlaybackCalibrationAudio();
-      setCalibrating(true);
-    } catch (error) {
-      console.error(error);
-      setCalibrating(false);
-      setAudioStatus("blocked");
-    }
-  }
-
-  function stopCalibration() {
-    engineRef.current?.stop();
-    setCalibrating(false);
-    setAudioStatus("idle");
-  }
+  const currentNowMs = useCurrentNowMs();
+  const { audioStatus, startCalibration, stopCalibration } =
+    usePlaybackCalibrationEngine({
+      playbackOffsetMs,
+      clickFrequencyHz,
+      isCalibrating,
+      setCalibrating,
+    });
 
   const flashState = getTimeSignalFlashState(currentNowMs + playbackOffsetMs);
 
