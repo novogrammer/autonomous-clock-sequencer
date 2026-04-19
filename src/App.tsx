@@ -1,6 +1,5 @@
+import { CalibrationPanel } from "./components/CalibrationPanel";
 import { MetronomePanel } from "./components/MetronomePanel";
-import { MicrophoneMeasurementPanel } from "./components/MicrophoneMeasurementPanel";
-import { PlaybackCalibrationPanel } from "./components/PlaybackCalibrationPanel";
 import "./styles.css";
 
 function App() {
@@ -9,9 +8,7 @@ function App() {
       <section className="panel">
         <MetronomePanel />
 
-        <PlaybackCalibrationPanel />
-
-        <MicrophoneMeasurementPanel />
+        <CalibrationPanel />
 
         <footer className="app-footer">
           <a
