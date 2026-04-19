@@ -19,6 +19,14 @@ type MetronomeEngineParams = Omit<TransportConfig, "startAt"> & {
   playbackOffsetMs: number;
 };
 
+type MetronomeEngineControls = {
+  audioEnabled: boolean;
+  audioStatus: AudioStatus;
+  metronomeMuted: boolean;
+  enableAudio: () => Promise<void>;
+  toggleMetronomeMuted: () => void;
+};
+
 export function useMetronomeEngine({
   bpm,
   stepsPerBeat,
@@ -26,13 +34,7 @@ export function useMetronomeEngine({
   startAt,
   isPlaying,
   playbackOffsetMs,
-}: MetronomeEngineParams): {
-  audioEnabled: boolean;
-  audioStatus: AudioStatus;
-  metronomeMuted: boolean;
-  enableAudio: () => Promise<void>;
-  toggleMetronomeMuted: () => void;
-} {
+}: MetronomeEngineParams): MetronomeEngineControls {
   const engineRef = useRef<MetronomeEngine | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [metronomeMuted, setMetronomeMuted] = useState(false);
