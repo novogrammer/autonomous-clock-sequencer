@@ -8,7 +8,7 @@ import {
 const startAt = 100_000;
 
 describe("transport", () => {
-  it("calculates beat and step position from startAt", () => {
+  it("startAtから拍位置とstep位置を計算する", () => {
     const position = calculatePosition(
       { bpm: 120, stepsPerBeat: 4, swing: 0, startAt },
       startAt + 1_000,
@@ -22,7 +22,7 @@ describe("transport", () => {
     expect(position.stepInLoop).toBe(8);
   });
 
-  it("wraps step and beat position within the default loop", () => {
+  it("デフォルトloop内のstep位置とbeat位置を計算する", () => {
     const position = calculatePosition(
       { bpm: 120, stepsPerBeat: 4, swing: 0, startAt },
       startAt + 2_250,
@@ -35,7 +35,7 @@ describe("transport", () => {
     expect(position.beatInLoop).toBe(0);
   });
 
-  it("retimes startAt to keep phase when bpm changes", () => {
+  it("BPM変更時に現在の位相を維持する", () => {
     const oldConfig = { bpm: 120, stepsPerBeat: 4, swing: 0, startAt };
     const nowMs = startAt + 1_500;
     const nextStartAt = retimeStartAtForBpmChange(oldConfig, 60, nowMs);
@@ -50,7 +50,7 @@ describe("transport", () => {
     expect(after.phaseBeats).toBe(before.phaseBeats);
   });
 
-  it("delays odd steps when swing is enabled", () => {
+  it("swing有効時に奇数stepを遅らせる", () => {
     const straightStep = scheduledStepTimeMs(
       { bpm: 120, stepsPerBeat: 4, swing: 0.5, startAt },
       2,
