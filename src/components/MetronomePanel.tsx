@@ -56,6 +56,22 @@ export function MetronomePanel() {
     () => ({ bpm, stepsPerBeat, swing, startAt }),
     [bpm, stepsPerBeat, swing, startAt],
   );
+  const engineConfig = useMemo(
+    () =>
+      startAt === null
+        ? null
+        : {
+            bpm,
+            stepsPerBeat,
+            swing,
+            startAt,
+            playbackOffsetMs,
+            metronomeMuted,
+          },
+    [bpm, metronomeMuted, playbackOffsetMs, startAt, stepsPerBeat, swing],
+  );
+  const engineConfigRef = useRef<typeof engineConfig>(null);
+  engineConfigRef.current = engineConfig;
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
@@ -78,19 +94,17 @@ export function MetronomePanel() {
       return;
     }
 
+    const initialEngineConfig = engineConfigRef.current;
+    if (initialEngineConfig === null) {
+      return;
+    }
+
     const engine = engineRef.current ?? new MetronomeEngine();
     engineRef.current = engine;
     let isActive = true;
     setAudioStatus("starting");
     engine
-      .start({
-        bpm,
-        stepsPerBeat,
-        swing,
-        startAt,
-        playbackOffsetMs,
-        metronomeMuted,
-      })
+      .start(initialEngineConfig)
       .then(() => {
         if (isActive) {
           setAudioStatus("ready");
@@ -110,14 +124,17 @@ export function MetronomePanel() {
     };
   }, [
     audioEnabled,
-    bpm,
     isPlaying,
-    metronomeMuted,
-    playbackOffsetMs,
     startAt,
-    stepsPerBeat,
-    swing,
   ]);
+
+  useEffect(() => {
+    if (!isPlaying || !audioEnabled || engineConfig === null) {
+      return;
+    }
+
+    engineRef.current?.update(engineConfig);
+  }, [audioEnabled, engineConfig, isPlaying]);
 
   async function enableAudio() {
     setAudioStatus("starting");
@@ -133,7 +150,7 @@ export function MetronomePanel() {
   }
 
   async function handlePlay() {
-    start(roundedNowMs() + playbackOffsetMs);
+    start(roundedNowMs());
     await enableAudio();
   }
 
@@ -184,7 +201,7 @@ export function MetronomePanel() {
             step="1"
             value={bpm}
             onChange={(event) =>
-              setBpm(Number(event.target.value), nowMs() + playbackOffsetMs)
+              setBpm(Number(event.target.value), nowMs())
             }
           />
         </label>
