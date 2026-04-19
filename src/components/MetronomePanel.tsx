@@ -1,5 +1,5 @@
 import type { ChangeEvent } from "react";
-import { nowMs, roundedNowMs } from "../clock/clock";
+import { nowMs, roundedNowMs, secondsToMs } from "../clock/clock";
 import {
   useMetronomeEngine,
   type AudioStatus,
@@ -145,7 +145,10 @@ export function MetronomePanel() {
 
       <div className="position-grid">
         <Readout label="startAt" value={startAt === null ? "-" : String(startAt)} />
-        <Readout label="elapsed" value={`${(position.elapsedMs / 1000).toFixed(2)}s`} />
+        <Readout
+          label="elapsed"
+          value={`${(position.elapsedMs / secondsToMs(1)).toFixed(2)}s`}
+        />
         <Readout label="beat" value={String(position.beat)} />
         <Readout label="step" value={String(position.step)} />
         <Readout label="stepInBeat" value={String(position.stepInBeat)} />

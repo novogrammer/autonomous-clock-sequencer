@@ -1,5 +1,5 @@
 import * as Tone from "tone";
-import { nowMs } from "../clock/clock";
+import { nowMs, secondsToMs } from "../clock/clock";
 import {
   calculatePosition,
   msPerStep,
@@ -96,7 +96,8 @@ export class MetronomeEngine {
       }
 
       if (eventMs >= currentNowMs - stepLengthMs && !this.config.metronomeMuted) {
-        const toneTime = Tone.now() + Math.max(0, eventMs - currentNowMs) / 1000;
+        const toneTime =
+          Tone.now() + Math.max(0, eventMs - currentNowMs) / secondsToMs(1);
         const stepInBeat = this.nextStep % this.config.stepsPerBeat;
         const isBeat = stepInBeat === 0;
         this.synth.triggerAttackRelease(

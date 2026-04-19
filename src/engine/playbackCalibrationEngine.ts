@@ -1,9 +1,9 @@
 import * as Tone from "tone";
-import { nowMs } from "../clock/clock";
+import { nowMs, secondsToMs } from "../clock/clock";
 
 const CLICK_DURATION_SECONDS = 0.015;
 const BOUNDARY_DURATION_SECONDS = 2;
-const REFERENCE_INTERVAL_MS = 1000;
+const REFERENCE_INTERVAL_MS = secondsToMs(1);
 const CALIBRATION_LOOKAHEAD_MS = 250;
 const CALIBRATION_TICK_MS = 40;
 
@@ -118,7 +118,8 @@ export class PlaybackCalibrationEngine {
 
       if (localEventMs >= currentNowMs - REFERENCE_INTERVAL_MS) {
         const toneTime =
-          Tone.now() + Math.max(0, localEventMs - currentNowMs) / 1000;
+          Tone.now() +
+          Math.max(0, localEventMs - currentNowMs) / secondsToMs(1);
         this.referenceSynth.triggerAttackRelease(
           clickFrequencyHz,
           CLICK_DURATION_SECONDS,
@@ -149,7 +150,7 @@ function nextCalibrationTimeMs(
 }
 
 function isTenSecondBoundary(timeMs: number): boolean {
-  const second = Math.floor(timeMs / 1000);
+  const second = Math.floor(timeMs / secondsToMs(1));
   return second % 10 === 0;
 }
 

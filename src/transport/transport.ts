@@ -1,3 +1,5 @@
+import { secondsToMs } from "../clock/clock";
+
 export type TransportConfig = {
   bpm: number;
   stepsPerBeat: number;
@@ -19,7 +21,7 @@ export type TransportPosition = {
 export const DEFAULT_LOOP_LENGTH = 16;
 
 export function msPerBeat(bpm: number): number {
-  return 60_000 / bpm;
+  return secondsToMs(60) / bpm;
 }
 
 export function msPerStep(bpm: number, stepsPerBeat: number): number {

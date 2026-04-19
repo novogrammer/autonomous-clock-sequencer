@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { secondsToMs } from "../clock/clock";
 
 type PlaybackCalibrationState = {
   playbackOffsetMs: number;
@@ -9,7 +10,13 @@ export const usePlaybackCalibrationStore = create<PlaybackCalibrationState>(
   (set) => ({
     playbackOffsetMs: 0,
     setPlaybackOffsetMs: (playbackOffsetMs) =>
-      set({ playbackOffsetMs: clamp(playbackOffsetMs, -10_000, 10_000) }),
+      set({
+        playbackOffsetMs: clamp(
+          playbackOffsetMs,
+          -secondsToMs(10),
+          secondsToMs(10),
+        ),
+      }),
   }),
 );
 

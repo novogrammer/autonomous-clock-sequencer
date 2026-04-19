@@ -9,3 +9,7 @@ export function nowMs(): number {
 export function roundedNowMs(): number {
   return Math.round(nowMs());
 }
+
+export function secondsToMs(seconds: number): number {
+  return seconds * 1000;
+}

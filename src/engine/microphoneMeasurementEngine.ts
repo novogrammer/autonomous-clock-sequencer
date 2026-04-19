@@ -1,3 +1,5 @@
+import { secondsToMs } from "../clock/clock";
+
 type MeasurementTarget = "a" | "b";
 
 export type MeasurementClickEvent = {
@@ -201,7 +203,7 @@ function detectClick(
   return {
     target: detector.target,
     frequencyHz: detector.frequencyHz,
-    timeMs: (eventSample / timing.sampleRate) * 1000,
+    timeMs: secondsToMs(eventSample / timing.sampleRate),
     power: maxPower,
   };
 }

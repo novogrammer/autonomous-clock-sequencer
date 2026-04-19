@@ -1,20 +1,21 @@
 import { describe, expect, it } from "vitest";
+import { secondsToMs } from "../clock/clock";
 import {
   calculatePosition,
   retimeStartAtForBpmChange,
   scheduledStepTimeMs,
 } from "./transport";
 
-const startAt = 100_000;
+const startAt = secondsToMs(100);
 
 describe("transport", () => {
   it("startAtから拍位置とstep位置を計算する", () => {
     const position = calculatePosition(
       { bpm: 120, stepsPerBeat: 4, swing: 0, startAt },
-      startAt + 1_000,
+      startAt + secondsToMs(1),
     );
 
-    expect(position.elapsedMs).toBe(1_000);
+    expect(position.elapsedMs).toBe(secondsToMs(1));
     expect(position.phaseBeats).toBe(2);
     expect(position.beat).toBe(2);
     expect(position.step).toBe(8);
@@ -25,7 +26,7 @@ describe("transport", () => {
   it("デフォルトloop内のstep位置とbeat位置を計算する", () => {
     const position = calculatePosition(
       { bpm: 120, stepsPerBeat: 4, swing: 0, startAt },
-      startAt + 2_250,
+      startAt + secondsToMs(2.25),
     );
 
     expect(position.beat).toBe(4);
@@ -37,10 +38,10 @@ describe("transport", () => {
 
   it("BPM変更時に現在の位相を維持する", () => {
     const oldConfig = { bpm: 120, stepsPerBeat: 4, swing: 0, startAt };
-    const nowMs = startAt + 1_500;
+    const nowMs = startAt + secondsToMs(1.5);
     const nextStartAt = retimeStartAtForBpmChange(oldConfig, 60, nowMs);
 
-    expect(nextStartAt).toBe(98_500);
+    expect(nextStartAt).toBe(secondsToMs(98.5));
 
     const before = calculatePosition(oldConfig, nowMs);
     const after = calculatePosition(

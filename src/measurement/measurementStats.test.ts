@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { secondsToMs } from "../clock/clock";
 import type { MeasurementResult } from "../engine/microphoneMeasurementEngine";
 import { calculateMeasurementStats } from "./measurementStats";
 
@@ -37,13 +38,13 @@ function createResult(skewMs: number): MeasurementResult {
     eventA: {
       target: "a",
       frequencyHz: 1500,
-      timeMs: 1000,
+      timeMs: secondsToMs(1),
       power: 1,
     },
     eventB: {
       target: "b",
       frequencyHz: 2500,
-      timeMs: 1000 - skewMs,
+      timeMs: secondsToMs(1) - skewMs,
       power: 1,
     },
   };

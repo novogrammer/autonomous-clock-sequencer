@@ -9,7 +9,16 @@ import { usePlaybackCalibrationRuntimeStore } from "../state/playbackCalibration
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
 import { Readout } from "./Readout";
 
-const PLAYBACK_OFFSET_STEPS_MS = [-1000, -100, -10, -1, 1, 10, 100, 1000] as const;
+const PLAYBACK_OFFSET_STEPS_MS = [
+  -1000,
+  -100,
+  -10,
+  -1,
+  1,
+  10,
+  100,
+  1000,
+] as const;
 const CLICK_FREQUENCY_PRESETS_HZ = [1500, 2000, 2500, 3000] as const;
 
 export function PlaybackCalibrationPanel() {
