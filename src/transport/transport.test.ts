@@ -1,0 +1,66 @@
+import { describe, expect, it } from "vitest";
+import {
+  calculatePosition,
+  retimeStartAtForBpmChange,
+  scheduledStepTimeMs,
+} from "./transport";
+
+const startAt = 100_000;
+
+describe("transport", () => {
+  it("calculates beat and step position from startAt", () => {
+    const position = calculatePosition(
+      { bpm: 120, stepsPerBeat: 4, swing: 0, startAt },
+      startAt + 1_000,
+    );
+
+    expect(position.elapsedMs).toBe(1_000);
+    expect(position.phaseBeats).toBe(2);
+    expect(position.beat).toBe(2);
+    expect(position.step).toBe(8);
+    expect(position.stepInBeat).toBe(0);
+    expect(position.stepInLoop).toBe(8);
+  });
+
+  it("wraps step and beat position within the default loop", () => {
+    const position = calculatePosition(
+      { bpm: 120, stepsPerBeat: 4, swing: 0, startAt },
+      startAt + 2_250,
+    );
+
+    expect(position.beat).toBe(4);
+    expect(position.step).toBe(18);
+    expect(position.stepInBeat).toBe(2);
+    expect(position.stepInLoop).toBe(2);
+    expect(position.beatInLoop).toBe(0);
+  });
+
+  it("retimes startAt to keep phase when bpm changes", () => {
+    const oldConfig = { bpm: 120, stepsPerBeat: 4, swing: 0, startAt };
+    const nowMs = startAt + 1_500;
+    const nextStartAt = retimeStartAtForBpmChange(oldConfig, 60, nowMs);
+
+    expect(nextStartAt).toBe(98_500);
+
+    const before = calculatePosition(oldConfig, nowMs);
+    const after = calculatePosition(
+      { ...oldConfig, bpm: 60, startAt: nextStartAt },
+      nowMs,
+    );
+    expect(after.phaseBeats).toBe(before.phaseBeats);
+  });
+
+  it("delays odd steps when swing is enabled", () => {
+    const straightStep = scheduledStepTimeMs(
+      { bpm: 120, stepsPerBeat: 4, swing: 0.5, startAt },
+      2,
+    );
+    const swungStep = scheduledStepTimeMs(
+      { bpm: 120, stepsPerBeat: 4, swing: 0.5, startAt },
+      1,
+    );
+
+    expect(straightStep).toBe(startAt + 250);
+    expect(swungStep).toBe(startAt + 156.25);
+  });
+});

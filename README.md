@@ -40,6 +40,12 @@ npm install
 npm run dev
 ```
 
+テスト:
+
+```bash
+npm test
+```
+
 ビルド:
 
 ```bash
