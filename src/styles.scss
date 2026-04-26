@@ -1,3 +1,9 @@
+@mixin narrow-screen {
+  @media (max-width: 720px) {
+    @content;
+  }
+}
+
 :root {
   color: #18202a;
   background: #f4f1ea;
@@ -380,7 +386,7 @@ input {
   font-weight: 700;
 }
 
-@media (max-width: 720px) {
+@include narrow-screen {
   .app-shell {
     padding: 16px;
     place-items: stretch;
