@@ -66,60 +66,71 @@ export function PlaybackCalibrationPanel() {
       </div>
 
       <div className="calibration-panel">
-        <div className="controls calibration-controls">
-          <label>
-            <span>playbackOffsetMs</span>
-            <input
-              type="number"
-              min="-10000"
-              max="10000"
-              step="1"
-              value={playbackOffsetMs}
-              onChange={handlePlaybackOffsetChange}
-            />
-          </label>
+        <div className="calibration-controls">
+          <div className="calibration-control-group">
+            <div className="offset-control-row">
+              <label>
+                <span>playbackOffsetMs</span>
+                <input
+                  type="number"
+                  min="-10000"
+                  max="10000"
+                  step="1"
+                  value={playbackOffsetMs}
+                  onChange={handlePlaybackOffsetChange}
+                />
+              </label>
 
-          <div className="storage-control">
-            <div className="storage-status">
-              <span>localStorage</span>
-              <strong>{isPlaybackOffsetStored ? "保持中" : "未保存"}</strong>
+              <div className="storage-control">
+                <div className="storage-status">
+                  <span>保存状態</span>
+                  <strong>
+                    {isPlaybackOffsetStored ? "保存済み" : "未保存"}
+                  </strong>
+                </div>
+                <button onClick={resetPlaybackOffsetMs}>リセット</button>
+              </div>
             </div>
-            <button onClick={resetPlaybackOffsetMs}>リセット</button>
+
+            <div className="offset-step-row" aria-label="Playback offset steps">
+              {PLAYBACK_OFFSET_STEPS_MS.map((step) => (
+                <button
+                  key={step}
+                  onClick={() => setPlaybackOffsetMs(playbackOffsetMs + step)}
+                >
+                  {step > 0 ? `+${step}` : step}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="offset-step-row" aria-label="Playback offset steps">
-            {PLAYBACK_OFFSET_STEPS_MS.map((step) => (
-              <button
-                key={step}
-                onClick={() => setPlaybackOffsetMs(playbackOffsetMs + step)}
-              >
-                {step > 0 ? `+${step}` : step}
-              </button>
-            ))}
-          </div>
+          <div className="calibration-control-group">
+            <label>
+              <span>clickFrequencyHz</span>
+              <input
+                type="number"
+                min="800"
+                max="4000"
+                step="100"
+                value={clickFrequencyHz}
+                onChange={handleClickFrequencyChange}
+              />
+            </label>
 
-          <label>
-            <span>clickFrequencyHz</span>
-            <input
-              type="number"
-              min="800"
-              max="4000"
-              step="100"
-              value={clickFrequencyHz}
-              onChange={handleClickFrequencyChange}
-            />
-          </label>
-
-          <div className="frequency-preset-row" aria-label="Click frequency presets">
-            {CLICK_FREQUENCY_PRESETS_HZ.map((frequencyHz) => (
-              <button
-                key={frequencyHz}
-                className={frequencyHz === clickFrequencyHz ? "selected" : ""}
-                onClick={() => setClickFrequencyHz(frequencyHz)}
-              >
-                {frequencyHz}
-              </button>
-            ))}
+            <div
+              className="frequency-preset-row"
+              aria-label="Click frequency presets"
+            >
+              {CLICK_FREQUENCY_PRESETS_HZ.map((frequencyHz) => (
+                <button
+                  key={frequencyHz}
+                  className={frequencyHz === clickFrequencyHz ? "selected" : ""}
+                  onClick={() => setClickFrequencyHz(frequencyHz)}
+                >
+                  {frequencyHz}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
