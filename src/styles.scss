@@ -22,7 +22,7 @@ body {
   margin: 0;
 }
 
-button,
+.button,
 input {
   font: inherit;
 }
@@ -193,7 +193,7 @@ h3 {
   }
 }
 
-button {
+.button {
   min-height: 44px;
   padding: 0 18px;
   border: 1px solid #b9b1a3;
@@ -201,17 +201,17 @@ button {
   background: #ffffff;
   color: #18202a;
   cursor: pointer;
-}
 
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
 
-button.primary {
-  border-color: #235f68;
-  background: #235f68;
-  color: #ffffff;
+  &--primary {
+    border-color: #235f68;
+    background: #235f68;
+    color: #ffffff;
+  }
 }
 
 label {
@@ -316,7 +316,7 @@ input {
     flex-wrap: wrap;
     gap: 8px;
 
-    button {
+    .button {
       min-height: 44px;
       padding: 0 12px;
     }

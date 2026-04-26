@@ -80,13 +80,17 @@ export function MicrophoneMeasurementPanel() {
 
         <div className="transport-row">
           <button
-            className="primary"
+            className="button button--primary"
             onClick={startMeasurement}
             disabled={status === "ready" || status === "starting"}
           >
             測定開始
           </button>
-          <button onClick={stopMeasurement} disabled={status !== "ready"}>
+          <button
+            className="button"
+            onClick={stopMeasurement}
+            disabled={status !== "ready"}
+          >
             停止
           </button>
         </div>

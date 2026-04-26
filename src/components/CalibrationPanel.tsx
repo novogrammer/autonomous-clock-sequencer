@@ -12,7 +12,10 @@ export function CalibrationPanel() {
           <p className="eyebrow">Calibration</p>
           <h2>Calibration</h2>
         </div>
-        <button onClick={() => setOpen((current) => !current)}>
+        <button
+          className="button"
+          onClick={() => setOpen((current) => !current)}
+        >
           {isOpen ? "隠す" : "表示"}
         </button>
       </div>

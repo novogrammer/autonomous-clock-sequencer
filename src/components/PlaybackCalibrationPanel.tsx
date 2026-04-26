@@ -88,7 +88,9 @@ export function PlaybackCalibrationPanel() {
                     {isPlaybackOffsetStored ? "保存済み" : "未保存"}
                   </strong>
                 </div>
-                <button onClick={resetPlaybackOffsetMs}>リセット</button>
+                <button className="button" onClick={resetPlaybackOffsetMs}>
+                  リセット
+                </button>
               </div>
             </div>
 
@@ -99,6 +101,7 @@ export function PlaybackCalibrationPanel() {
               {PLAYBACK_OFFSET_STEPS_MS.map((step) => (
                 <button
                   key={step}
+                  className="button"
                   onClick={() => setPlaybackOffsetMs(playbackOffsetMs + step)}
                 >
                   {step > 0 ? `+${step}` : step}
@@ -129,8 +132,8 @@ export function PlaybackCalibrationPanel() {
                   key={frequencyHz}
                   className={
                     frequencyHz === clickFrequencyHz
-                      ? "playback-calibration__frequency-preset--selected"
-                      : ""
+                      ? "button playback-calibration__frequency-preset--selected"
+                      : "button"
                   }
                   onClick={() => setClickFrequencyHz(frequencyHz)}
                 >
@@ -156,13 +159,17 @@ export function PlaybackCalibrationPanel() {
 
         <div className="transport-row">
           <button
-            className="primary"
+            className="button button--primary"
             onClick={startCalibration}
             disabled={isCalibrating || audioStatus === "starting"}
           >
             時報開始
           </button>
-          <button onClick={stopCalibration} disabled={!isCalibrating}>
+          <button
+            className="button"
+            onClick={stopCalibration}
+            disabled={!isCalibrating}
+          >
             停止
           </button>
         </div>

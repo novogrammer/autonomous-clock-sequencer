@@ -82,13 +82,13 @@ export function MetronomePanel() {
 
       <div className="transport-row">
         <button
-          className="primary"
+          className="button button--primary"
           onClick={handlePlay}
           disabled={isPlaying || audioStatus === "starting"}
         >
           再生
         </button>
-        <button onClick={handleStop}>停止</button>
+        <button className="button" onClick={handleStop}>停止</button>
       </div>
 
       <div className="metronome__controls">
