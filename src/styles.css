@@ -259,6 +259,34 @@ input {
   gap: 8px;
 }
 
+.storage-control {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+}
+
+.storage-status {
+  min-width: 120px;
+  padding: 8px 10px;
+  border: 1px solid #ded8cf;
+  border-radius: 6px;
+  background: #f8f5ef;
+}
+
+.storage-status span {
+  display: block;
+  color: #6b7280;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.storage-status strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.95rem;
+}
+
 .offset-step-row button,
 .frequency-preset-row button {
   min-height: 44px;

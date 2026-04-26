@@ -29,7 +29,12 @@ export function PlaybackCalibrationPanel() {
     setCalibrating,
   } =
     usePlaybackCalibrationRuntimeStore();
-  const { playbackOffsetMs, setPlaybackOffsetMs } =
+  const {
+    playbackOffsetMs,
+    isPlaybackOffsetStored,
+    setPlaybackOffsetMs,
+    resetPlaybackOffsetMs,
+  } =
     usePlaybackCalibrationStore();
   const currentNowMs = useCurrentNowMs();
   const { audioStatus, startCalibration, stopCalibration } =
@@ -73,6 +78,14 @@ export function PlaybackCalibrationPanel() {
               onChange={handlePlaybackOffsetChange}
             />
           </label>
+
+          <div className="storage-control">
+            <div className="storage-status">
+              <span>localStorage</span>
+              <strong>{isPlaybackOffsetStored ? "保持中" : "未保存"}</strong>
+            </div>
+            <button onClick={resetPlaybackOffsetMs}>リセット</button>
+          </div>
 
           <div className="offset-step-row" aria-label="Playback offset steps">
             {PLAYBACK_OFFSET_STEPS_MS.map((step) => (
