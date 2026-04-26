@@ -1,6 +1,6 @@
 import { CalibrationPanel } from "./components/CalibrationPanel";
 import { MetronomePanel } from "./components/MetronomePanel";
-import "./styles.css";
+import "./styles.scss";
 
 function App() {
   return (
