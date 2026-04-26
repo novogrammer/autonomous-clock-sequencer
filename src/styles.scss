@@ -137,12 +137,6 @@ button.primary {
   color: #ffffff;
 }
 
-button.selected {
-  border-color: #235f68;
-  background: #e4f0f1;
-  color: #17444b;
-}
-
 .controls {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -238,7 +232,6 @@ input {
   border-top: 0;
 }
 
-.calibration-panel,
 .measurement-panel {
   margin-top: 24px;
 }
@@ -247,42 +240,46 @@ input {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.calibration-controls {
+.playback-calibration__panel {
+  margin-top: 24px;
+}
+
+.playback-calibration__controls {
   display: grid;
   gap: 24px;
   margin-top: 24px;
 }
 
-.calibration-control-group {
+.playback-calibration__control-group {
   display: grid;
   gap: 12px;
 }
 
-.frequency-control-group label {
+.playback-calibration__frequency label {
   max-width: 240px;
 }
 
-.offset-control-row {
+.playback-calibration__offset-row {
   display: grid;
   grid-template-columns: minmax(160px, 240px) auto;
   align-items: end;
   gap: 16px;
 }
 
-.offset-step-row,
-.frequency-preset-row {
+.playback-calibration__offset-steps,
+.playback-calibration__frequency-presets {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.storage-control {
+.playback-calibration__storage-control {
   display: flex;
   align-items: end;
   gap: 12px;
 }
 
-.storage-status {
+.playback-calibration__storage-status {
   min-width: 120px;
   padding: 8px 10px;
   border: 1px solid #ded8cf;
@@ -290,7 +287,7 @@ input {
   background: #f8f5ef;
 }
 
-.storage-status span {
+.playback-calibration__storage-status span {
   display: block;
   color: #6b7280;
   font-size: 0.72rem;
@@ -298,19 +295,25 @@ input {
   text-transform: uppercase;
 }
 
-.storage-status strong {
+.playback-calibration__storage-status strong {
   display: block;
   margin-top: 4px;
   font-size: 0.95rem;
 }
 
-.offset-step-row button,
-.frequency-preset-row button {
+.playback-calibration__offset-steps button,
+.playback-calibration__frequency-presets button {
   min-height: 44px;
   padding: 0 12px;
 }
 
-.time-readout {
+.playback-calibration__frequency-preset--selected {
+  border-color: #235f68;
+  background: #e4f0f1;
+  color: #17444b;
+}
+
+.playback-calibration__time-readout {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
@@ -324,7 +327,7 @@ input {
   margin-top: 16px;
 }
 
-.time-signal-flash {
+.playback-calibration__time-signal {
   height: 10px;
   margin-top: 12px;
   border-radius: 999px;
@@ -335,17 +338,17 @@ input {
     opacity 90ms linear;
 }
 
-.time-signal-flash-idle {
+.playback-calibration__time-signal--idle {
   opacity: 0.55;
 }
 
-.time-signal-flash-second {
+.playback-calibration__time-signal--second {
   background: #4aa3a8;
   box-shadow: 0 0 0 3px rgb(74 163 168 / 18%);
   opacity: 1;
 }
 
-.time-signal-flash-boundary {
+.playback-calibration__time-signal--boundary {
   background: #d88a1d;
   box-shadow: 0 0 0 5px rgb(216 138 29 / 22%);
   opacity: 1;
@@ -380,16 +383,16 @@ input {
 
   .controls,
   .measurement-grid,
-  .time-readout,
+  .playback-calibration__time-readout,
   .position-grid {
     grid-template-columns: 1fr;
   }
 
-  .offset-control-row {
+  .playback-calibration__offset-row {
     grid-template-columns: 1fr;
   }
 
-  .storage-control {
+  .playback-calibration__storage-control {
     align-items: stretch;
   }
 }
