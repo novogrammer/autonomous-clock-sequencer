@@ -25,11 +25,12 @@ export function parsePhase0Url(search: string): Phase0UrlState {
 
 export function buildPhase0Url(state: Phase0UrlState): string {
   const url = new URL(window.location.href);
-  url.searchParams.set("bpm", formatNumber(state.bpm));
-  url.searchParams.set("stepsPerBeat", String(state.stepsPerBeat));
-  url.searchParams.set("swing", formatNumber(state.swing));
+  const params = new URLSearchParams();
+  params.set("bpm", formatNumber(state.bpm));
+  params.set("stepsPerBeat", String(state.stepsPerBeat));
+  params.set("swing", formatNumber(state.swing));
 
-  return `${url.pathname}?${url.searchParams.toString()}${url.hash}`;
+  return `${url.pathname}?${params.toString()}${url.hash}`;
 }
 
 export function replaceUrlFromState(state: Phase0UrlState): void {
