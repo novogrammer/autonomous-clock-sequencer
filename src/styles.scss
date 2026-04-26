@@ -237,23 +237,23 @@ input {
   border: 1px solid #ded8cf;
   border-radius: 6px;
   background: #f8f5ef;
-}
 
-.readout span {
-  display: block;
-  color: #6b7280;
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
+  span {
+    display: block;
+    color: #6b7280;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
 
-.readout strong {
-  display: block;
-  margin-top: 6px;
-  overflow-wrap: anywhere;
-  font-size: 1.25rem;
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
+  strong {
+    display: block;
+    margin-top: 6px;
+    overflow-wrap: anywhere;
+    font-size: 1.25rem;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
 }
 
 .calibration-section {
