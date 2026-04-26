@@ -80,7 +80,7 @@ export function MetronomePanel() {
         <StatusBadge isPlaying={isPlaying} audioStatus={audioStatus} />
       </div>
 
-      <div className="transport-row">
+      <div className="action-row">
         <button
           className="button button--primary"
           onClick={handlePlay}

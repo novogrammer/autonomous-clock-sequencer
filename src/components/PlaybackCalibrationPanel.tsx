@@ -157,7 +157,7 @@ export function PlaybackCalibrationPanel() {
           aria-label="Time signal visual indicator"
         />
 
-        <div className="transport-row">
+        <div className="action-row">
           <button
             className="button button--primary"
             onClick={startCalibration}

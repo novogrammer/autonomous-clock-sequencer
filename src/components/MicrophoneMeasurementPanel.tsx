@@ -78,7 +78,7 @@ export function MicrophoneMeasurementPanel() {
           <Readout label="B clicks" value={String(clickCounts.b)} />
         </div>
 
-        <div className="transport-row">
+        <div className="action-row">
           <button
             className="button button--primary"
             onClick={startMeasurement}
