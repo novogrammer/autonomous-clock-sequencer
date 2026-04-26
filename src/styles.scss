@@ -32,6 +32,11 @@ input {
   padding: 32px;
   display: grid;
   place-items: center;
+
+  @include narrow-screen {
+    padding: 16px;
+    place-items: stretch;
+  }
 }
 
 .panel {
@@ -40,6 +45,10 @@ input {
   border: 1px solid #d6d0c5;
   border-radius: 8px;
   background: #fffdf8;
+
+  @include narrow-screen {
+    padding: 20px;
+  }
 }
 
 .metronome {
@@ -48,6 +57,11 @@ input {
     align-items: flex-start;
     justify-content: space-between;
     gap: 24px;
+
+    @include narrow-screen {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
 
   &__controls {
@@ -55,6 +69,10 @@ input {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
     margin-top: 24px;
+
+    @include narrow-screen {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__position-grid {
@@ -62,6 +80,10 @@ input {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     margin-top: 24px;
+
+    @include narrow-screen {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__url-box {
@@ -122,6 +144,11 @@ h3 {
   align-items: flex-start;
   justify-content: space-between;
   gap: 24px;
+
+  @include narrow-screen {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 .status {
@@ -159,6 +186,11 @@ h3 {
   display: flex;
   gap: 12px;
   margin-top: 28px;
+
+  @include narrow-screen {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 button {
@@ -272,6 +304,10 @@ input {
     grid-template-columns: minmax(160px, 240px) auto;
     align-items: end;
     gap: 16px;
+
+    @include narrow-screen {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__offset-steps,
@@ -290,6 +326,10 @@ input {
     display: flex;
     align-items: end;
     gap: 12px;
+
+    @include narrow-screen {
+      align-items: stretch;
+    }
   }
 
   &__storage-status {
@@ -327,6 +367,10 @@ input {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
     margin-top: 16px;
+
+    @include narrow-screen {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__time-signal {
@@ -366,6 +410,10 @@ input {
     display: grid;
     gap: 16px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    @include narrow-screen {
+      grid-template-columns: 1fr;
+    }
   }
 
   &__grid {
@@ -373,6 +421,10 @@ input {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     margin-top: 16px;
+
+    @include narrow-screen {
+      grid-template-columns: 1fr;
+    }
   }
 }
 
@@ -384,51 +436,4 @@ input {
 .app-footer a {
   color: #235f68;
   font-weight: 700;
-}
-
-@include narrow-screen {
-  .app-shell {
-    padding: 16px;
-    place-items: stretch;
-  }
-
-  .panel {
-    padding: 20px;
-  }
-
-  .section-header,
-  .transport-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .metronome {
-    &__header {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    &__controls,
-    &__position-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  .playback-calibration {
-    &__time-readout,
-    &__offset-row {
-      grid-template-columns: 1fr;
-    }
-
-    &__storage-control {
-      align-items: stretch;
-    }
-  }
-
-  .microphone-measurement {
-    &__controls,
-    &__grid {
-      grid-template-columns: 1fr;
-    }
-  }
 }
