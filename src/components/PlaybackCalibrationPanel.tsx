@@ -104,7 +104,7 @@ export function PlaybackCalibrationPanel() {
             </div>
           </div>
 
-          <div className="calibration-control-group">
+          <div className="calibration-control-group frequency-control-group">
             <label>
               <span>clickFrequencyHz</span>
               <input

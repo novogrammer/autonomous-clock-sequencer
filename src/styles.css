@@ -258,6 +258,10 @@ input {
   gap: 12px;
 }
 
+.frequency-control-group label {
+  max-width: 240px;
+}
+
 .offset-control-row {
   display: grid;
   grid-template-columns: minmax(160px, 240px) auto;
