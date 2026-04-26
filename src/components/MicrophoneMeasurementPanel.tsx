@@ -34,7 +34,7 @@ export function MicrophoneMeasurementPanel() {
           <p className="eyebrow">Measurement</p>
           <h3>Microphone measurement</h3>
         </div>
-        <span className={`status status-${status}`}>{status}</span>
+        <span className={`status status--${status}`}>{status}</span>
       </div>
 
       <div className="microphone-measurement__panel">

@@ -160,26 +160,26 @@ h3 {
   font-weight: 700;
   background: #ece7dd;
   color: #5f5546;
-}
 
-.status-ready {
-  background: #dff0d9;
-  color: #2f6b36;
-}
+  &--ready {
+    background: #dff0d9;
+    color: #2f6b36;
+  }
 
-.status-starting {
-  background: #f2e6bd;
-  color: #765a11;
-}
+  &--starting {
+    background: #f2e6bd;
+    color: #765a11;
+  }
 
-.status-locked {
-  background: #e6e8ec;
-  color: #4b5560;
-}
+  &--locked {
+    background: #e6e8ec;
+    color: #4b5560;
+  }
 
-.status-blocked {
-  background: #f2d4cf;
-  color: #8c2f22;
+  &--blocked {
+    background: #f2d4cf;
+    color: #8c2f22;
+  }
 }
 
 .transport-row {

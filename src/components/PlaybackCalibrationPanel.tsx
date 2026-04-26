@@ -62,7 +62,7 @@ export function PlaybackCalibrationPanel() {
           <p className="eyebrow">Playback</p>
           <h3>Playback calibration</h3>
         </div>
-        <span className={`status status-${audioStatus}`}>{audioStatus}</span>
+        <span className={`status status--${audioStatus}`}>{audioStatus}</span>
       </div>
 
       <div className="playback-calibration__panel">

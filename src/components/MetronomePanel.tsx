@@ -156,5 +156,5 @@ function StatusBadge({
   audioStatus: AudioStatus;
 }) {
   const label = isPlaying ? audioStatus : "stopped";
-  return <span className={`status status-${label}`}>{label}</span>;
+  return <span className={`status status--${label}`}>{label}</span>;
 }
