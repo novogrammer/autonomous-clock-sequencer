@@ -71,8 +71,8 @@ export function MetronomePanel() {
   }
 
   return (
-    <>
-      <div className="header">
+    <section className="metronome">
+      <div className="metronome__header">
         <div>
           <p className="eyebrow">Phase 0</p>
           <h1>Autonomous Clock Metronome</h1>
@@ -91,7 +91,7 @@ export function MetronomePanel() {
         <button onClick={handleStop}>停止</button>
       </div>
 
-      <div className="controls">
+      <div className="metronome__controls">
         <label>
           <span>BPM</span>
           <input
@@ -129,7 +129,7 @@ export function MetronomePanel() {
         </label>
       </div>
 
-      <div className="position-grid">
+      <div className="metronome__position-grid">
         <Readout
           label="elapsed"
           value={`${(position.elapsedMs / secondsToMs(1)).toFixed(2)}s`}
@@ -140,11 +140,11 @@ export function MetronomePanel() {
         <Readout label="stepInLoop" value={String(position.stepInLoop)} />
       </div>
 
-      <div className="url-box">
+      <div className="metronome__url-box">
         <span>URL</span>
         <code>{currentUrl}</code>
       </div>
-    </>
+    </section>
   );
 }
 
