@@ -9,11 +9,11 @@ export function CalibrationPanel() {
     <section className="calibration-section">
       <div className="section-header">
         <div>
-          <p className="eyebrow">Calibration</p>
+          <p className="c-eyebrow">Calibration</p>
           <h2>Calibration</h2>
         </div>
         <button
-          className="button"
+          className="c-button"
           onClick={() => setOpen((current) => !current)}
         >
           {isOpen ? "隠す" : "表示"}

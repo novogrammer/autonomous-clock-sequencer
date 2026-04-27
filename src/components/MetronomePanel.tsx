@@ -71,10 +71,10 @@ export function MetronomePanel() {
   }
 
   return (
-    <section className="metronome">
-      <div className="metronome__header">
+    <section className="p-metronome">
+      <div className="p-metronome__header">
         <div>
-          <p className="eyebrow">Phase 0</p>
+          <p className="c-eyebrow">Phase 0</p>
           <h1>Autonomous Clock Metronome</h1>
         </div>
         <StatusBadge isPlaying={isPlaying} audioStatus={audioStatus} />
@@ -82,16 +82,16 @@ export function MetronomePanel() {
 
       <div className="action-row">
         <button
-          className="button button--primary"
+          className="c-button c-button--primary"
           onClick={handlePlay}
           disabled={isPlaying || audioStatus === "starting"}
         >
           再生
         </button>
-        <button className="button" onClick={handleStop}>停止</button>
+        <button className="c-button" onClick={handleStop}>停止</button>
       </div>
 
-      <div className="metronome__controls">
+      <div className="p-metronome__controls">
         <label>
           <span>BPM</span>
           <input
@@ -129,7 +129,7 @@ export function MetronomePanel() {
         </label>
       </div>
 
-      <div className="metronome__position-grid">
+      <div className="p-metronome__position-grid">
         <Readout
           label="elapsed"
           value={`${(position.elapsedMs / secondsToMs(1)).toFixed(2)}s`}
@@ -140,7 +140,7 @@ export function MetronomePanel() {
         <Readout label="stepInLoop" value={String(position.stepInLoop)} />
       </div>
 
-      <div className="metronome__url-box">
+      <div className="p-metronome__url-box">
         <span>URL</span>
         <code>{currentUrl}</code>
       </div>
@@ -156,5 +156,5 @@ function StatusBadge({
   audioStatus: AudioStatus;
 }) {
   const label = isPlaying ? audioStatus : "stopped";
-  return <span className={`status status--${label}`}>{label}</span>;
+  return <span className={`c-status c-status--${label}`}>{label}</span>;
 }

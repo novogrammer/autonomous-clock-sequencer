@@ -22,12 +22,12 @@ body {
   margin: 0;
 }
 
-.button,
+.c-button,
 input {
   font: inherit;
 }
 
-.app-shell {
+.l-app-shell {
   min-height: 100vh;
   padding: 32px;
   display: grid;
@@ -39,7 +39,7 @@ input {
   }
 }
 
-.panel {
+.l-panel {
   width: min(920px, 100%);
   padding: 28px;
   border: 1px solid #d6d0c5;
@@ -51,7 +51,7 @@ input {
   }
 }
 
-.metronome {
+.p-metronome {
   &__header {
     display: flex;
     align-items: flex-start;
@@ -110,7 +110,7 @@ input {
   }
 }
 
-.eyebrow {
+.c-eyebrow {
   margin: 0 0 6px;
   color: #7a5a32;
   font-size: 0.78rem;
@@ -151,7 +151,7 @@ h3 {
   }
 }
 
-.status {
+.c-status {
   min-width: 82px;
   padding: 6px 10px;
   border-radius: 999px;
@@ -193,7 +193,7 @@ h3 {
   }
 }
 
-.button {
+.c-button {
   min-height: 44px;
   padding: 0 18px;
   border: 1px solid #b9b1a3;
@@ -231,7 +231,7 @@ input {
   color: #18202a;
 }
 
-.readout {
+.c-readout {
   min-width: 0;
   padding: 14px;
   border: 1px solid #ded8cf;
@@ -268,8 +268,8 @@ input {
   gap: 28px;
 }
 
-.playback-calibration,
-.microphone-measurement {
+.p-playback-calibration,
+.p-microphone-measurement {
   padding-top: 20px;
   border-top: 1px solid #ded8cf;
 }
@@ -279,7 +279,7 @@ input {
   border-top: 0;
 }
 
-.playback-calibration {
+.p-playback-calibration {
   &__panel {
     margin-top: 24px;
   }
@@ -316,7 +316,7 @@ input {
     flex-wrap: wrap;
     gap: 8px;
 
-    .button {
+    .c-button {
       min-height: 44px;
       padding: 0 12px;
     }
@@ -401,7 +401,7 @@ input {
   }
 }
 
-.microphone-measurement {
+.p-microphone-measurement {
   &__panel {
     margin-top: 24px;
   }

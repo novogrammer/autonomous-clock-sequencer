@@ -4,8 +4,8 @@ import "./styles.scss";
 
 function App() {
   return (
-    <main className="app-shell">
-      <section className="panel">
+    <main className="l-app-shell">
+      <section className="l-panel">
         <MetronomePanel />
 
         <CalibrationPanel />

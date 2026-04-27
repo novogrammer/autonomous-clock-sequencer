@@ -56,19 +56,19 @@ export function PlaybackCalibrationPanel() {
   }
 
   return (
-    <section className="playback-calibration">
+    <section className="p-playback-calibration">
       <div className="section-header">
         <div>
-          <p className="eyebrow">Playback</p>
+          <p className="c-eyebrow">Playback</p>
           <h3>Playback calibration</h3>
         </div>
-        <span className={`status status--${audioStatus}`}>{audioStatus}</span>
+        <span className={`c-status c-status--${audioStatus}`}>{audioStatus}</span>
       </div>
 
-      <div className="playback-calibration__panel">
-        <div className="playback-calibration__controls">
-          <div className="playback-calibration__control-group">
-            <div className="playback-calibration__offset-row">
+      <div className="p-playback-calibration__panel">
+        <div className="p-playback-calibration__controls">
+          <div className="p-playback-calibration__control-group">
+            <div className="p-playback-calibration__offset-row">
               <label>
                 <span>playbackOffsetMs</span>
                 <input
@@ -81,27 +81,27 @@ export function PlaybackCalibrationPanel() {
                 />
               </label>
 
-              <div className="playback-calibration__storage-control">
-                <div className="playback-calibration__storage-status">
+              <div className="p-playback-calibration__storage-control">
+                <div className="p-playback-calibration__storage-status">
                   <span>保存状態</span>
                   <strong>
                     {isPlaybackOffsetStored ? "保存済み" : "未保存"}
                   </strong>
                 </div>
-                <button className="button" onClick={resetPlaybackOffsetMs}>
+                <button className="c-button" onClick={resetPlaybackOffsetMs}>
                   リセット
                 </button>
               </div>
             </div>
 
             <div
-              className="playback-calibration__offset-steps"
+              className="p-playback-calibration__offset-steps"
               aria-label="Playback offset steps"
             >
               {PLAYBACK_OFFSET_STEPS_MS.map((step) => (
                 <button
                   key={step}
-                  className="button"
+                  className="c-button"
                   onClick={() => setPlaybackOffsetMs(playbackOffsetMs + step)}
                 >
                   {step > 0 ? `+${step}` : step}
@@ -110,7 +110,7 @@ export function PlaybackCalibrationPanel() {
             </div>
           </div>
 
-          <div className="playback-calibration__control-group playback-calibration__frequency">
+          <div className="p-playback-calibration__control-group p-playback-calibration__frequency">
             <label>
               <span>clickFrequencyHz</span>
               <input
@@ -124,7 +124,7 @@ export function PlaybackCalibrationPanel() {
             </label>
 
             <div
-              className="playback-calibration__frequency-presets"
+              className="p-playback-calibration__frequency-presets"
               aria-label="Click frequency presets"
             >
               {CLICK_FREQUENCY_PRESETS_HZ.map((frequencyHz) => (
@@ -132,8 +132,8 @@ export function PlaybackCalibrationPanel() {
                   key={frequencyHz}
                   className={
                     frequencyHz === clickFrequencyHz
-                      ? "button playback-calibration__frequency-preset--selected"
-                      : "button"
+                      ? "c-button p-playback-calibration__frequency-preset--selected"
+                      : "c-button"
                   }
                   onClick={() => setClickFrequencyHz(frequencyHz)}
                 >
@@ -144,7 +144,7 @@ export function PlaybackCalibrationPanel() {
           </div>
         </div>
 
-        <div className="playback-calibration__time-readout">
+        <div className="p-playback-calibration__time-readout">
           <Readout label="raw time" value={formatLocalTime(currentNowMs)} />
           <Readout
             label="offset time"
@@ -153,20 +153,20 @@ export function PlaybackCalibrationPanel() {
         </div>
 
         <div
-          className={`playback-calibration__time-signal playback-calibration__time-signal--${flashState}`}
+          className={`p-playback-calibration__time-signal p-playback-calibration__time-signal--${flashState}`}
           aria-label="Time signal visual indicator"
         />
 
         <div className="action-row">
           <button
-            className="button button--primary"
+            className="c-button c-button--primary"
             onClick={startCalibration}
             disabled={isCalibrating || audioStatus === "starting"}
           >
             時報開始
           </button>
           <button
-            className="button"
+            className="c-button"
             onClick={stopCalibration}
             disabled={!isCalibrating}
           >

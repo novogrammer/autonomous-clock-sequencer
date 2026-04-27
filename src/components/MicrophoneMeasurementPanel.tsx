@@ -28,17 +28,17 @@ export function MicrophoneMeasurementPanel() {
   }
 
   return (
-    <section className="microphone-measurement">
+    <section className="p-microphone-measurement">
       <div className="section-header">
         <div>
-          <p className="eyebrow">Measurement</p>
+          <p className="c-eyebrow">Measurement</p>
           <h3>Microphone measurement</h3>
         </div>
-        <span className={`status status--${status}`}>{status}</span>
+        <span className={`c-status c-status--${status}`}>{status}</span>
       </div>
 
-      <div className="microphone-measurement__panel">
-        <div className="microphone-measurement__controls">
+      <div className="p-microphone-measurement__panel">
+        <div className="p-microphone-measurement__controls">
           <label>
             <span>device A Hz</span>
             <input
@@ -66,7 +66,7 @@ export function MicrophoneMeasurementPanel() {
           </label>
         </div>
 
-        <div className="microphone-measurement__grid">
+        <div className="p-microphone-measurement__grid">
           <Readout
             label="latest A-B"
             value={latestResult === null ? "-" : `${latestResult.skewMs.toFixed(1)}ms`}
@@ -80,14 +80,14 @@ export function MicrophoneMeasurementPanel() {
 
         <div className="action-row">
           <button
-            className="button button--primary"
+            className="c-button c-button--primary"
             onClick={startMeasurement}
             disabled={status === "ready" || status === "starting"}
           >
             測定開始
           </button>
           <button
-            className="button"
+            className="c-button"
             onClick={stopMeasurement}
             disabled={status !== "ready"}
           >

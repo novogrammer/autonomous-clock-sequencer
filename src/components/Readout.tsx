@@ -5,7 +5,7 @@ type ReadoutProps = {
 
 export function Readout({ label, value }: ReadoutProps) {
   return (
-    <div className="readout">
+    <div className="c-readout">
       <span>{label}</span>
       <strong>{value}</strong>
     </div>
