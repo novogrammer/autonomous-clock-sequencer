@@ -120,13 +120,18 @@ export function SequencerPanel() {
         <div className="c-action-row">
           <span className="c-field__label">Playback</span>
           <button
-            className="c-button c-button--primary"
+            className={isPlaying ? "c-button c-button--primary" : "c-button"}
             onClick={handlePlay}
             disabled={isPlaying || audioStatus === "starting"}
           >
             On
           </button>
-          <button className="c-button" onClick={handleStop}>Off</button>
+          <button
+            className={!isPlaying ? "c-button c-button--primary" : "c-button"}
+            onClick={handleStop}
+          >
+            Off
+          </button>
         </div>
 
         <div className="c-action-row">
