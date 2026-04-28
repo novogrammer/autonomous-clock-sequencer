@@ -73,12 +73,19 @@ export class SequencerEngine {
       return;
     }
 
+    const shouldReplaceKitVoices = this.config.kit !== config.kit;
     const shouldReschedule =
+      shouldReplaceKitVoices ||
       this.config.bpm !== config.bpm ||
       this.config.stepsPerBeat !== config.stepsPerBeat ||
       this.config.swing !== config.swing ||
       this.config.beatsPerLoop !== config.beatsPerLoop ||
       this.config.playbackOffsetMs !== config.playbackOffsetMs;
+
+    if (shouldReplaceKitVoices) {
+      disposeKitVoices(this.config.kit, this.kitVoices);
+      this.kitVoices = createKitVoices(config.kit);
+    }
 
     this.config = config;
     if (shouldReschedule) {

@@ -20,6 +20,7 @@ vi.mock("../clock/clock", async () => {
 });
 
 vi.mock("tone", () => ({
+  __esModule: true,
   default: {
     now: testState.mockToneNow,
     start: vi.fn(),
@@ -32,10 +33,64 @@ vi.mock("tone", () => ({
 
       dispose() {}
     },
+    MembraneSynth: class {
+      toDestination() {
+        return this;
+      }
+
+      triggerAttackRelease = testState.triggerAttackRelease;
+
+      dispose() {}
+    },
+    NoiseSynth: class {
+      toDestination() {
+        return this;
+      }
+
+      triggerAttackRelease = testState.triggerAttackRelease;
+
+      dispose() {}
+    },
+    MetalSynth: class {
+      toDestination() {
+        return this;
+      }
+
+      triggerAttackRelease = testState.triggerAttackRelease;
+
+      dispose() {}
+    },
   },
   now: testState.mockToneNow,
   start: vi.fn(),
   Synth: class {
+    toDestination() {
+      return this;
+    }
+
+    triggerAttackRelease = testState.triggerAttackRelease;
+
+    dispose() {}
+  },
+  MembraneSynth: class {
+    toDestination() {
+      return this;
+    }
+
+    triggerAttackRelease = testState.triggerAttackRelease;
+
+    dispose() {}
+  },
+  NoiseSynth: class {
+    toDestination() {
+      return this;
+    }
+
+    triggerAttackRelease = testState.triggerAttackRelease;
+
+    dispose() {}
+  },
+  MetalSynth: class {
     toDestination() {
       return this;
     }
@@ -91,6 +146,28 @@ describe("SequencerEngine.update", () => {
     });
 
     expect(engine.nextStep).toBe(9);
+  });
+
+  it("kit変更時はvoicesを作り直して現在stepへ再計算する", () => {
+    testState.mockedNowMs = 1000;
+    const engine = createPreparedEngine();
+    const previousVoices = engine.kitVoices;
+
+    engine.update({
+      bpm: 120,
+      stepsPerBeat: 4,
+      beatsPerLoop: 4,
+      kit: "bass-fourths",
+      pattern: "0000000000000000_0000000000000000_0000000000000000_0000000000000000",
+      isPatternEnabled: true,
+      isClickEnabled: false,
+      swing: 0,
+      playbackOffsetMs: 0,
+    });
+
+    expect(previousVoices.kick.dispose).toHaveBeenCalledTimes(5);
+    expect(engine.kitVoices).not.toBe(previousVoices);
+    expect(engine.nextStep).toBe(8);
   });
 
   it("stepsPerBeat変更後のstep境界でアクセントを再計算する", () => {
