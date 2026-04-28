@@ -98,7 +98,9 @@ export function SequencerPanel() {
   }
 
   function handleKitChange(event: ChangeEvent<HTMLSelectElement>) {
-    setKit(event.target.value);
+    const nextKit = event.target.value;
+    setKit(nextKit);
+    setPattern(createEmptyPattern(nextKit, stepsPerBeat, beatsPerLoop));
   }
 
   function handleStepToggle(trackIndex: number, stepIndex: number) {
