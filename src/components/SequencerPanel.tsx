@@ -118,7 +118,7 @@ export function SequencerPanel() {
 
       <div className="l-stack l-stack--subsection">
         <div className="c-action-row">
-          <span className="c-field__label">Playback</span>
+          <span className="c-field__label">Sequencer</span>
           <button
             className="c-button c-button--primary"
             onClick={handlePlay}
