@@ -10,7 +10,7 @@ https://novogrammer.github.io/autonomous-clock-sequencer/
 
 - Unix epoch 基準で現在位置を計算する transport
 - URL 共有によるシーケンス状態の復元
-- `kit=minimal` の 4 トラック step シーケンサー
+- `minimal` と `bass-fourths` の step シーケンサー
 - `Sequencer` と `Metronome` の独立した on / off
 - `beatsPerLoop`, `stepsPerBeat`, `swing`, `bpm` の編集
 - `Clear Pattern`

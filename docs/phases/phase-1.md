@@ -5,6 +5,7 @@
 - 実装完了
 - 本文は Phase 1 の確定仕様として保持する
 - 次の拡張は Phase 2 で扱う
+
 ## 目的
 
 最小の pattern 記述を URL で共有し、各端末が同じ絶対時刻基準で再生できることを確認する。
@@ -54,7 +55,7 @@
 ## 最小構成
 
 - `kit` はまず 1 種類でもよい
-- トラック数は 3 を基準とする
+- トラック数は `kit` ごとに定義する
 - `beatsPerLoop` は 4 を初期値とする
 - `pattern` はトラックごとの `0/1` 文字列を `_` で連結した 1 文字列とする
 - 各トラックの長さは `stepsPerBeat * beatsPerLoop` に合わせる
@@ -76,7 +77,7 @@
 - Phase 1 で主に使う URL パラメーター:
   `bpm`, `stepsPerBeat`, `swing`, `beatsPerLoop`, `kit`, `pattern`
 - 例:
-  `?bpm=120&stepsPerBeat=4&swing=0&beatsPerLoop=4&kit=minimal&pattern=1000100010001000_0000100000001000_1010101010101010`
+  `?bpm=120&stepsPerBeat=4&swing=0&beatsPerLoop=4&kit=minimal&pattern=1000100010001000_0000100000001000_1010101010101010_0000000010000000`
 - `beatsPerLoop` は整数として扱う
 - `pattern` は `kit` で定義されたトラック順に従う
 - `pattern` 読み込み時は `docs/spec/url-state.md` の共通原則に従う
@@ -124,7 +125,7 @@
 - 長すぎる場合は末尾を切り捨てる
 - 不正文字は `0` 扱いにする
 - トラック数が不足している場合は不足トラックを `0` 埋めで補完する
-- トラック数が多すぎる場合は既定 `kit` のトラック数まで切り捨てる
+- トラック数が多すぎる場合は対象 `kit` のトラック数まで切り捨てる
 - `stepsPerBeat` や `beatsPerLoop` を変更して必要長が変わった場合も、新しい領域は `0` で埋める
 - 既存の `1` を拍単位や step 単位で推測再配置しない
 - `minimal` の `pattern` は上記トラック順で解釈する

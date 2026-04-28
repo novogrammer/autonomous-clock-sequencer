@@ -10,8 +10,8 @@
 - 全体概要: `docs/overview.md`
 - 時間モデル: `docs/spec/time-model.md`
 - URL / state 仕様: `docs/spec/url-state.md`
-- 現行 Phase: `docs/phases/phase-0.md`
-- 次 Phase 案: `docs/phases/phase-1.md`
+- Phase 0: `docs/phases/phase-0.md`
+- 現行 Phase: `docs/phases/phase-1.md`
 
 ---
 
@@ -23,7 +23,7 @@
 - TypeScript を使う
 - 再生中の通信は行わない
 - 状態共有は URL を使う
-- QR コードは後で URL 配布手段として扱う
+- QR コードは URL 配布手段として扱う
 - URL は当面圧縮しない
 
 ---
