@@ -11,6 +11,7 @@ type EngineConfig = TransportConfig & {
   beatsPerLoop: number;
   kit: string;
   pattern: string;
+  isClickEnabled: boolean;
   playbackOffsetMs: number;
 };
 
@@ -18,6 +19,7 @@ type MetronomeEngineParams = TransportConfig & {
   beatsPerLoop: number;
   kit: string;
   pattern: string;
+  isClickEnabled: boolean;
   isPlaying: boolean;
   playbackOffsetMs: number;
 };
@@ -33,6 +35,7 @@ export function useMetronomeEngine({
   beatsPerLoop,
   kit,
   pattern,
+  isClickEnabled,
   swing,
   isPlaying,
   playbackOffsetMs,
@@ -47,10 +50,20 @@ export function useMetronomeEngine({
       beatsPerLoop,
       kit,
       pattern,
+      isClickEnabled,
       swing,
       playbackOffsetMs,
     }),
-    [beatsPerLoop, bpm, kit, pattern, playbackOffsetMs, stepsPerBeat, swing],
+    [
+      beatsPerLoop,
+      bpm,
+      isClickEnabled,
+      kit,
+      pattern,
+      playbackOffsetMs,
+      stepsPerBeat,
+      swing,
+    ],
   );
   const engineConfigRef = useRef<EngineConfig>(engineConfig);
   engineConfigRef.current = engineConfig;

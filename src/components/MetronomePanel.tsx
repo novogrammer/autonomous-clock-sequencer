@@ -1,4 +1,4 @@
-import type { ChangeEvent } from "react";
+import { useState, type ChangeEvent } from "react";
 import { secondsToMs } from "../clock/clock";
 import {
   useMetronomeEngine,
@@ -16,6 +16,7 @@ import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
 import { Readout } from "./Readout";
 
 export function MetronomePanel() {
+  const [isClickEnabled, setClickEnabled] = useState(false);
   const {
     bpm,
     stepsPerBeat,
@@ -58,6 +59,7 @@ export function MetronomePanel() {
     beatsPerLoop,
     kit,
     pattern,
+    isClickEnabled,
     swing,
     isPlaying,
     playbackOffsetMs,
@@ -94,6 +96,10 @@ export function MetronomePanel() {
     setPattern(togglePatternStep(pattern, trackIndex, stepIndex));
   }
 
+  function handleClickToggle() {
+    setClickEnabled((current) => !current);
+  }
+
   const patternTracks = splitPatternTracks(pattern);
 
   return (
@@ -115,6 +121,9 @@ export function MetronomePanel() {
           再生
         </button>
         <button className="c-button" onClick={handleStop}>停止</button>
+        <button className="c-button" onClick={handleClickToggle}>
+          {isClickEnabled ? "click on" : "click off"}
+        </button>
       </div>
 
       <div className="l-grid l-grid--columns-3 l-grid--gap-l l-grid--section">

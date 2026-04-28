@@ -12,6 +12,7 @@ type EngineConfig = TransportConfig & {
   beatsPerLoop: number;
   kit: string;
   pattern: string;
+  isClickEnabled: boolean;
   playbackOffsetMs: number;
 };
 
@@ -156,11 +157,16 @@ export class MetronomeEngine {
       if (eventMs >= currentNowMs - stepLengthMs) {
         const toneTime =
           Tone.now() + Math.max(0, eventMs - currentNowMs) / secondsToMs(1);
+        const stepInBeat = this.nextStep % this.config.stepsPerBeat;
         const stepInLoop = this.nextStep % loopLength;
         const activeTrackIds = getActiveTrackIdsAtStep(
           this.config.pattern,
           stepInLoop,
         );
+
+        if (this.config.isClickEnabled) {
+          this.playClick(stepInBeat, toneTime);
+        }
 
         for (const trackId of activeTrackIds) {
           this.playTrack(trackId, toneTime);
@@ -198,5 +204,15 @@ export class MetronomeEngine {
       default:
         break;
     }
+  }
+
+  private playClick(stepInBeat: number, toneTime: number): void {
+    const isBeat = stepInBeat === 0;
+    this.closedHatSynth?.triggerAttackRelease(
+      isBeat ? CLOSED_HAT_FREQUENCY + 60 : CLOSED_HAT_FREQUENCY,
+      DEFAULT_HAT_DURATION,
+      toneTime,
+      isBeat ? 0.3 : 0.18,
+    );
   }
 }
