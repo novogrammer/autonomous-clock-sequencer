@@ -38,6 +38,7 @@ export function SequencerPanel() {
   const position = useSequencerPosition({
     bpm,
     stepsPerBeat,
+    beatsPerLoop,
     swing,
     playbackOffsetMs,
   });

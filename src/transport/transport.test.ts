@@ -45,6 +45,18 @@ describe("transport", () => {
     expect(position.step).toBe(6);
   });
 
+  it("loopLength指定時はその長さでloop内位置を計算する", () => {
+    const position = calculatePosition(
+      { bpm: 120, stepsPerBeat: 4, swing: 0 },
+      secondsToMs(2.25),
+      24,
+    );
+
+    expect(position.loopLength).toBe(24);
+    expect(position.stepInLoop).toBe(18);
+    expect(position.beatInLoop).toBe(4);
+  });
+
   it("swing有効時に奇数stepを遅らせる", () => {
     const straightStep = scheduledStepTimeMs(
       { bpm: 120, stepsPerBeat: 4, swing: 0.5 },

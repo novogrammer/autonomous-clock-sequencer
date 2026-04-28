@@ -7,12 +7,14 @@ import {
 } from "../transport/transport";
 
 type SequencerPositionParams = TransportConfig & {
+  beatsPerLoop: number;
   playbackOffsetMs: number;
 };
 
 export function useSequencerPosition({
   bpm,
   stepsPerBeat,
+  beatsPerLoop,
   swing,
   playbackOffsetMs,
 }: SequencerPositionParams): TransportPosition {
@@ -20,17 +22,18 @@ export function useSequencerPosition({
     () => ({ bpm, stepsPerBeat, swing }),
     [bpm, stepsPerBeat, swing],
   );
+  const loopLength = stepsPerBeat * beatsPerLoop;
   const [position, setPosition] = useState<TransportPosition>(() =>
-    calculatePosition(config, nowMs() + playbackOffsetMs),
+    calculatePosition(config, nowMs() + playbackOffsetMs, loopLength),
   );
 
   useEffect(() => {
     const timerId = window.setInterval(() => {
-      setPosition(calculatePosition(config, nowMs() + playbackOffsetMs));
+      setPosition(calculatePosition(config, nowMs() + playbackOffsetMs, loopLength));
     }, 50);
 
     return () => window.clearInterval(timerId);
-  }, [config, playbackOffsetMs]);
+  }, [config, loopLength, playbackOffsetMs]);
 
   return position;
 }
