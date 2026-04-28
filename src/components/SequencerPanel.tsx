@@ -19,6 +19,7 @@ import { Readout } from "./Readout";
 export function SequencerPanel() {
   const [isClickEnabled, setClickEnabled] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
   const {
     bpm,
     stepsPerBeat,
@@ -109,6 +110,16 @@ export function SequencerPanel() {
 
   function handleClickOff() {
     setClickEnabled(false);
+  }
+
+  async function handleCopyUrl() {
+    try {
+      await navigator.clipboard.writeText(currentUrl);
+      setCopyStatus("copied");
+    } catch (error) {
+      console.error(error);
+      setCopyStatus("failed");
+    }
   }
 
   const patternTracks = splitPatternTracks(pattern);
@@ -320,6 +331,17 @@ export function SequencerPanel() {
         <div className="c-detail-box">
           <span className="c-detail-box__label">URL</span>
           <code className="c-detail-box__value">{currentUrl}</code>
+          <div className="p-sequencer__share-actions">
+            <button className="c-button" onClick={handleCopyUrl}>
+              Copy URL
+            </button>
+            {copyStatus === "copied" ? (
+              <span className="p-sequencer__share-status">Copied</span>
+            ) : null}
+            {copyStatus === "failed" ? (
+              <span className="p-sequencer__share-status">Copy failed</span>
+            ) : null}
+          </div>
         </div>
 
         <div className="c-detail-box p-sequencer__qr-box">

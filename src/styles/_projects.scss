@@ -81,6 +81,20 @@
     background: var(--color-surface-raised);
   }
 
+  &__share-actions {
+    margin-top: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  &__share-status {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body-s);
+    line-height: var(--line-height-tight);
+  }
+
   &__track-steps {
     display: grid;
     grid-auto-columns: minmax(36px, 1fr);
