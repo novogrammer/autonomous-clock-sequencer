@@ -327,36 +327,44 @@ export function SequencerPanel() {
         </div>
       </details>
 
-      <div className="p-sequencer__share">
-        <div className="c-detail-box">
-          <span className="c-detail-box__label">URL</span>
-          <code className="c-detail-box__value">{currentUrl}</code>
-          <div className="p-sequencer__share-actions">
-            <button className="c-button" onClick={handleCopyUrl}>
-              Copy URL
-            </button>
-            {copyStatus === "copied" ? (
-              <span className="p-sequencer__share-status">Copied</span>
-            ) : null}
-            {copyStatus === "failed" ? (
-              <span className="p-sequencer__share-status">Copy failed</span>
-            ) : null}
+      <section className="p-sequencer__share-section">
+        <div className="c-section-header">
+          <div>
+            <h2 className="c-heading c-heading--2">Share</h2>
           </div>
         </div>
 
-        <div className="c-detail-box p-sequencer__qr-box">
-          <span className="c-detail-box__label">QR Code</span>
-          {qrCodeUrl === "" ? (
-            <span className="c-detail-box__value">QR unavailable</span>
-          ) : (
-            <img
-              className="p-sequencer__qr-image"
-              src={qrCodeUrl}
-              alt="Shared sequencer URL QR code"
-            />
-          )}
+        <div className="p-sequencer__share">
+          <div className="c-detail-box">
+            <span className="c-detail-box__label">URL</span>
+            <code className="c-detail-box__value">{currentUrl}</code>
+            <div className="p-sequencer__share-actions">
+              <button className="c-button" onClick={handleCopyUrl}>
+                Copy URL
+              </button>
+              {copyStatus === "copied" ? (
+                <span className="p-sequencer__share-status">Copied</span>
+              ) : null}
+              {copyStatus === "failed" ? (
+                <span className="p-sequencer__share-status">Copy failed</span>
+              ) : null}
+            </div>
+          </div>
+
+          <div className="c-detail-box p-sequencer__qr-box">
+            <span className="c-detail-box__label">QR Code</span>
+            {qrCodeUrl === "" ? (
+              <span className="c-detail-box__value">QR unavailable</span>
+            ) : (
+              <img
+                className="p-sequencer__qr-image"
+                src={qrCodeUrl}
+                alt="Shared sequencer URL QR code"
+              />
+            )}
+          </div>
         </div>
-      </div>
+      </section>
     </section>
   );
 }
