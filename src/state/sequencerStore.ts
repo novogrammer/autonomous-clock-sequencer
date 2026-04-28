@@ -1,7 +1,10 @@
 import { create } from "zustand";
-import { normalizePhase0UrlState, parsePhase0Url } from "../url/phase0Url";
+import {
+  normalizeSequencerUrlState,
+  parseSequencerUrl,
+} from "../url/sequencerUrl";
 
-export type MetronomeState = {
+export type SequencerState = {
   bpm: number;
   stepsPerBeat: number;
   swing: number;
@@ -17,20 +20,20 @@ export type MetronomeState = {
 const initialUrlState =
   typeof window === "undefined"
     ? { bpm: 120, stepsPerBeat: 4, swing: 0 }
-    : parsePhase0Url(window.location.search);
+    : parseSequencerUrl(window.location.search);
 
-export const useMetronomeStore = create<MetronomeState>((set) => ({
+export const useSequencerStore = create<SequencerState>((set) => ({
   ...initialUrlState,
   isPlaying: false,
 
   setBpm: (bpm) =>
-    set((state) => normalizePhase0UrlState({ ...state, bpm })),
+    set((state) => normalizeSequencerUrlState({ ...state, bpm })),
 
   setStepsPerBeat: (stepsPerBeat) =>
-    set((state) => normalizePhase0UrlState({ ...state, stepsPerBeat })),
+    set((state) => normalizeSequencerUrlState({ ...state, stepsPerBeat })),
 
   setSwing: (swing) =>
-    set((state) => normalizePhase0UrlState({ ...state, swing })),
+    set((state) => normalizeSequencerUrlState({ ...state, swing })),
 
   start: () =>
     set({
@@ -40,7 +43,7 @@ export const useMetronomeStore = create<MetronomeState>((set) => ({
   stop: () => set({ isPlaying: false }),
 
   hydrateFromUrl: (search) => {
-    const next = parsePhase0Url(search);
+    const next = parseSequencerUrl(search);
     set({ ...next, isPlaying: false });
   },
 }));

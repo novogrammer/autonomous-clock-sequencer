@@ -5,8 +5,8 @@ import {
   type AudioStatus,
 } from "../hooks/useMetronomeEngine";
 import { useMetronomePosition } from "../hooks/useMetronomePosition";
-import { useMetronomeUrlSync } from "../hooks/useMetronomeUrlSync";
-import { useMetronomeStore } from "../state/metronomeStore";
+import { useSequencerUrlSync } from "../hooks/useSequencerUrlSync";
+import { useSequencerStore } from "../state/sequencerStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
 import { Readout } from "./Readout";
 
@@ -21,7 +21,7 @@ export function MetronomePanel() {
     setSwing,
     start,
     stop,
-  } = useMetronomeStore();
+  } = useSequencerStore();
   const playbackOffsetMs = usePlaybackCalibrationStore(
     (state) => state.playbackOffsetMs,
   );
@@ -31,7 +31,7 @@ export function MetronomePanel() {
     swing,
     playbackOffsetMs,
   });
-  const currentUrl = useMetronomeUrlSync({
+  const currentUrl = useSequencerUrlSync({
     bpm,
     stepsPerBeat,
     swing,

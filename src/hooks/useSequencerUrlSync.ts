@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { useMetronomeStore } from "../state/metronomeStore";
-import type { Phase0UrlState } from "../url/phase0Url";
-import { replaceUrlFromState } from "../url/phase0Url";
+import { useSequencerStore } from "../state/sequencerStore";
+import type { SequencerUrlState } from "../url/sequencerUrl";
+import { replaceUrlFromState } from "../url/sequencerUrl";
 
-export function useMetronomeUrlSync(state: Phase0UrlState): string {
+export function useSequencerUrlSync(state: SequencerUrlState): string {
   const urlState = useMemo(
     () => ({
       bpm: state.bpm,
@@ -12,7 +12,7 @@ export function useMetronomeUrlSync(state: Phase0UrlState): string {
     }),
     [state.bpm, state.stepsPerBeat, state.swing],
   );
-  const hydrateFromUrl = useMetronomeStore((store) => store.hydrateFromUrl);
+  const hydrateFromUrl = useSequencerStore((store) => store.hydrateFromUrl);
   const [href, setHref] = useState(() => window.location.href);
 
   useEffect(() => {

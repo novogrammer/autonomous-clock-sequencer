@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
-  normalizePhase0UrlState,
-  parsePhase0Url,
-} from "./phase0Url";
+  normalizeSequencerUrlState,
+  parseSequencerUrl,
+} from "./sequencerUrl";
 
-describe("parsePhase0Url", () => {
+describe("parseSequencerUrl", () => {
   it("URLパラメータを復元する", () => {
-    expect(parsePhase0Url("?bpm=140&stepsPerBeat=8&swing=0.25")).toEqual({
+    expect(parseSequencerUrl("?bpm=140&stepsPerBeat=8&swing=0.25")).toEqual({
       bpm: 140,
       stepsPerBeat: 8,
       swing: 0.25,
@@ -14,7 +14,7 @@ describe("parsePhase0Url", () => {
   });
 
   it("境界外の値をクランプする", () => {
-    expect(parsePhase0Url("?bpm=999&stepsPerBeat=0&swing=2")).toEqual({
+    expect(parseSequencerUrl("?bpm=999&stepsPerBeat=0&swing=2")).toEqual({
       bpm: 300,
       stepsPerBeat: 1,
       swing: 0.95,
@@ -22,7 +22,7 @@ describe("parsePhase0Url", () => {
   });
 
   it("不正値や空値はデフォルトに戻す", () => {
-    expect(parsePhase0Url("?bpm=abc&stepsPerBeat=&swing=NaN")).toEqual({
+    expect(parseSequencerUrl("?bpm=abc&stepsPerBeat=&swing=NaN")).toEqual({
       bpm: 120,
       stepsPerBeat: 4,
       swing: 0,
@@ -30,7 +30,7 @@ describe("parsePhase0Url", () => {
   });
 
   it("stepsPerBeatを整数に丸める", () => {
-    expect(parsePhase0Url("?stepsPerBeat=3.6")).toEqual({
+    expect(parseSequencerUrl("?stepsPerBeat=3.6")).toEqual({
       bpm: 120,
       stepsPerBeat: 4,
       swing: 0,
@@ -38,10 +38,10 @@ describe("parsePhase0Url", () => {
   });
 });
 
-describe("normalizePhase0UrlState", () => {
+describe("normalizeSequencerUrlState", () => {
   it("store更新値のNaNや無限大をデフォルトに戻す", () => {
     expect(
-      normalizePhase0UrlState({
+      normalizeSequencerUrlState({
         bpm: Number.NaN,
         stepsPerBeat: Number.POSITIVE_INFINITY,
         swing: Number.NEGATIVE_INFINITY,
@@ -55,7 +55,7 @@ describe("normalizePhase0UrlState", () => {
 
   it("store更新値をURL方針に合わせて正規化する", () => {
     expect(
-      normalizePhase0UrlState({
+      normalizeSequencerUrlState({
         bpm: 19,
         stepsPerBeat: 7.8,
         swing: -0.1,
