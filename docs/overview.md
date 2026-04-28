@@ -21,3 +21,8 @@
 - URL / state 仕様: `docs/spec/url-state.md`
 - Phase 0: `docs/phases/phase-0.md`
 - Phase 1: `docs/phases/phase-1.md`
+
+## 現在の状態
+
+- Phase 1 の実装は完了扱いとする
+- 次の仕様は Phase 2 として別途定義する
