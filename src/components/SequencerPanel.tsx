@@ -111,6 +111,7 @@ export function SequencerPanel() {
 
   const patternTracks = splitPatternTracks(pattern);
   const kitTracks = getKitTracks(kit);
+  const loopLength = stepsPerBeat * beatsPerLoop;
 
   return (
     <section className="p-sequencer">
@@ -219,6 +220,11 @@ export function SequencerPanel() {
         <div className="c-detail-box c-detail-box--compact">
           <span className="c-detail-box__label">kit</span>
           <strong className="c-detail-box__value">{kit}</strong>
+        </div>
+
+        <div className="c-detail-box c-detail-box--compact">
+          <span className="c-detail-box__label">loopLength</span>
+          <strong className="c-detail-box__value">{loopLength} steps</strong>
         </div>
       </div>
 
