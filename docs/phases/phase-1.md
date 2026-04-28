@@ -79,6 +79,7 @@
 - メトロノーム click の on/off は URL 共有対象にしない
 - `stepsPerBeat` が異なると同じ `pattern` でも時間解釈が変わるため、必ず URL 共有対象に含める
 - `beatsPerLoop` が異なると 1 ループの総 step 数が変わるため、必ず URL 共有対象に含める
+- `kit` ごとの UI 上の並びと `pattern` のトラック順は一致させる
 
 ## kit 仕様
 
@@ -96,6 +97,14 @@
   `snare`: 中高域の短いノイズ系の音
   `closedHat`: 高域の短いノイズ系の音
   `openHat`: `closedHat` より長い高域の音
+- 追加 `kit` として、固定音高のベース系 `kit` を導入してよい
+- ベース系 `kit` の ID は `bass-fourths` とする
+- `bass-fourths` のトラック順は以下で固定する:
+  `C3`, `G2`, `F2`, `C2`
+- `bass-fourths` はピアノロールに寄せて、下が低音、上が高音になる並びを採用する
+- `bass-fourths` の `pattern` は上記トラック順で解釈する
+- `bass-fourths` の各トラックは対応する固定音高の短い synth / bass 音を鳴らす
+- `bass-fourths` では同時発音を許可する
 - Phase 1 では Tone.js の最小構成で実装できる音色を優先し、サンプル再生は必須にしない
 - `closedHat` と `openHat` は Phase 1 では choke しなくてよい
 - まずは互換性重視で、既定 `kit` の ID は固定値にする
@@ -114,6 +123,7 @@
 - `stepsPerBeat` や `beatsPerLoop` を変更して必要長が変わった場合も、新しい領域は `0` で埋める
 - 既存の `1` を拍単位や step 単位で推測再配置しない
 - `minimal` の `pattern` は上記トラック順で解釈する
+- `bass-fourths` を使う場合は `C3_G2_F2_C2` の順で解釈する
 
 ## UI 方針
 
