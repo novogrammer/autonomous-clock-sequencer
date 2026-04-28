@@ -155,6 +155,7 @@ function createPreparedEngine(): PreparedMetronomeEngine {
     triggerAttackRelease: testState.triggerAttackRelease,
     dispose: vi.fn(),
   };
+  engine.clickSynth = voice;
   engine.kickSynth = voice;
   engine.snareSynth = voice;
   engine.closedHatSynth = voice;

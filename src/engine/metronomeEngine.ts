@@ -24,12 +24,17 @@ const DEFAULT_HAT_DURATION = "32n";
 const DEFAULT_OPEN_HAT_DURATION = "8n";
 const CLOSED_HAT_FREQUENCY = 280;
 const OPEN_HAT_FREQUENCY = 220;
+const LOOP_CLICK_FREQUENCY = "G6";
+const BEAT_CLICK_FREQUENCY = "E6";
+const STEP_CLICK_FREQUENCY = "C6";
+const CLICK_DURATION = "32n";
 
 export async function unlockMetronomeAudio(): Promise<void> {
   await Tone.start();
 }
 
 export class MetronomeEngine {
+  private clickSynth: Tone.Synth | null = null;
   private kickSynth: Tone.MembraneSynth | null = null;
   private snareSynth: Tone.NoiseSynth | null = null;
   private closedHatSynth: Tone.MetalSynth | null = null;
@@ -43,6 +48,16 @@ export class MetronomeEngine {
     this.stop();
 
     this.config = config;
+    this.clickSynth = new Tone.Synth({
+      oscillator: { type: "triangle" },
+      envelope: {
+        attack: 0.001,
+        decay: 0.04,
+        sustain: 0,
+        release: 0.02,
+      },
+      volume: -18,
+    }).toDestination();
     this.kickSynth = new Tone.MembraneSynth({
       octaves: 4,
       pitchDecay: 0.05,
@@ -118,10 +133,12 @@ export class MetronomeEngine {
       this.timerId = null;
     }
 
+    this.clickSynth?.dispose();
     this.kickSynth?.dispose();
     this.snareSynth?.dispose();
     this.closedHatSynth?.dispose();
     this.openHatSynth?.dispose();
+    this.clickSynth = null;
     this.kickSynth = null;
     this.snareSynth = null;
     this.closedHatSynth = null;
@@ -133,6 +150,7 @@ export class MetronomeEngine {
   private schedule(): void {
     if (
       this.config === null ||
+      this.clickSynth === null ||
       this.kickSynth === null ||
       this.snareSynth === null ||
       this.closedHatSynth === null ||
@@ -165,7 +183,7 @@ export class MetronomeEngine {
         );
 
         if (this.config.isClickEnabled) {
-          this.playClick(stepInBeat, toneTime);
+          this.playClick(stepInLoop, stepInBeat, toneTime);
         }
 
         for (const trackId of activeTrackIds) {
@@ -206,13 +224,36 @@ export class MetronomeEngine {
     }
   }
 
-  private playClick(stepInBeat: number, toneTime: number): void {
-    const isBeat = stepInBeat === 0;
-    this.closedHatSynth?.triggerAttackRelease(
-      isBeat ? CLOSED_HAT_FREQUENCY + 60 : CLOSED_HAT_FREQUENCY,
-      DEFAULT_HAT_DURATION,
+  private playClick(
+    stepInLoop: number,
+    stepInBeat: number,
+    toneTime: number,
+  ): void {
+    if (stepInLoop === 0) {
+      this.clickSynth?.triggerAttackRelease(
+        LOOP_CLICK_FREQUENCY,
+        CLICK_DURATION,
+        toneTime,
+        0.55,
+      );
+      return;
+    }
+
+    if (stepInBeat === 0) {
+      this.clickSynth?.triggerAttackRelease(
+        BEAT_CLICK_FREQUENCY,
+        CLICK_DURATION,
+        toneTime,
+        0.4,
+      );
+      return;
+    }
+
+    this.clickSynth?.triggerAttackRelease(
+      STEP_CLICK_FREQUENCY,
+      CLICK_DURATION,
       toneTime,
-      isBeat ? 0.3 : 0.18,
+      0.22,
     );
   }
 }
