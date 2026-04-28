@@ -108,10 +108,10 @@
   gap: var(--space-3);
   color: var(--color-text-muted);
   font-weight: 700;
-}
 
-.c-field__label {
-  display: block;
+  &__label {
+    display: block;
+  }
 }
 
 .c-input {
@@ -161,31 +161,31 @@
     min-width: 120px;
     padding: var(--space-3) var(--space-4);
   }
-}
 
-.c-detail-box__label {
-  display: block;
-  color: var(--color-text-subtle);
-  font-size: var(--font-size-label);
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.c-detail-box__value {
-  display: block;
-  margin-top: var(--space-3);
-  overflow-wrap: anywhere;
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum";
-
-  .c-detail-box--compact & {
-    margin-top: var(--space-1);
-    font-size: var(--font-size-detail);
+  &__label {
+    display: block;
+    color: var(--color-text-subtle);
+    font-size: var(--font-size-label);
+    font-weight: 700;
+    text-transform: uppercase;
   }
-}
 
-code.c-detail-box__value {
-  color: var(--color-text-code);
+  &__value {
+    display: block;
+    margin-top: var(--space-3);
+    overflow-wrap: anywhere;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+
+    .c-detail-box--compact & {
+      margin-top: var(--space-1);
+      font-size: var(--font-size-detail);
+    }
+  }
+
+  @at-root code#{&}__value {
+    color: var(--color-text-code);
+  }
 }
 
 .c-button-group {

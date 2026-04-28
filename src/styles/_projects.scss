@@ -12,23 +12,22 @@
       align-items: stretch;
     }
   }
-
 }
 
 .p-calibration {
   margin-top: var(--space-11);
   padding-top: var(--space-10);
   border-top: 1px solid var(--color-border-default);
-}
 
-.p-calibration__tools {
-  margin-top: var(--space-9);
-  display: grid;
-  gap: var(--space-11);
+  &__tools {
+    margin-top: var(--space-9);
+    display: grid;
+    gap: var(--space-11);
 
-  > :first-child {
-    padding-top: 0;
-    border-top: 0;
+    > :first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
   }
 }
 
@@ -36,8 +35,10 @@
   padding-top: var(--space-9);
   border-top: 1px solid var(--color-border-default);
 
-  &__frequency .c-field {
-    max-width: 240px;
+  &__frequency {
+    .c-field {
+      max-width: 240px;
+    }
   }
 
   &__offset-row {
