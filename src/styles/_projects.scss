@@ -55,6 +55,32 @@
     user-select: none;
   }
 
+  &__share {
+    margin-top: var(--space-9);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--space-6);
+    align-items: start;
+
+    @include narrow-screen {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__qr-box {
+    align-self: start;
+  }
+
+  &__qr-image {
+    display: block;
+    width: 224px;
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-m);
+    border: 1px solid var(--color-border-default);
+    background: var(--color-surface-raised);
+  }
+
   &__track-steps {
     display: grid;
     grid-auto-columns: minmax(36px, 1fr);

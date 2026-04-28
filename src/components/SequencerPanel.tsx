@@ -1,4 +1,5 @@
-import { useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent } from "react";
+import { toDataURL } from "qrcode";
 import { secondsToMs } from "../clock/clock";
 import {
   useSequencerEngine, type AudioStatus
@@ -17,6 +18,7 @@ import { Readout } from "./Readout";
 
 export function SequencerPanel() {
   const [isClickEnabled, setClickEnabled] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState("");
   const {
     bpm,
     stepsPerBeat,
@@ -112,6 +114,34 @@ export function SequencerPanel() {
   const patternTracks = splitPatternTracks(pattern);
   const kitTracks = getKitTracks(kit);
   const loopLength = stepsPerBeat * beatsPerLoop;
+
+  useEffect(() => {
+    let isActive = true;
+
+    toDataURL(currentUrl, {
+      width: 224,
+      margin: 1,
+      color: {
+        dark: "#18202a",
+        light: "#fffdf8",
+      },
+    })
+      .then((nextUrl: string) => {
+        if (isActive) {
+          setQrCodeUrl(nextUrl);
+        }
+      })
+      .catch((error: unknown) => {
+        console.error(error);
+        if (isActive) {
+          setQrCodeUrl("");
+        }
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, [currentUrl]);
 
   return (
     <section className="p-sequencer">
@@ -286,9 +316,24 @@ export function SequencerPanel() {
         </div>
       </details>
 
-      <div className="c-detail-box">
-        <span className="c-detail-box__label">URL</span>
-        <code className="c-detail-box__value">{currentUrl}</code>
+      <div className="p-sequencer__share">
+        <div className="c-detail-box">
+          <span className="c-detail-box__label">URL</span>
+          <code className="c-detail-box__value">{currentUrl}</code>
+        </div>
+
+        <div className="c-detail-box p-sequencer__qr-box">
+          <span className="c-detail-box__label">QR Code</span>
+          {qrCodeUrl === "" ? (
+            <span className="c-detail-box__value">QR unavailable</span>
+          ) : (
+            <img
+              className="p-sequencer__qr-image"
+              src={qrCodeUrl}
+              alt="Shared sequencer URL QR code"
+            />
+          )}
+        </div>
       </div>
     </section>
   );
