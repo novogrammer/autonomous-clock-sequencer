@@ -1,12 +1,12 @@
 import { CalibrationPanel } from "./components/CalibrationPanel";
-import { MetronomePanel } from "./components/MetronomePanel";
+import { SequencerPanel } from "./components/SequencerPanel";
 import "./styles.scss";
 
 function App() {
   return (
     <main className="l-app-shell">
       <section className="l-panel">
-        <MetronomePanel />
+        <SequencerPanel />
 
         <CalibrationPanel />
 

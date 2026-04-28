@@ -15,7 +15,7 @@ type EngineConfig = TransportConfig & {
   playbackOffsetMs: number;
 };
 
-type MetronomeEngineParams = TransportConfig & {
+type SequencerEngineParams = TransportConfig & {
   beatsPerLoop: number;
   kit: string;
   pattern: string;
@@ -24,12 +24,12 @@ type MetronomeEngineParams = TransportConfig & {
   playbackOffsetMs: number;
 };
 
-type MetronomeEngineControls = {
+type SequencerEngineControls = {
   audioStatus: AudioStatus;
   enableAudio: () => Promise<boolean>;
 };
 
-export function useMetronomeEngine({
+export function useSequencerEngine({
   bpm,
   stepsPerBeat,
   beatsPerLoop,
@@ -39,7 +39,7 @@ export function useMetronomeEngine({
   swing,
   isPlaying,
   playbackOffsetMs,
-}: MetronomeEngineParams): MetronomeEngineControls {
+}: SequencerEngineParams): SequencerEngineControls {
   const engineRef = useRef<MetronomeEngine | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [audioStatus, setAudioStatus] = useState<AudioStatus>("idle");

@@ -1,9 +1,9 @@
 import { useState, type ChangeEvent } from "react";
 import { secondsToMs } from "../clock/clock";
 import {
-  useMetronomeEngine,
+  useSequencerEngine,
   type AudioStatus,
-} from "../hooks/useMetronomeEngine";
+} from "../hooks/useSequencerEngine";
 import { useMetronomePosition } from "../hooks/useMetronomePosition";
 import { MINIMAL_KIT_TRACKS } from "../kit/minimalKit";
 import {
@@ -15,7 +15,7 @@ import { useSequencerStore } from "../state/sequencerStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
 import { Readout } from "./Readout";
 
-export function MetronomePanel() {
+export function SequencerPanel() {
   const [isClickEnabled, setClickEnabled] = useState(false);
   const {
     bpm,
@@ -53,7 +53,7 @@ export function MetronomePanel() {
   const {
     audioStatus,
     enableAudio,
-  } = useMetronomeEngine({
+  } = useSequencerEngine({
     bpm,
     stepsPerBeat,
     beatsPerLoop,
