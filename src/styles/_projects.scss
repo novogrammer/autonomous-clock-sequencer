@@ -43,6 +43,18 @@
     gap: var(--space-3);
   }
 
+  &__transport-details {
+    margin-top: var(--space-9);
+  }
+
+  &__transport-summary {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+  }
+
   &__track-steps {
     display: grid;
     grid-auto-columns: minmax(36px, 1fr);

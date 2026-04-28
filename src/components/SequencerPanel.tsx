@@ -264,16 +264,21 @@ export function SequencerPanel() {
         </div>
       </div>
 
-      <div className="l-grid l-grid--columns-3 l-grid--gap-m l-grid--section">
-        <Readout
-          label="elapsed"
-          value={`${(position.elapsedMs / secondsToMs(1)).toFixed(2)}s`}
-        />
-        <Readout label="beat" value={String(position.beat)} />
-        <Readout label="step" value={String(position.step)} />
-        <Readout label="stepInBeat" value={String(position.stepInBeat)} />
-        <Readout label="stepInLoop" value={String(position.stepInLoop)} />
-      </div>
+      <details className="p-sequencer__transport-details">
+        <summary className="p-sequencer__transport-summary">
+          Transport Details
+        </summary>
+        <div className="l-grid l-grid--columns-3 l-grid--gap-m l-grid--section">
+          <Readout
+            label="elapsed"
+            value={`${(position.elapsedMs / secondsToMs(1)).toFixed(2)}s`}
+          />
+          <Readout label="beat" value={String(position.beat)} />
+          <Readout label="step" value={String(position.step)} />
+          <Readout label="stepInBeat" value={String(position.stepInBeat)} />
+          <Readout label="stepInLoop" value={String(position.stepInLoop)} />
+        </div>
+      </details>
 
       <div className="c-detail-box">
         <span className="c-detail-box__label">URL</span>
