@@ -6,7 +6,7 @@
 
 ## 追加するもの
 
-- `loopLength` を導入する
+- `beatsPerLoop` を導入する
 - `pattern` を導入する
 - `kit` を導入する
 - 複数トラックの step 再生を行う
@@ -19,12 +19,21 @@
 - `bpm`, `stepsPerBeat`, `swing` は即時反映
 - URL が共有状態の正本
 
+## `stepsPerBeat` の位置付け
+
+- `stepsPerBeat` は 1 拍あたりの step 数を表す
+- Phase 1 では metronome 用の補助値ではなく、シーケンサーの時間グリッド定義として扱う
+- `stepsPerBeat` は transport の step 計算、pattern の時間解釈、swing の適用単位に影響する
+- 同じ pattern を同じ意味で共有するため、URL 共有対象に含める
+- UI 上の見せ方は `stepsPerBeat` のままでもよいが、必要なら `Steps / Beat` や `Grid` のような表示名を検討してよい
+
 ## スコープ
 
 - 単一ページ内で step シーケンサーを編集して再生できる
-- URL を共有すれば、別端末でも同じ `bpm`, `stepsPerBeat`, `swing`, `loopLength`, `kit`, `pattern` を復元できる
+- URL を共有すれば、別端末でも同じ `bpm`, `stepsPerBeat`, `swing`, `beatsPerLoop`, `kit`, `pattern` を復元できる
 - 各端末は現在の絶対時刻から再生位置を計算し、同じ pattern を同じ時間軸で再生する
 - 最小の `kit` 定義に従って、複数トラックを Tone.js で鳴らす
+- オプション機能としてメトロノーム click を併設できる
 
 ## 非スコープ
 
@@ -35,26 +44,41 @@
 - ステップごとの velocity や probability
 - ミュート、ソロ、エフェクト、サンプル管理
 - パターン複数保存
+- メトロノーム click の共有同期設定
 
 ## 最小構成
 
 - `kit` はまず 1 種類でもよい
 - トラック数は 3 を基準とする
-- `loopLength` は 16 を初期値とする
+- `beatsPerLoop` は 4 を初期値とする
 - `pattern` はトラックごとの `0/1` 文字列を `_` で連結した 1 文字列とする
-- 各トラックの長さは `loopLength` に合わせる
+- 各トラックの長さは `stepsPerBeat * beatsPerLoop` に合わせる
 - 編集 UI は step の on/off 切り替えのみを扱う
+- メトロノーム click は on/off 可能な補助機能として扱う
+- `beatsPerLoop` と `stepsPerBeat` の組で 1 ループの総 step 数が決まる
+- 例:
+  `stepsPerBeat=4, beatsPerLoop=4` なら総 step 数は 16
+  `stepsPerBeat=3, beatsPerLoop=4` なら総 step 数は 12
+
+## 導出値
+
+- `loopLength` は URL の一次パラメーターではなく導出値とする
+- `loopLength = stepsPerBeat * beatsPerLoop`
+- pattern の各トラック長、loop 内 step 位置、UI の step grid 長はこの導出値を使う
 
 ## URL 仕様
 
 - Phase 1 で主に使う URL パラメーター:
-  `bpm`, `stepsPerBeat`, `swing`, `loopLength`, `kit`, `pattern`
+  `bpm`, `stepsPerBeat`, `swing`, `beatsPerLoop`, `kit`, `pattern`
 - 例:
-  `?bpm=120&stepsPerBeat=4&swing=0&loopLength=16&kit=minimal&pattern=1000100010001000_0000100000001000_1010101010101010`
-- `loopLength` は整数として扱う
+  `?bpm=120&stepsPerBeat=4&swing=0&beatsPerLoop=4&kit=minimal&pattern=1000100010001000_0000100000001000_1010101010101010`
+- `beatsPerLoop` は整数として扱う
 - `pattern` は `kit` で定義されたトラック順に従う
 - `pattern` 読み込み時は `docs/spec/url-state.md` の共通原則に従う
 - `kit` が未知の場合は Phase 1 の既定 `kit` にフォールバックする
+- メトロノーム click の on/off は URL 共有対象にしない
+- `stepsPerBeat` が異なると同じ `pattern` でも時間解釈が変わるため、必ず URL 共有対象に含める
+- `beatsPerLoop` が異なると 1 ループの総 step 数が変わるため、必ず URL 共有対象に含める
 
 ## kit 仕様
 
@@ -71,7 +95,7 @@
 - `pattern` は 1 つの文字列
 - 各トラックは `0/1` のみを使う
 - `1` は発音、`0` は無音
-- 各トラック文字列の長さは `loopLength` と一致させる
+- 各トラック文字列の長さは `stepsPerBeat * beatsPerLoop` と一致させる
 - 足りない場合は末尾を `0` で補完する
 - 長すぎる場合は末尾を切り捨てる
 - 不正文字は `0` 扱いにする
@@ -90,23 +114,26 @@
 
 - ヘッダには機能名のみを表示する
 - 再生 / 停止を行える
-- `bpm`, `stepsPerBeat`, `swing`, `loopLength`, `kit` を編集できる
+- `bpm`, `stepsPerBeat`, `swing`, `beatsPerLoop`, `kit` を編集できる
 - トラックごとの step grid を表示する
 - URL を確認できる
+- メトロノーム click を個別に on/off できる
 - calibration 系 UI を残す場合は、シーケンサー本体の補助として扱う
 
 ## State 仕様
 
 - URL に載る state は少なくとも以下を持つ:
-  `bpm`, `stepsPerBeat`, `swing`, `loopLength`, `kit`, `pattern`
+  `bpm`, `stepsPerBeat`, `swing`, `beatsPerLoop`, `kit`, `pattern`
 - runtime 専用の再生オブジェクトは state に入れない
 - URL からの復元時には全値を正規化する
 - UI 編集時も URL と同じ制約で正規化する
+- メトロノーム click の on/off はローカル state として扱う
 
 ## Transport / Engine 仕様
 
 - Transport は引き続き音を鳴らさず、絶対時刻から beat / step 位置を計算する
 - Engine は現在 step をもとに、各トラックの `pattern` を参照して発音する
+- メトロノーム click を残す場合も、sequencer と同じ transport を使う
 - BPM 変更時は既存の先読み予約を捨てて再スケジュールする
 - `stepsPerBeat` 変更時も共有グリッド優先で step 解釈を更新する
 - `swing` 変更時は奇数 step の発音時刻を新設定で再計算する
@@ -115,8 +142,9 @@
 ## 完了条件
 
 - URL 共有だけで別端末が同じシーケンスを再生できる
-- `loopLength`, `kit`, `pattern` を URL から復元できる
+- `beatsPerLoop`, `kit`, `pattern` を URL から復元できる
 - step grid から `pattern` を編集できる
 - 再生中に `bpm`, `stepsPerBeat`, `swing` を変えても共有グリッド基準で破綻しない
 - `pattern` の不正値や不足値で停止せず、既定ルールで復元できる
+- メトロノーム click を有効にした場合も sequencer と同じ時間基準で追従する
 - 画面上に Phase 名を表示しない

@@ -5,7 +5,7 @@
 現時点または将来使う URL パラメーター名は以下。
 
 - `bpm`
-- `loopLength`
+- `beatsPerLoop`
 - `stepsPerBeat`
 - `kit`
 - `pattern`

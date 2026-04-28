@@ -21,5 +21,8 @@
 ## step / beat
 
 - `stepsPerBeat` は 1 拍あたりの step 数
+- `stepsPerBeat` はシーケンサーの時間グリッド分割数でもある
 - step 位置は絶対時刻から都度再計算する
+- `stepsPerBeat` は transport の step 計算、pattern の解釈、swing の適用単位に影響する
+- 同じ pattern を同じ意味で共有するため、`stepsPerBeat` は URL 共有対象に含める
 - loop や pattern が追加されても、基準は絶対時刻側に置く
