@@ -96,8 +96,12 @@ export function SequencerPanel() {
     setPattern(togglePatternStep(pattern, trackIndex, stepIndex));
   }
 
-  function handleClickToggle() {
-    setClickEnabled((current) => !current);
+  function handleClickOn() {
+    setClickEnabled(true);
+  }
+
+  function handleClickOff() {
+    setClickEnabled(false);
   }
 
   const patternTracks = splitPatternTracks(pattern);
@@ -112,18 +116,34 @@ export function SequencerPanel() {
         <StatusBadge isPlaying={isPlaying} audioStatus={audioStatus} />
       </div>
 
-      <div className="c-action-row">
-        <button
-          className="c-button c-button--primary"
-          onClick={handlePlay}
-          disabled={isPlaying || audioStatus === "starting"}
-        >
-          再生
-        </button>
-        <button className="c-button" onClick={handleStop}>停止</button>
-        <button className="c-button" onClick={handleClickToggle}>
-          {isClickEnabled ? "click on" : "click off"}
-        </button>
+      <div className="l-stack l-stack--subsection">
+        <div className="c-action-row">
+          <span className="c-field__label">Playback</span>
+          <button
+            className="c-button c-button--primary"
+            onClick={handlePlay}
+            disabled={isPlaying || audioStatus === "starting"}
+          >
+            On
+          </button>
+          <button className="c-button" onClick={handleStop}>Off</button>
+        </div>
+
+        <div className="c-action-row">
+          <span className="c-field__label">Metronome</span>
+          <button
+            className={isClickEnabled ? "c-button c-button--primary" : "c-button"}
+            onClick={handleClickOn}
+          >
+            On
+          </button>
+          <button
+            className={!isClickEnabled ? "c-button c-button--primary" : "c-button"}
+            onClick={handleClickOff}
+          >
+            Off
+          </button>
+        </div>
       </div>
 
       <div className="l-grid l-grid--columns-3 l-grid--gap-l l-grid--section">

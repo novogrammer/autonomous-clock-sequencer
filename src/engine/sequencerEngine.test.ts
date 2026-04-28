@@ -64,6 +64,8 @@ describe("SequencerEngine.update", () => {
       kit: "minimal",
       pattern:
         "1000_0000_0000_0000",
+      isPatternEnabled: true,
+      isClickEnabled: false,
       swing: 0,
       playbackOffsetMs: 0,
     });
@@ -82,6 +84,8 @@ describe("SequencerEngine.update", () => {
       kit: "minimal",
       pattern:
         "000000100000_000000000000_000000000000_000000000000",
+      isPatternEnabled: true,
+      isClickEnabled: false,
       swing: 0,
       playbackOffsetMs: 0,
     });
@@ -101,6 +105,8 @@ describe("SequencerEngine.update", () => {
       beatsPerLoop: 1,
       kit: "minimal",
       pattern: "0100_0000_0000_0000",
+      isPatternEnabled: true,
+      isClickEnabled: false,
       swing: 0.5,
       playbackOffsetMs: 0,
     });
@@ -128,6 +134,8 @@ describe("SequencerEngine.update", () => {
       beatsPerLoop: 1,
       kit: "minimal",
       pattern: "1000_1000_0000_0000",
+      isPatternEnabled: true,
+      isClickEnabled: false,
       swing: 0,
       playbackOffsetMs: 0,
     });
@@ -136,6 +144,28 @@ describe("SequencerEngine.update", () => {
     expect(testState.triggerAttackRelease).toHaveBeenCalledTimes(2);
     expect(testState.triggerAttackRelease.mock.calls[0]?.[0]).toBe("C1");
     expect(testState.triggerAttackRelease.mock.calls[1]?.[0]).toBe("16n");
+  });
+
+  it("pattern再生がoffでもclickだけは鳴らせる", () => {
+    testState.mockedNowMs = 0;
+    const engine = createPreparedEngine();
+
+    engine.update({
+      bpm: 120,
+      stepsPerBeat: 4,
+      beatsPerLoop: 1,
+      kit: "minimal",
+      pattern: "1000_1000_1000_1000",
+      isPatternEnabled: false,
+      isClickEnabled: true,
+      swing: 0,
+      playbackOffsetMs: 0,
+    });
+    engine.schedule();
+
+    expect(testState.triggerAttackRelease).toHaveBeenCalledTimes(2);
+    expect(testState.triggerAttackRelease.mock.calls[0]?.[0]).toBe("G6");
+    expect(testState.triggerAttackRelease.mock.calls[1]?.[0]).toBe("C6");
   });
 });
 
@@ -148,6 +178,8 @@ function createPreparedEngine(): PreparedSequencerEngine {
     kit: "minimal",
     pattern:
       "0000000000000000_0000000000000000_0000000000000000_0000000000000000",
+    isPatternEnabled: true,
+    isClickEnabled: false,
     swing: 0,
     playbackOffsetMs: 0,
   };

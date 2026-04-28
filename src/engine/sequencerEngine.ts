@@ -12,6 +12,7 @@ type EngineConfig = TransportConfig & {
   beatsPerLoop: number;
   kit: string;
   pattern: string;
+  isPatternEnabled: boolean;
   isClickEnabled: boolean;
   playbackOffsetMs: number;
 };
@@ -186,8 +187,10 @@ export class SequencerEngine {
           this.playClick(stepInLoop, stepInBeat, toneTime);
         }
 
-        for (const trackId of activeTrackIds) {
-          this.playTrack(trackId, toneTime);
+        if (this.config.isPatternEnabled) {
+          for (const trackId of activeTrackIds) {
+            this.playTrack(trackId, toneTime);
+          }
         }
       }
 

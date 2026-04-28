@@ -11,6 +11,7 @@ type EngineConfig = TransportConfig & {
   beatsPerLoop: number;
   kit: string;
   pattern: string;
+  isPatternEnabled: boolean;
   isClickEnabled: boolean;
   playbackOffsetMs: number;
 };
@@ -43,6 +44,7 @@ export function useSequencerEngine({
   const engineRef = useRef<SequencerEngine | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [audioStatus, setAudioStatus] = useState<AudioStatus>("idle");
+  const shouldRun = isPlaying || isClickEnabled;
   const engineConfig = useMemo(
     () => ({
       bpm,
@@ -50,6 +52,7 @@ export function useSequencerEngine({
       beatsPerLoop,
       kit,
       pattern,
+      isPatternEnabled: isPlaying,
       isClickEnabled,
       swing,
       playbackOffsetMs,
@@ -57,6 +60,7 @@ export function useSequencerEngine({
     [
       beatsPerLoop,
       bpm,
+      isPlaying,
       isClickEnabled,
       kit,
       pattern,
@@ -69,7 +73,7 @@ export function useSequencerEngine({
   engineConfigRef.current = engineConfig;
 
   useEffect(() => {
-    if (!isPlaying) {
+    if (!shouldRun) {
       engineRef.current?.stop();
       setAudioStatus("idle");
       return;
@@ -104,15 +108,15 @@ export function useSequencerEngine({
       isActive = false;
       engine.stop();
     };
-  }, [audioEnabled, isPlaying]);
+  }, [audioEnabled, shouldRun]);
 
   useEffect(() => {
-    if (!isPlaying || !audioEnabled) {
+    if (!shouldRun || !audioEnabled) {
       return;
     }
 
     engineRef.current?.update(engineConfig);
-  }, [audioEnabled, engineConfig, isPlaying]);
+  }, [audioEnabled, engineConfig, shouldRun]);
 
   async function enableAudio(): Promise<boolean> {
     setAudioStatus("starting");
