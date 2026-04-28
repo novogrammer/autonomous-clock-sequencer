@@ -197,6 +197,9 @@ export function SequencerPanel() {
                     [
                       "p-sequencer__step-button",
                       step === "1" ? "p-sequencer__step-button--active" : "",
+                      stepIndex % stepsPerBeat === 0
+                        ? "p-sequencer__step-button--beat-head"
+                        : "",
                       stepIndex === position.stepInLoop
                         ? "p-sequencer__step-button--current"
                         : "",
