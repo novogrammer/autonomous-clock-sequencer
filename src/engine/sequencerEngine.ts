@@ -73,13 +73,22 @@ export class SequencerEngine {
       return;
     }
 
+    const shouldReschedule =
+      this.config.bpm !== config.bpm ||
+      this.config.stepsPerBeat !== config.stepsPerBeat ||
+      this.config.swing !== config.swing ||
+      this.config.beatsPerLoop !== config.beatsPerLoop ||
+      this.config.playbackOffsetMs !== config.playbackOffsetMs;
+
     this.config = config;
-    this.nextStep = Math.max(
-      0,
-      Math.floor(
-        calculatePosition(config, nowMs() + config.playbackOffsetMs).step,
-      ),
-    );
+    if (shouldReschedule) {
+      this.nextStep = Math.max(
+        0,
+        Math.floor(
+          calculatePosition(config, nowMs() + config.playbackOffsetMs).step,
+        ),
+      );
+    }
   }
 
   stop(): void {

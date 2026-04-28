@@ -73,6 +73,26 @@ describe("SequencerEngine.update", () => {
     expect(engine.nextStep).toBe(4);
   });
 
+  it("pattern変更だけではnextStepを巻き戻さない", () => {
+    testState.mockedNowMs = 1000;
+    const engine = createPreparedEngine();
+    engine.nextStep = 9;
+
+    engine.update({
+      bpm: 120,
+      stepsPerBeat: 4,
+      beatsPerLoop: 4,
+      kit: "minimal",
+      pattern: "1000_0000_0000_0000",
+      isPatternEnabled: true,
+      isClickEnabled: false,
+      swing: 0,
+      playbackOffsetMs: 0,
+    });
+
+    expect(engine.nextStep).toBe(9);
+  });
+
   it("stepsPerBeat変更後のstep境界でアクセントを再計算する", () => {
     testState.mockedNowMs = 1125;
     const engine = createPreparedEngine();
