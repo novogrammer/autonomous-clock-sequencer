@@ -194,9 +194,15 @@ export function MetronomePanel() {
                 <button
                   key={`${track.id}-${stepIndex}`}
                   className={
-                    step === "1"
-                      ? "p-metronome__step-button p-metronome__step-button--active"
-                      : "p-metronome__step-button"
+                    [
+                      "p-metronome__step-button",
+                      step === "1" ? "p-metronome__step-button--active" : "",
+                      stepIndex === position.stepInLoop
+                        ? "p-metronome__step-button--current"
+                        : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")
                   }
                   onClick={() => handleStepToggle(trackIndex, stepIndex)}
                   aria-pressed={step === "1"}
