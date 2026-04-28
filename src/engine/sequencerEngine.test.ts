@@ -161,10 +161,11 @@ describe("SequencerEngine.update", () => {
     });
     engine.schedule();
 
-    expect(testState.triggerAttackRelease).toHaveBeenCalledTimes(3);
+    expect(testState.triggerAttackRelease).toHaveBeenCalledTimes(4);
     expect(testState.triggerAttackRelease.mock.calls[0]?.[0]).toBe("C1");
     expect(testState.triggerAttackRelease.mock.calls[1]?.[0]).toBe("16n");
-    expect(testState.triggerAttackRelease.mock.calls[2]?.[0]).toBe("G3");
+    expect(testState.triggerAttackRelease.mock.calls[2]?.[0]).toBe("16n");
+    expect(testState.triggerAttackRelease.mock.calls[3]?.[0]).toBe("E3");
   });
 
   it("pattern再生がoffでもclickだけは鳴らせる", () => {
