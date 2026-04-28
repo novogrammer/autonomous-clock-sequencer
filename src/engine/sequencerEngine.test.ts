@@ -161,9 +161,10 @@ describe("SequencerEngine.update", () => {
     });
     engine.schedule();
 
-    expect(testState.triggerAttackRelease).toHaveBeenCalledTimes(2);
+    expect(testState.triggerAttackRelease).toHaveBeenCalledTimes(3);
     expect(testState.triggerAttackRelease.mock.calls[0]?.[0]).toBe("C1");
     expect(testState.triggerAttackRelease.mock.calls[1]?.[0]).toBe("16n");
+    expect(testState.triggerAttackRelease.mock.calls[2]?.[0]).toBe("G3");
   });
 
   it("pattern再生がoffでもclickだけは鳴らせる", () => {
@@ -211,6 +212,7 @@ function createPreparedEngine(): PreparedSequencerEngine {
   engine.kitVoices = {
     kick: voice,
     snare: voice,
+    snareTone: voice,
     closedHat: voice,
     openHat: voice,
   };

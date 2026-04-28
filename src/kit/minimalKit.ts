@@ -4,10 +4,12 @@ export const MINIMAL_KIT_ID = "minimal";
 
 const DEFAULT_KICK_DURATION = "8n";
 const DEFAULT_SNARE_DURATION = "16n";
+const DEFAULT_SNARE_TONE_DURATION = "32n";
 const DEFAULT_HAT_DURATION = "32n";
 const DEFAULT_OPEN_HAT_DURATION = "8n";
 const CLOSED_HAT_FREQUENCY = 280;
 const OPEN_HAT_FREQUENCY = 220;
+const SNARE_TONE_NOTE = "G3";
 
 export const MINIMAL_KIT_TRACKS = [
   { id: "kick", label: "Kick" },
@@ -27,6 +29,7 @@ export const MINIMAL_KIT_TRACK_COUNT = MINIMAL_KIT_TRACKS.length;
 export type MinimalKitVoices = {
   kick: Tone.MembraneSynth;
   snare: Tone.NoiseSynth;
+  snareTone: Tone.Synth;
   closedHat: Tone.MetalSynth;
   openHat: Tone.MetalSynth;
 };
@@ -44,14 +47,24 @@ export function createMinimalKitVoices(): MinimalKitVoices {
       },
     }).toDestination(),
     snare: new Tone.NoiseSynth({
-      noise: { type: "white" },
+      noise: { type: "pink" },
       envelope: {
         attack: 0.001,
-        decay: 0.12,
+        decay: 0.18,
         sustain: 0,
-        release: 0.05,
+        release: 0.08,
       },
-      volume: -16,
+      volume: -12,
+    }).toDestination(),
+    snareTone: new Tone.Synth({
+      oscillator: { type: "triangle" },
+      envelope: {
+        attack: 0.001,
+        decay: 0.08,
+        sustain: 0,
+        release: 0.04,
+      },
+      volume: -20,
     }).toDestination(),
     closedHat: new Tone.MetalSynth({
       envelope: {
@@ -83,6 +96,7 @@ export function createMinimalKitVoices(): MinimalKitVoices {
 export function disposeMinimalKitVoices(voices: MinimalKitVoices): void {
   voices.kick.dispose();
   voices.snare.dispose();
+  voices.snareTone.dispose();
   voices.closedHat.dispose();
   voices.openHat.dispose();
 }
@@ -98,6 +112,12 @@ export function playMinimalKitTrack(
       break;
     case "snare":
       voices.snare.triggerAttackRelease(DEFAULT_SNARE_DURATION, toneTime, 0.7);
+      voices.snareTone.triggerAttackRelease(
+        SNARE_TONE_NOTE,
+        DEFAULT_SNARE_TONE_DURATION,
+        toneTime,
+        0.45,
+      );
       break;
     case "closedHat":
       voices.closedHat.triggerAttackRelease(
