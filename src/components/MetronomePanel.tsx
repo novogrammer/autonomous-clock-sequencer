@@ -5,6 +5,11 @@ import {
   type AudioStatus,
 } from "../hooks/useMetronomeEngine";
 import { useMetronomePosition } from "../hooks/useMetronomePosition";
+import { MINIMAL_KIT_TRACKS } from "../kit/minimalKit";
+import {
+  splitPatternTracks,
+  togglePatternStep,
+} from "../pattern/pattern";
 import { useSequencerUrlSync } from "../hooks/useSequencerUrlSync";
 import { useSequencerStore } from "../state/sequencerStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
@@ -21,6 +26,8 @@ export function MetronomePanel() {
     isPlaying,
     setBpm,
     setStepsPerBeat,
+    setBeatsPerLoop,
+    setPattern,
     setSwing,
     start,
     stop,
@@ -76,12 +83,22 @@ export function MetronomePanel() {
     setSwing(Number(event.target.value));
   }
 
+  function handleBeatsPerLoopChange(event: ChangeEvent<HTMLInputElement>) {
+    setBeatsPerLoop(Number(event.target.value));
+  }
+
+  function handleStepToggle(trackIndex: number, stepIndex: number) {
+    setPattern(togglePatternStep(pattern, trackIndex, stepIndex));
+  }
+
+  const patternTracks = splitPatternTracks(pattern);
+
   return (
     <section className="p-metronome">
       <div className="p-metronome__header">
         <div>
-          <p className="c-eyebrow">Phase 0</p>
-          <h1 className="c-heading c-heading--1">Autonomous Clock Metronome</h1>
+          <p className="c-eyebrow">Sequencer</p>
+          <h1 className="c-heading c-heading--1">Autonomous Clock Sequencer</h1>
         </div>
         <StatusBadge isPlaying={isPlaying} audioStatus={audioStatus} />
       </div>
@@ -136,6 +153,50 @@ export function MetronomePanel() {
             onChange={handleSwingChange}
           />
         </label>
+
+        <label className="c-field">
+          <span className="c-field__label">beatsPerLoop</span>
+          <input
+            className="c-input"
+            type="number"
+            min="1"
+            max="32"
+            step="1"
+            value={beatsPerLoop}
+            onChange={handleBeatsPerLoopChange}
+          />
+        </label>
+
+        <div className="c-detail-box c-detail-box--compact">
+          <span className="c-detail-box__label">kit</span>
+          <strong className="c-detail-box__value">{kit}</strong>
+        </div>
+      </div>
+
+      <div className="p-metronome__sequencer">
+        {MINIMAL_KIT_TRACKS.map((track, trackIndex) => (
+          <div className="p-metronome__track" key={track.id}>
+            <div className="p-metronome__track-label">{track.label}</div>
+            <div className="p-metronome__track-steps">
+              {(patternTracks[trackIndex] ?? "").split("").map((step, stepIndex) => (
+                <button
+                  key={`${track.id}-${stepIndex}`}
+                  className={
+                    step === "1"
+                      ? "p-metronome__step-button p-metronome__step-button--active"
+                      : "p-metronome__step-button"
+                  }
+                  onClick={() => handleStepToggle(trackIndex, stepIndex)}
+                  aria-pressed={step === "1"}
+                >
+                  <span className="u-visually-hidden">
+                    {track.label} step {stepIndex + 1}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
 
       <div className="l-grid l-grid--columns-3 l-grid--gap-m l-grid--section">
