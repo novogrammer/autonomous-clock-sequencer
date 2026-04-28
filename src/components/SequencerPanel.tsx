@@ -1,11 +1,10 @@
 import { useState, type ChangeEvent } from "react";
 import { secondsToMs } from "../clock/clock";
 import {
-  useSequencerEngine,
-  type AudioStatus,
+  useSequencerEngine, type AudioStatus
 } from "../hooks/useSequencerEngine";
 import { useSequencerPosition } from "../hooks/useSequencerPosition";
-import { MINIMAL_KIT_TRACKS } from "../kit/minimalKit";
+import { getKitTracks } from "../kit/kits";
 import {
   splitPatternTracks,
   togglePatternStep,
@@ -105,6 +104,7 @@ export function SequencerPanel() {
   }
 
   const patternTracks = splitPatternTracks(pattern);
+  const kitTracks = getKitTracks(kit);
 
   return (
     <section className="p-sequencer">
@@ -210,7 +210,7 @@ export function SequencerPanel() {
       </div>
 
       <div className="p-sequencer__sequencer">
-        {MINIMAL_KIT_TRACKS.map((track, trackIndex) => (
+        {kitTracks.map((track, trackIndex) => (
           <div className="p-sequencer__track" key={track.id}>
             <div className="p-sequencer__track-label">{track.label}</div>
             <div className="p-sequencer__track-steps">

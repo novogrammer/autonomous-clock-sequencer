@@ -188,10 +188,12 @@ function createPreparedEngine(): PreparedSequencerEngine {
     dispose: vi.fn(),
   };
   engine.clickSynth = voice;
-  engine.kickSynth = voice;
-  engine.snareSynth = voice;
-  engine.closedHatSynth = voice;
-  engine.openHatSynth = voice;
+  engine.kitVoices = {
+    kick: voice,
+    snare: voice,
+    closedHat: voice,
+    openHat: voice,
+  };
   engine.nextStep = 0;
 
   return engine;

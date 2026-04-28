@@ -1,13 +1,17 @@
-import { MINIMAL_KIT_TRACK_IDS } from "../kit/minimalKit";
+import { getKitTracks } from "../kit/kits";
 import { splitPatternTracks } from "./pattern";
 
 export function getActiveTrackIdsAtStep(
+  kit: string,
   pattern: string,
   stepInLoop: number,
 ): string[] {
   const tracks = splitPatternTracks(pattern);
+  const kitTracks = getKitTracks(kit);
 
-  return MINIMAL_KIT_TRACK_IDS.filter((trackId, trackIndex) => {
+  return kitTracks
+    .map((track) => track.id)
+    .filter((trackId, trackIndex) => {
     const track = tracks[trackIndex];
     return track !== undefined && track[stepInLoop] === "1";
   });
