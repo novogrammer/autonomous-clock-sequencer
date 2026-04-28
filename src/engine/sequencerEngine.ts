@@ -29,11 +29,11 @@ const BEAT_CLICK_FREQUENCY = "E6";
 const STEP_CLICK_FREQUENCY = "C6";
 const CLICK_DURATION = "32n";
 
-export async function unlockMetronomeAudio(): Promise<void> {
+export async function unlockSequencerAudio(): Promise<void> {
   await Tone.start();
 }
 
-export class MetronomeEngine {
+export class SequencerEngine {
   private clickSynth: Tone.Synth | null = null;
   private kickSynth: Tone.MembraneSynth | null = null;
   private snareSynth: Tone.NoiseSynth | null = null;
@@ -44,7 +44,7 @@ export class MetronomeEngine {
   private nextStep = 0;
 
   async start(config: EngineConfig): Promise<void> {
-    await unlockMetronomeAudio();
+    await unlockSequencerAudio();
     this.stop();
 
     this.config = config;

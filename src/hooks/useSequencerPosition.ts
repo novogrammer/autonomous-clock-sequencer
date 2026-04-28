@@ -6,16 +6,16 @@ import {
   type TransportPosition,
 } from "../transport/transport";
 
-type MetronomePositionParams = TransportConfig & {
+type SequencerPositionParams = TransportConfig & {
   playbackOffsetMs: number;
 };
 
-export function useMetronomePosition({
+export function useSequencerPosition({
   bpm,
   stepsPerBeat,
   swing,
   playbackOffsetMs,
-}: MetronomePositionParams): TransportPosition {
+}: SequencerPositionParams): TransportPosition {
   const config = useMemo(
     () => ({ bpm, stepsPerBeat, swing }),
     [bpm, stepsPerBeat, swing],

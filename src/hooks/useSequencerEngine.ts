@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  MetronomeEngine,
-  unlockMetronomeAudio,
-} from "../engine/metronomeEngine";
+  SequencerEngine,
+  unlockSequencerAudio,
+} from "../engine/sequencerEngine";
 import type { TransportConfig } from "../transport/transport";
 
 export type AudioStatus = "idle" | "locked" | "starting" | "ready" | "blocked";
@@ -40,7 +40,7 @@ export function useSequencerEngine({
   isPlaying,
   playbackOffsetMs,
 }: SequencerEngineParams): SequencerEngineControls {
-  const engineRef = useRef<MetronomeEngine | null>(null);
+  const engineRef = useRef<SequencerEngine | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [audioStatus, setAudioStatus] = useState<AudioStatus>("idle");
   const engineConfig = useMemo(
@@ -81,7 +81,7 @@ export function useSequencerEngine({
       return;
     }
 
-    const engine = engineRef.current ?? new MetronomeEngine();
+    const engine = engineRef.current ?? new SequencerEngine();
     engineRef.current = engine;
     let isActive = true;
     setAudioStatus("starting");
@@ -118,7 +118,7 @@ export function useSequencerEngine({
     setAudioStatus("starting");
 
     try {
-      await unlockMetronomeAudio();
+      await unlockSequencerAudio();
       setAudioEnabled(true);
       return true;
     } catch (error) {

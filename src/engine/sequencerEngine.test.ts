@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { scheduledStepTimeMs } from "../transport/transport";
-import { MetronomeEngine } from "./metronomeEngine";
+import { SequencerEngine } from "./sequencerEngine";
 
 const testState = vi.hoisted(() => ({
   mockedNowMs: 0,
@@ -46,7 +46,7 @@ vi.mock("tone", () => ({
   },
 }));
 
-describe("MetronomeEngine.update", () => {
+describe("SequencerEngine.update", () => {
   beforeEach(() => {
     testState.mockedNowMs = 0;
     testState.mockToneNow.mockClear();
@@ -139,8 +139,8 @@ describe("MetronomeEngine.update", () => {
   });
 });
 
-function createPreparedEngine(): PreparedMetronomeEngine {
-  const engine = new MetronomeEngine() as PreparedMetronomeEngine;
+function createPreparedEngine(): PreparedSequencerEngine {
+  const engine = new SequencerEngine() as PreparedSequencerEngine;
   engine.config = {
     bpm: 120,
     stepsPerBeat: 4,
@@ -165,6 +165,6 @@ function createPreparedEngine(): PreparedMetronomeEngine {
   return engine;
 }
 
-type PreparedMetronomeEngine = MetronomeEngine & {
+type PreparedSequencerEngine = SequencerEngine & {
   [key: string]: unknown;
 } & any;

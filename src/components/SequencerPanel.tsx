@@ -4,7 +4,7 @@ import {
   useSequencerEngine,
   type AudioStatus,
 } from "../hooks/useSequencerEngine";
-import { useMetronomePosition } from "../hooks/useMetronomePosition";
+import { useSequencerPosition } from "../hooks/useSequencerPosition";
 import { MINIMAL_KIT_TRACKS } from "../kit/minimalKit";
 import {
   splitPatternTracks,
@@ -36,7 +36,7 @@ export function SequencerPanel() {
   const playbackOffsetMs = usePlaybackCalibrationStore(
     (state) => state.playbackOffsetMs,
   );
-  const position = useMetronomePosition({
+  const position = useSequencerPosition({
     bpm,
     stepsPerBeat,
     swing,
