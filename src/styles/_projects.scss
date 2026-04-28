@@ -13,27 +13,6 @@
     }
   }
 
-  &__controls {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-7);
-    margin-top: var(--space-10);
-
-    @include narrow-screen {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__position-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-5);
-    margin-top: var(--space-10);
-
-    @include narrow-screen {
-      grid-template-columns: 1fr;
-    }
-  }
 }
 
 .p-calibration {
@@ -56,21 +35,6 @@
 .p-playback-calibration {
   padding-top: var(--space-9);
   border-top: 1px solid var(--color-border-default);
-
-  &__panel {
-    margin-top: var(--space-10);
-  }
-
-  &__controls {
-    display: grid;
-    gap: var(--space-10);
-    margin-top: var(--space-10);
-  }
-
-  &__control-group {
-    display: grid;
-    gap: var(--space-5);
-  }
 
   &__frequency .c-field {
     max-width: 240px;
@@ -104,45 +68,9 @@
       color: var(--color-text-accent-soft);
     }
   }
-
-  &__time-readout {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-5);
-    margin-top: var(--space-7);
-
-    @include narrow-screen {
-      grid-template-columns: 1fr;
-    }
-  }
 }
 
 .p-microphone-measurement {
   padding-top: var(--space-9);
   border-top: 1px solid var(--color-border-default);
-
-  &__panel {
-    margin-top: var(--space-10);
-  }
-
-  &__controls {
-    display: grid;
-    gap: var(--space-7);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-
-    @include narrow-screen {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  &__grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-5);
-    margin-top: var(--space-7);
-
-    @include narrow-screen {
-      grid-template-columns: 1fr;
-    }
-  }
 }

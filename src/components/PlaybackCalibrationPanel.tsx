@@ -65,9 +65,9 @@ export function PlaybackCalibrationPanel() {
         <span className={`c-status c-status--${audioStatus}`}>{audioStatus}</span>
       </div>
 
-      <div className="p-playback-calibration__panel">
-        <div className="p-playback-calibration__controls">
-          <div className="p-playback-calibration__control-group">
+      <div className="l-stack l-stack--section">
+        <div className="l-stack l-stack--section">
+          <div className="l-stack l-stack--control-group">
             <div className="p-playback-calibration__offset-row">
               <label className="c-field">
                 <span className="c-field__label">playbackOffsetMs</span>
@@ -111,7 +111,7 @@ export function PlaybackCalibrationPanel() {
             </div>
           </div>
 
-          <div className="p-playback-calibration__control-group p-playback-calibration__frequency">
+          <div className="l-stack l-stack--control-group p-playback-calibration__frequency">
             <label className="c-field">
               <span className="c-field__label">clickFrequencyHz</span>
               <input
@@ -146,7 +146,7 @@ export function PlaybackCalibrationPanel() {
           </div>
         </div>
 
-        <div className="p-playback-calibration__time-readout">
+        <div className="l-grid l-grid--columns-2 l-grid--gap-m l-grid--subsection">
           <Readout label="raw time" value={formatLocalTime(currentNowMs)} />
           <Readout
             label="offset time"

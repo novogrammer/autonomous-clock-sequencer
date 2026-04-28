@@ -37,8 +37,8 @@ export function MicrophoneMeasurementPanel() {
         <span className={`c-status c-status--${status}`}>{status}</span>
       </div>
 
-      <div className="p-microphone-measurement__panel">
-        <div className="p-microphone-measurement__controls">
+      <div className="l-stack l-stack--section">
+        <div className="l-grid l-grid--columns-2 l-grid--gap-l">
           <label className="c-field">
             <span className="c-field__label">device A Hz</span>
             <input
@@ -68,7 +68,7 @@ export function MicrophoneMeasurementPanel() {
           </label>
         </div>
 
-        <div className="p-microphone-measurement__grid">
+        <div className="l-grid l-grid--columns-3 l-grid--gap-m l-grid--subsection">
           <Readout
             label="latest A-B"
             value={latestResult === null ? "-" : `${latestResult.skewMs.toFixed(1)}ms`}

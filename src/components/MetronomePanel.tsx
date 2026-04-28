@@ -91,7 +91,7 @@ export function MetronomePanel() {
         <button className="c-button" onClick={handleStop}>停止</button>
       </div>
 
-      <div className="p-metronome__controls">
+      <div className="l-grid l-grid--columns-3 l-grid--gap-l l-grid--section">
         <label className="c-field">
           <span className="c-field__label">BPM</span>
           <input
@@ -132,7 +132,7 @@ export function MetronomePanel() {
         </label>
       </div>
 
-      <div className="p-metronome__position-grid">
+      <div className="l-grid l-grid--columns-3 l-grid--gap-m l-grid--section">
         <Readout
           label="elapsed"
           value={`${(position.elapsedMs / secondsToMs(1)).toFixed(2)}s`}
