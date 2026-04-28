@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { splitPatternTracks, togglePatternStep } from "./pattern";
+import { createEmptyPattern, splitPatternTracks, togglePatternStep } from "./pattern";
+
+describe("createEmptyPattern", () => {
+  it("kitとloop長に応じた空patternを返す", () => {
+    expect(createEmptyPattern("minimal", 4, 2)).toBe(
+      "00000000_00000000_00000000_00000000",
+    );
+  });
+});
 
 describe("togglePatternStep", () => {
   it("指定stepを0から1へ切り替える", () => {

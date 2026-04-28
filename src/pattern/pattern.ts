@@ -1,3 +1,18 @@
+import { getKitTracks } from "../kit/kits";
+
+export function createEmptyPattern(
+  kit: string,
+  stepsPerBeat: number,
+  beatsPerLoop: number,
+): string {
+  const trackLength = stepsPerBeat * beatsPerLoop;
+  const emptyTrack = "0".repeat(trackLength);
+
+  return getKitTracks(kit)
+    .map(() => emptyTrack)
+    .join("_");
+}
+
 export function togglePatternStep(
   pattern: string,
   trackIndex: number,

@@ -6,6 +6,7 @@ import {
 import { useSequencerPosition } from "../hooks/useSequencerPosition";
 import { getKitTracks } from "../kit/kits";
 import {
+  createEmptyPattern,
   splitPatternTracks,
   togglePatternStep,
 } from "../pattern/pattern";
@@ -96,6 +97,10 @@ export function SequencerPanel() {
     setPattern(togglePatternStep(pattern, trackIndex, stepIndex));
   }
 
+  function handleClearPattern() {
+    setPattern(createEmptyPattern(kit, stepsPerBeat, beatsPerLoop));
+  }
+
   function handleClickOn() {
     setClickEnabled(true);
   }
@@ -147,6 +152,13 @@ export function SequencerPanel() {
             disabled={!isClickEnabled}
           >
             Off
+          </button>
+        </div>
+
+        <div className="c-action-row">
+          <span className="c-field__label">Pattern</span>
+          <button className="c-button" onClick={handleClearPattern}>
+            Clear Pattern
           </button>
         </div>
       </div>
