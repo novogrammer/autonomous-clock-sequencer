@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { parsePhase0Url } from "../url/phase0Url";
+import { normalizePhase0UrlState, parsePhase0Url } from "../url/phase0Url";
 
 export type MetronomeState = {
   bpm: number;
@@ -23,12 +23,14 @@ export const useMetronomeStore = create<MetronomeState>((set) => ({
   ...initialUrlState,
   isPlaying: false,
 
-  setBpm: (bpm) => set({ bpm: clamp(bpm, 20, 300) }),
+  setBpm: (bpm) =>
+    set((state) => normalizePhase0UrlState({ ...state, bpm })),
 
   setStepsPerBeat: (stepsPerBeat) =>
-    set({ stepsPerBeat: Math.round(clamp(stepsPerBeat, 1, 16)) }),
+    set((state) => normalizePhase0UrlState({ ...state, stepsPerBeat })),
 
-  setSwing: (swing) => set({ swing: clamp(swing, 0, 0.95) }),
+  setSwing: (swing) =>
+    set((state) => normalizePhase0UrlState({ ...state, swing })),
 
   start: () =>
     set({
@@ -42,7 +44,3 @@ export const useMetronomeStore = create<MetronomeState>((set) => ({
     set({ ...next, isPlaying: false });
   },
 }));
-
-function clamp(value: number, min: number, max: number): number {
-  return Math.min(max, Math.max(min, value));
-}
