@@ -104,7 +104,7 @@ describe("normalizeSequencerUrlState", () => {
 });
 
 describe("normalizePattern", () => {
-  it("トラック数不足と文字列長不足を補完する", () => {
+  it("トラック数不足と文字列長不足は0で補完する", () => {
     expect(
       normalizePattern("1010_01", {
         kit: "minimal",
@@ -124,6 +124,18 @@ describe("normalizePattern", () => {
         beatsPerLoop: 2,
       }),
     ).toBe("1001_1111_0101_1000");
+  });
+
+  it("loop長を広げても新しい領域は推測せず0で埋める", () => {
+    expect(
+      normalizePattern("1010_01", {
+        kit: "minimal",
+        stepsPerBeat: 4,
+        beatsPerLoop: 4,
+      }),
+    ).toBe(
+      "1010000000000000_0100000000000000_0000000000000000_0000000000000000",
+    );
   });
 });
 
