@@ -80,29 +80,6 @@ body {
       grid-template-columns: 1fr;
     }
   }
-
-  &__url-box {
-    margin-top: 24px;
-    padding: 14px;
-    border: 1px solid #ded8cf;
-    border-radius: 6px;
-    background: #f8f5ef;
-
-    span {
-      display: block;
-      color: #6b7280;
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    code {
-      display: block;
-      margin-top: 8px;
-      overflow-wrap: anywhere;
-      color: #1f4f59;
-    }
-  }
 }
 
 .c-eyebrow {
@@ -255,6 +232,82 @@ body {
   }
 }
 
+.c-detail-box {
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #ded8cf;
+  border-radius: 6px;
+  background: #f8f5ef;
+
+  &--compact {
+    min-width: 120px;
+    padding: 8px 10px;
+  }
+}
+
+.c-detail-box__label {
+  display: block;
+  color: #6b7280;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.c-detail-box__value {
+  display: block;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+
+  .c-detail-box--compact & {
+    margin-top: 4px;
+    font-size: 0.95rem;
+  }
+}
+
+code.c-detail-box__value {
+  color: #1f4f59;
+}
+
+.c-button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  .c-button {
+    min-height: 44px;
+    padding: 0 12px;
+  }
+}
+
+.c-time-signal {
+  height: 10px;
+  margin-top: 12px;
+  border-radius: 999px;
+  background: #ded8cf;
+  transition:
+    background-color 90ms linear,
+    box-shadow 90ms linear,
+    opacity 90ms linear;
+
+  &--idle {
+    opacity: 0.55;
+  }
+
+  &--second {
+    background: #4aa3a8;
+    box-shadow: 0 0 0 3px rgb(74 163 168 / 18%);
+    opacity: 1;
+  }
+
+  &--boundary {
+    background: #d88a1d;
+    box-shadow: 0 0 0 5px rgb(216 138 29 / 22%);
+    opacity: 1;
+  }
+}
+
 .p-calibration {
   margin-top: 28px;
   padding-top: 24px;
@@ -306,18 +359,6 @@ body {
     }
   }
 
-  &__offset-steps,
-  &__frequency-presets {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-
-    .c-button {
-      min-height: 44px;
-      padding: 0 12px;
-    }
-  }
-
   &__storage-control {
     display: flex;
     align-items: end;
@@ -325,28 +366,6 @@ body {
 
     @include narrow-screen {
       align-items: stretch;
-    }
-  }
-
-  &__storage-status {
-    min-width: 120px;
-    padding: 8px 10px;
-    border: 1px solid #ded8cf;
-    border-radius: 6px;
-    background: #f8f5ef;
-
-    span {
-      display: block;
-      color: #6b7280;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    strong {
-      display: block;
-      margin-top: 4px;
-      font-size: 0.95rem;
     }
   }
 
@@ -366,33 +385,6 @@ body {
 
     @include narrow-screen {
       grid-template-columns: 1fr;
-    }
-  }
-
-  &__time-signal {
-    height: 10px;
-    margin-top: 12px;
-    border-radius: 999px;
-    background: #ded8cf;
-    transition:
-      background-color 90ms linear,
-      box-shadow 90ms linear,
-      opacity 90ms linear;
-
-    &--idle {
-      opacity: 0.55;
-    }
-
-    &--second {
-      background: #4aa3a8;
-      box-shadow: 0 0 0 3px rgb(74 163 168 / 18%);
-      opacity: 1;
-    }
-
-    &--boundary {
-      background: #d88a1d;
-      box-shadow: 0 0 0 5px rgb(216 138 29 / 22%);
-      opacity: 1;
     }
   }
 }

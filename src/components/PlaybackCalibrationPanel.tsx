@@ -83,9 +83,9 @@ export function PlaybackCalibrationPanel() {
               </label>
 
               <div className="p-playback-calibration__storage-control">
-                <div className="p-playback-calibration__storage-status">
-                  <span>保存状態</span>
-                  <strong>
+                <div className="c-detail-box c-detail-box--compact">
+                  <span className="c-detail-box__label">保存状態</span>
+                  <strong className="c-detail-box__value">
                     {isPlaybackOffsetStored ? "保存済み" : "未保存"}
                   </strong>
                 </div>
@@ -96,7 +96,7 @@ export function PlaybackCalibrationPanel() {
             </div>
 
             <div
-              className="p-playback-calibration__offset-steps"
+              className="c-button-group"
               aria-label="Playback offset steps"
             >
               {PLAYBACK_OFFSET_STEPS_MS.map((step) => (
@@ -126,7 +126,7 @@ export function PlaybackCalibrationPanel() {
             </label>
 
             <div
-              className="p-playback-calibration__frequency-presets"
+              className="c-button-group"
               aria-label="Click frequency presets"
             >
               {CLICK_FREQUENCY_PRESETS_HZ.map((frequencyHz) => (
@@ -155,7 +155,7 @@ export function PlaybackCalibrationPanel() {
         </div>
 
         <div
-          className={`p-playback-calibration__time-signal p-playback-calibration__time-signal--${flashState}`}
+          className={`c-time-signal c-time-signal--${flashState}`}
           aria-label="Time signal visual indicator"
         />
 

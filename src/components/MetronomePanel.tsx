@@ -143,9 +143,9 @@ export function MetronomePanel() {
         <Readout label="stepInLoop" value={String(position.stepInLoop)} />
       </div>
 
-      <div className="p-metronome__url-box">
-        <span>URL</span>
-        <code>{currentUrl}</code>
+      <div className="c-detail-box">
+        <span className="c-detail-box__label">URL</span>
+        <code className="c-detail-box__value">{currentUrl}</code>
       </div>
     </section>
   );
