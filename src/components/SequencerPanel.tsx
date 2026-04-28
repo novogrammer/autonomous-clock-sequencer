@@ -210,10 +210,17 @@ export function SequencerPanel() {
       </div>
 
       <div className="p-sequencer__sequencer">
-        {kitTracks.map((track, trackIndex) => (
-          <div className="p-sequencer__track" key={track.id}>
-            <div className="p-sequencer__track-label">{track.label}</div>
-            <div className="p-sequencer__track-steps">
+        <div className="p-sequencer__track-labels">
+          {kitTracks.map((track) => (
+            <div className="p-sequencer__track-label" key={track.id}>
+              {track.label}
+            </div>
+          ))}
+        </div>
+
+        <div className="p-sequencer__track-grid">
+          {kitTracks.map((track, trackIndex) => (
+            <div className="p-sequencer__track-steps" key={track.id}>
               {(patternTracks[trackIndex] ?? "").split("").map((step, stepIndex) => (
                 <button
                   key={`${track.id}-${stepIndex}`}
@@ -240,8 +247,8 @@ export function SequencerPanel() {
                 </button>
               ))}
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <div className="l-grid l-grid--columns-3 l-grid--gap-m l-grid--section">
