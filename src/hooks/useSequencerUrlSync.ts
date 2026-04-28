@@ -8,9 +8,19 @@ export function useSequencerUrlSync(state: SequencerUrlState): string {
     () => ({
       bpm: state.bpm,
       stepsPerBeat: state.stepsPerBeat,
+      beatsPerLoop: state.beatsPerLoop,
+      kit: state.kit,
+      pattern: state.pattern,
       swing: state.swing,
     }),
-    [state.bpm, state.stepsPerBeat, state.swing],
+    [
+      state.bpm,
+      state.stepsPerBeat,
+      state.beatsPerLoop,
+      state.kit,
+      state.pattern,
+      state.swing,
+    ],
   );
   const hydrateFromUrl = useSequencerStore((store) => store.hydrateFromUrl);
   const [href, setHref] = useState(() => window.location.href);

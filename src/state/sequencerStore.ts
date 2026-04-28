@@ -7,10 +7,16 @@ import {
 export type SequencerState = {
   bpm: number;
   stepsPerBeat: number;
+  beatsPerLoop: number;
+  kit: string;
+  pattern: string;
   swing: number;
   isPlaying: boolean;
   setBpm: (bpm: number) => void;
   setStepsPerBeat: (stepsPerBeat: number) => void;
+  setBeatsPerLoop: (beatsPerLoop: number) => void;
+  setKit: (kit: string) => void;
+  setPattern: (pattern: string) => void;
   setSwing: (swing: number) => void;
   start: () => void;
   stop: () => void;
@@ -19,7 +25,7 @@ export type SequencerState = {
 
 const initialUrlState =
   typeof window === "undefined"
-    ? { bpm: 120, stepsPerBeat: 4, swing: 0 }
+    ? parseSequencerUrl("")
     : parseSequencerUrl(window.location.search);
 
 export const useSequencerStore = create<SequencerState>((set) => ({
@@ -31,6 +37,15 @@ export const useSequencerStore = create<SequencerState>((set) => ({
 
   setStepsPerBeat: (stepsPerBeat) =>
     set((state) => normalizeSequencerUrlState({ ...state, stepsPerBeat })),
+
+  setBeatsPerLoop: (beatsPerLoop) =>
+    set((state) => normalizeSequencerUrlState({ ...state, beatsPerLoop })),
+
+  setKit: (kit) =>
+    set((state) => normalizeSequencerUrlState({ ...state, kit })),
+
+  setPattern: (pattern) =>
+    set((state) => normalizeSequencerUrlState({ ...state, pattern })),
 
   setSwing: (swing) =>
     set((state) => normalizeSequencerUrlState({ ...state, swing })),

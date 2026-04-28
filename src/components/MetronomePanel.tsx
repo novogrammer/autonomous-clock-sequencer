@@ -14,6 +14,9 @@ export function MetronomePanel() {
   const {
     bpm,
     stepsPerBeat,
+    beatsPerLoop,
+    kit,
+    pattern,
     swing,
     isPlaying,
     setBpm,
@@ -34,6 +37,9 @@ export function MetronomePanel() {
   const currentUrl = useSequencerUrlSync({
     bpm,
     stepsPerBeat,
+    beatsPerLoop,
+    kit,
+    pattern,
     swing,
   });
   const {
