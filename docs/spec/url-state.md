@@ -18,6 +18,12 @@
 - 通常の URL 更新は `history.replaceState()` を使う
 - 毎操作で履歴を増やさない
 
+## ローカル専用値
+
+- 端末ごとの補正値や runtime 専用値は URL に載せない
+- 例: `playbackOffsetMs` は端末ごとのローカル再生補正値として扱う
+- `playbackOffsetMs` は共有グリッドには混ぜず、音声スケジューリングや表示確認だけに使う
+
 ## kit
 
 - `kit` は URL の解釈ルール
