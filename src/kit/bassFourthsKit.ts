@@ -26,7 +26,7 @@ function createBassVoice(): Tone.Synth {
       sustain: 0.5,
       release: 0.05,
     },
-    volume: -13,
+    volume: -19,
   }).toDestination();
 }
 
