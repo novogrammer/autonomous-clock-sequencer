@@ -103,8 +103,8 @@ export function SequencerPanel() {
   const patternTracks = splitPatternTracks(pattern);
 
   return (
-    <section className="p-metronome">
-      <div className="p-metronome__header">
+    <section className="p-sequencer">
+      <div className="p-sequencer__header">
         <div>
           <p className="c-eyebrow">Sequencer</p>
           <h1 className="c-heading c-heading--1">Autonomous Clock Sequencer</h1>
@@ -185,20 +185,20 @@ export function SequencerPanel() {
         </div>
       </div>
 
-      <div className="p-metronome__sequencer">
+      <div className="p-sequencer__sequencer">
         {MINIMAL_KIT_TRACKS.map((track, trackIndex) => (
-          <div className="p-metronome__track" key={track.id}>
-            <div className="p-metronome__track-label">{track.label}</div>
-            <div className="p-metronome__track-steps">
+          <div className="p-sequencer__track" key={track.id}>
+            <div className="p-sequencer__track-label">{track.label}</div>
+            <div className="p-sequencer__track-steps">
               {(patternTracks[trackIndex] ?? "").split("").map((step, stepIndex) => (
                 <button
                   key={`${track.id}-${stepIndex}`}
                   className={
                     [
-                      "p-metronome__step-button",
-                      step === "1" ? "p-metronome__step-button--active" : "",
+                      "p-sequencer__step-button",
+                      step === "1" ? "p-sequencer__step-button--active" : "",
                       stepIndex === position.stepInLoop
-                        ? "p-metronome__step-button--current"
+                        ? "p-sequencer__step-button--current"
                         : "",
                     ]
                       .filter(Boolean)
