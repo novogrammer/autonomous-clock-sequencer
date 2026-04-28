@@ -1,8 +1,6 @@
 import {
   BASS_FOURTHS_KIT_ID,
   BASS_FOURTHS_KIT_TRACKS,
-  type BassFourthsTrackId,
-  type BassFourthsKitVoices,
   createBassFourthsKitVoices,
   disposeBassFourthsKitVoices,
   playBassFourthsTrack,
@@ -10,8 +8,6 @@ import {
 import {
   MINIMAL_KIT_ID,
   MINIMAL_KIT_TRACKS,
-  type MinimalKitTrackId,
-  type MinimalKitVoices,
   createMinimalKitVoices,
   disposeMinimalKitVoices,
   playMinimalKitTrack,
@@ -20,8 +16,63 @@ import {
 export const KIT_IDS = [MINIMAL_KIT_ID, BASS_FOURTHS_KIT_ID] as const;
 
 export type KitId = (typeof KIT_IDS)[number];
-export type KitTrackId = MinimalKitTrackId | BassFourthsTrackId;
-export type KitVoices = MinimalKitVoices | BassFourthsKitVoices;
+export type KitTrack = {
+  id: string;
+  label: string;
+  note?: string;
+};
+
+export type KitInstance = {
+  id: KitId;
+  tracks: readonly KitTrack[];
+  dispose: () => void;
+  playTrack: (trackId: string, toneTime: number) => void;
+};
+
+type KitDefinition = {
+  id: KitId;
+  tracks: readonly KitTrack[];
+  createInstance: () => KitInstance;
+};
+
+const minimalKitDefinition: KitDefinition = {
+  id: MINIMAL_KIT_ID,
+  tracks: MINIMAL_KIT_TRACKS,
+  createInstance() {
+    const voices = createMinimalKitVoices();
+
+    return {
+      id: MINIMAL_KIT_ID,
+      tracks: MINIMAL_KIT_TRACKS,
+      dispose: () => disposeMinimalKitVoices(voices),
+      playTrack: (trackId, toneTime) => {
+        playMinimalKitTrack(trackId as (typeof MINIMAL_KIT_TRACKS)[number]["id"], voices, toneTime);
+      },
+    };
+  },
+};
+
+const bassFourthsKitDefinition: KitDefinition = {
+  id: BASS_FOURTHS_KIT_ID,
+  tracks: BASS_FOURTHS_KIT_TRACKS,
+  createInstance() {
+    const voices = createBassFourthsKitVoices();
+
+    return {
+      id: BASS_FOURTHS_KIT_ID,
+      tracks: BASS_FOURTHS_KIT_TRACKS,
+      dispose: () => disposeBassFourthsKitVoices(voices),
+      playTrack: (trackId, toneTime) => {
+        playBassFourthsTrack(trackId as (typeof BASS_FOURTHS_KIT_TRACKS)[number]["id"], voices, toneTime);
+      },
+    };
+  },
+};
+
+const KIT_DEFINITIONS: Record<KitId, KitDefinition> = {
+  [MINIMAL_KIT_ID]: minimalKitDefinition,
+  [BASS_FOURTHS_KIT_ID]: bassFourthsKitDefinition,
+};
 
 export function getDefaultKitId(): KitId {
   return MINIMAL_KIT_ID;
@@ -31,57 +82,18 @@ export function isKitId(value: string): value is KitId {
   return KIT_IDS.includes(value as KitId);
 }
 
-export function getKitTracks(kit: string) {
-  switch (kit) {
-    case BASS_FOURTHS_KIT_ID:
-      return BASS_FOURTHS_KIT_TRACKS;
-    case MINIMAL_KIT_ID:
-    default:
-      return MINIMAL_KIT_TRACKS;
-  }
+export function getKitTracks(kit: string): readonly KitTrack[] {
+  return getKitDefinition(kit).tracks;
 }
 
-export function createKitVoices(kit: string): KitVoices {
-  switch (kit) {
-    case BASS_FOURTHS_KIT_ID:
-      return createBassFourthsKitVoices();
-    case MINIMAL_KIT_ID:
-    default:
-      return createMinimalKitVoices();
-  }
+export function createKit(kit: string): KitInstance {
+  return getKitDefinition(kit).createInstance();
 }
 
-export function disposeKitVoices(kit: string, voices: KitVoices): void {
-  switch (kit) {
-    case BASS_FOURTHS_KIT_ID:
-      disposeBassFourthsKitVoices(voices as BassFourthsKitVoices);
-      return;
-    case MINIMAL_KIT_ID:
-    default:
-      disposeMinimalKitVoices(voices as MinimalKitVoices);
+function getKitDefinition(kit: string): KitDefinition {
+  if (isKitId(kit)) {
+    return KIT_DEFINITIONS[kit];
   }
-}
 
-export function playKitTrack(
-  kit: string,
-  trackId: string,
-  voices: KitVoices,
-  toneTime: number,
-): void {
-  switch (kit) {
-    case BASS_FOURTHS_KIT_ID:
-      playBassFourthsTrack(
-        trackId as BassFourthsTrackId,
-        voices as BassFourthsKitVoices,
-        toneTime,
-      );
-      return;
-    case MINIMAL_KIT_ID:
-    default:
-      playMinimalKitTrack(
-        trackId as MinimalKitTrackId,
-        voices as MinimalKitVoices,
-        toneTime,
-      );
-  }
+  return KIT_DEFINITIONS[getDefaultKitId()];
 }

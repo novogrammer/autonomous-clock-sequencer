@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createKit } from "../kit/kits";
 import { scheduledStepTimeMs } from "../transport/transport";
 import { SequencerEngine } from "./sequencerEngine";
 
@@ -148,10 +149,11 @@ describe("SequencerEngine.update", () => {
     expect(engine.nextStep).toBe(9);
   });
 
-  it("kit変更時はvoicesを作り直して現在stepへ再計算する", () => {
+  it("kit変更時はinstanceを作り直して現在stepへ再計算する", () => {
     testState.mockedNowMs = 1000;
     const engine = createPreparedEngine();
-    const previousVoices = engine.kitVoices;
+    const previousKit = engine.kit;
+    const disposeSpy = vi.spyOn(previousKit, "dispose");
 
     engine.update({
       bpm: 120,
@@ -165,8 +167,9 @@ describe("SequencerEngine.update", () => {
       playbackOffsetMs: 0,
     });
 
-    expect(previousVoices.kick.dispose).toHaveBeenCalledTimes(5);
-    expect(engine.kitVoices).not.toBe(previousVoices);
+    expect(disposeSpy).toHaveBeenCalledTimes(1);
+    expect(engine.kit).not.toBe(previousKit);
+    expect(engine.kit.id).toBe("bass-fourths");
     expect(engine.nextStep).toBe(8);
   });
 
@@ -287,13 +290,7 @@ function createPreparedEngine(): PreparedSequencerEngine {
     dispose: vi.fn(),
   };
   engine.clickSynth = voice;
-  engine.kitVoices = {
-    kick: voice,
-    snare: voice,
-    snareTone: voice,
-    closedHat: voice,
-    openHat: voice,
-  };
+  engine.kit = createKit("minimal");
   engine.nextStep = 0;
 
   return engine;

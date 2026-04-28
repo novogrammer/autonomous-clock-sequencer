@@ -1,10 +1,8 @@
 import * as Tone from "tone";
 import { nowMs, secondsToMs } from "../clock/clock";
 import {
-  createKitVoices,
-  disposeKitVoices,
-  playKitTrack,
-  type KitVoices,
+  createKit,
+  type KitInstance,
 } from "../kit/kits";
 import { getActiveTrackIdsAtStep } from "../pattern/playback";
 import {
@@ -36,7 +34,7 @@ export async function unlockSequencerAudio(): Promise<void> {
 
 export class SequencerEngine {
   private clickSynth: Tone.Synth | null = null;
-  private kitVoices: KitVoices | null = null;
+  private kit: KitInstance | null = null;
   private timerId: number | null = null;
   private config: EngineConfig | null = null;
   private nextStep = 0;
@@ -56,7 +54,7 @@ export class SequencerEngine {
       },
       volume: -18,
     }).toDestination();
-    this.kitVoices = createKitVoices(config.kit);
+    this.kit = createKit(config.kit);
 
     this.nextStep = Math.max(
       0,
@@ -69,7 +67,7 @@ export class SequencerEngine {
   }
 
   update(config: EngineConfig): void {
-    if (this.config === null || this.kitVoices === null) {
+    if (this.config === null || this.kit === null) {
       return;
     }
 
@@ -83,8 +81,8 @@ export class SequencerEngine {
       this.config.playbackOffsetMs !== config.playbackOffsetMs;
 
     if (shouldReplaceKitVoices) {
-      disposeKitVoices(this.config.kit, this.kitVoices);
-      this.kitVoices = createKitVoices(config.kit);
+      this.kit.dispose();
+      this.kit = createKit(config.kit);
     }
 
     this.config = config;
@@ -105,11 +103,9 @@ export class SequencerEngine {
     }
 
     this.clickSynth?.dispose();
-    if (this.config !== null && this.kitVoices !== null) {
-      disposeKitVoices(this.config.kit, this.kitVoices);
-    }
+    this.kit?.dispose();
     this.clickSynth = null;
-    this.kitVoices = null;
+    this.kit = null;
     this.config = null;
     this.nextStep = 0;
   }
@@ -118,7 +114,7 @@ export class SequencerEngine {
     if (
       this.config === null ||
       this.clickSynth === null ||
-      this.kitVoices === null
+      this.kit === null
     ) {
       return;
     }
@@ -163,11 +159,11 @@ export class SequencerEngine {
   }
 
   private playTrack(trackId: string, toneTime: number): void {
-    if (this.config === null || this.kitVoices === null) {
+    if (this.kit === null) {
       return;
     }
 
-    playKitTrack(this.config.kit, trackId, this.kitVoices, toneTime);
+    this.kit.playTrack(trackId, toneTime);
   }
 
   private playClick(
