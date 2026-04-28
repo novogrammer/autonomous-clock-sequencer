@@ -8,10 +8,16 @@ import type { TransportConfig } from "../transport/transport";
 export type AudioStatus = "idle" | "locked" | "starting" | "ready" | "blocked";
 
 type EngineConfig = TransportConfig & {
+  beatsPerLoop: number;
+  kit: string;
+  pattern: string;
   playbackOffsetMs: number;
 };
 
 type MetronomeEngineParams = TransportConfig & {
+  beatsPerLoop: number;
+  kit: string;
+  pattern: string;
   isPlaying: boolean;
   playbackOffsetMs: number;
 };
@@ -24,6 +30,9 @@ type MetronomeEngineControls = {
 export function useMetronomeEngine({
   bpm,
   stepsPerBeat,
+  beatsPerLoop,
+  kit,
+  pattern,
   swing,
   isPlaying,
   playbackOffsetMs,
@@ -35,10 +44,13 @@ export function useMetronomeEngine({
     () => ({
       bpm,
       stepsPerBeat,
+      beatsPerLoop,
+      kit,
+      pattern,
       swing,
       playbackOffsetMs,
     }),
-    [bpm, playbackOffsetMs, stepsPerBeat, swing],
+    [beatsPerLoop, bpm, kit, pattern, playbackOffsetMs, stepsPerBeat, swing],
   );
   const engineConfigRef = useRef<EngineConfig>(engineConfig);
   engineConfigRef.current = engineConfig;

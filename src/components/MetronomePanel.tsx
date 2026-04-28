@@ -55,6 +55,9 @@ export function MetronomePanel() {
   } = useMetronomeEngine({
     bpm,
     stepsPerBeat,
+    beatsPerLoop,
+    kit,
+    pattern,
     swing,
     isPlaying,
     playbackOffsetMs,

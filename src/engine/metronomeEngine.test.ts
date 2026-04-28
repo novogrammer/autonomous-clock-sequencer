@@ -60,6 +60,10 @@ describe("MetronomeEngine.update", () => {
     engine.update({
       bpm: 60,
       stepsPerBeat: 4,
+      beatsPerLoop: 4,
+      kit: "minimal",
+      pattern:
+        "1000_0000_0000_0000",
       swing: 0,
       playbackOffsetMs: 0,
     });
@@ -74,13 +78,17 @@ describe("MetronomeEngine.update", () => {
     engine.update({
       bpm: 120,
       stepsPerBeat: 3,
+      beatsPerLoop: 4,
+      kit: "minimal",
+      pattern:
+        "000000100000_000000000000_000000000000_000000000000",
       swing: 0,
       playbackOffsetMs: 0,
     });
     engine.schedule();
 
-    expect(testState.triggerAttackRelease).toHaveBeenCalledTimes(2);
-    expect(testState.triggerAttackRelease.mock.calls[0]?.[0]).toBe("C6");
+    expect(testState.triggerAttackRelease).toHaveBeenCalledTimes(1);
+    expect(testState.triggerAttackRelease.mock.calls[0]?.[0]).toBe("C1");
   });
 
   it("swing変更後は奇数stepの発音時刻を新設定で再計算する", () => {
@@ -90,6 +98,9 @@ describe("MetronomeEngine.update", () => {
     engine.update({
       bpm: 120,
       stepsPerBeat: 4,
+      beatsPerLoop: 1,
+      kit: "minimal",
+      pattern: "0100_0000_0000_0000",
       swing: 0.5,
       playbackOffsetMs: 0,
     });
@@ -100,11 +111,31 @@ describe("MetronomeEngine.update", () => {
       (scheduledStepTimeMs({ bpm: 120, stepsPerBeat: 4, swing: 0.5 }, 1) - 130) /
         1000;
 
-    expect(testState.triggerAttackRelease).toHaveBeenCalledTimes(2);
+    expect(testState.triggerAttackRelease).toHaveBeenCalledTimes(1);
     expect(testState.triggerAttackRelease.mock.calls[0]?.[2]).toBeCloseTo(
       expectedToneTime,
       5,
     );
+  });
+
+  it("patternの有効trackだけを同じstepで鳴らす", () => {
+    testState.mockedNowMs = 0;
+    const engine = createPreparedEngine();
+
+    engine.update({
+      bpm: 120,
+      stepsPerBeat: 4,
+      beatsPerLoop: 1,
+      kit: "minimal",
+      pattern: "1000_1000_0000_0000",
+      swing: 0,
+      playbackOffsetMs: 0,
+    });
+    engine.schedule();
+
+    expect(testState.triggerAttackRelease).toHaveBeenCalledTimes(2);
+    expect(testState.triggerAttackRelease.mock.calls[0]?.[0]).toBe("C1");
+    expect(testState.triggerAttackRelease.mock.calls[1]?.[0]).toBe("16n");
   });
 });
 
@@ -113,13 +144,21 @@ function createPreparedEngine(): PreparedMetronomeEngine {
   engine.config = {
     bpm: 120,
     stepsPerBeat: 4,
+    beatsPerLoop: 4,
+    kit: "minimal",
+    pattern:
+      "0000000000000000_0000000000000000_0000000000000000_0000000000000000",
     swing: 0,
     playbackOffsetMs: 0,
   };
-  engine.synth = {
+  const voice = {
     triggerAttackRelease: testState.triggerAttackRelease,
     dispose: vi.fn(),
   };
+  engine.kickSynth = voice;
+  engine.snareSynth = voice;
+  engine.closedHatSynth = voice;
+  engine.openHatSynth = voice;
   engine.nextStep = 0;
 
   return engine;
