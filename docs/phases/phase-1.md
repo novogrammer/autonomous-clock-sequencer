@@ -91,6 +91,13 @@
   各トラックの発音ルール
 - `minimal` のトラック順は以下で固定する:
   `kick`, `snare`, `closedHat`, `openHat`
+- `minimal` の各トラックは以下の発音ルールを持つ:
+  `kick`: 低く短い音
+  `snare`: 中高域の短いノイズ系の音
+  `closedHat`: 高域の短いノイズ系の音
+  `openHat`: `closedHat` より長い高域の音
+- Phase 1 では Tone.js の最小構成で実装できる音色を優先し、サンプル再生は必須にしない
+- `closedHat` と `openHat` は Phase 1 では choke しなくてよい
 - まずは互換性重視で、既定 `kit` の ID は固定値にする
 
 ## pattern 仕様
