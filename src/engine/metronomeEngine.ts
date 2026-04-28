@@ -21,6 +21,8 @@ const DEFAULT_KICK_DURATION = "8n";
 const DEFAULT_SNARE_DURATION = "16n";
 const DEFAULT_HAT_DURATION = "32n";
 const DEFAULT_OPEN_HAT_DURATION = "8n";
+const CLOSED_HAT_FREQUENCY = 280;
+const OPEN_HAT_FREQUENCY = 220;
 
 export async function unlockMetronomeAudio(): Promise<void> {
   await Tone.start();
@@ -178,10 +180,20 @@ export class MetronomeEngine {
         this.snareSynth?.triggerAttackRelease(DEFAULT_SNARE_DURATION, toneTime, 0.7);
         break;
       case "closedHat":
-        this.closedHatSynth?.triggerAttackRelease(DEFAULT_HAT_DURATION, toneTime, 0.4);
+        this.closedHatSynth?.triggerAttackRelease(
+          CLOSED_HAT_FREQUENCY,
+          DEFAULT_HAT_DURATION,
+          toneTime,
+          0.4,
+        );
         break;
       case "openHat":
-        this.openHatSynth?.triggerAttackRelease(DEFAULT_OPEN_HAT_DURATION, toneTime, 0.35);
+        this.openHatSynth?.triggerAttackRelease(
+          OPEN_HAT_FREQUENCY,
+          DEFAULT_OPEN_HAT_DURATION,
+          toneTime,
+          0.35,
+        );
         break;
       default:
         break;
