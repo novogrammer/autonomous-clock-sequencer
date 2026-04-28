@@ -5,6 +5,31 @@
 }
 
 :root {
+  --space-1: 4px;
+  --space-2: 6px;
+  --space-3: 8px;
+  --space-4: 10px;
+  --space-5: 12px;
+  --space-6: 14px;
+  --space-7: 16px;
+  --space-8: 18px;
+  --space-9: 20px;
+  --space-10: 24px;
+  --space-11: 28px;
+  --space-12: 32px;
+  --radius-m: 6px;
+  --radius-l: 8px;
+  --radius-pill: 999px;
+  --control-height: 44px;
+  --font-size-label: 0.78rem;
+  --font-size-status: 0.8rem;
+  --font-size-body-s: 0.9rem;
+  --font-size-detail: 0.95rem;
+  --font-size-heading-1: clamp(1.75rem, 2vw, 2.4rem);
+  --font-size-heading-2: 1.25rem;
+  --font-size-heading-3: 1.08rem;
+  --line-height-tight: 1.1;
+  --line-height-default: 1.2;
   --color-text: #18202a;
   --color-text-muted: #4b5560;
   --color-text-subtle: #6b7280;
@@ -53,25 +78,25 @@ body {
 
 .l-app-shell {
   min-height: 100vh;
-  padding: 32px;
+  padding: var(--space-12);
   display: grid;
   place-items: center;
 
   @include narrow-screen {
-    padding: 16px;
+    padding: var(--space-7);
     place-items: stretch;
   }
 }
 
 .l-panel {
   width: min(920px, 100%);
-  padding: 28px;
+  padding: var(--space-11);
   border: 1px solid var(--color-border-strong);
-  border-radius: 8px;
+  border-radius: var(--radius-l);
   background: var(--color-surface-panel);
 
   @include narrow-screen {
-    padding: 20px;
+    padding: var(--space-9);
   }
 }
 
@@ -80,7 +105,7 @@ body {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 24px;
+    gap: var(--space-10);
 
     @include narrow-screen {
       flex-direction: column;
@@ -91,8 +116,8 @@ body {
   &__controls {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    margin-top: 24px;
+    gap: var(--space-7);
+    margin-top: var(--space-10);
 
     @include narrow-screen {
       grid-template-columns: 1fr;
@@ -102,8 +127,8 @@ body {
   &__position-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 24px;
+    gap: var(--space-5);
+    margin-top: var(--space-10);
 
     @include narrow-screen {
       grid-template-columns: 1fr;
@@ -112,29 +137,29 @@ body {
 }
 
 .c-eyebrow {
-  margin: 0 0 6px;
+  margin: 0 0 var(--space-2);
   color: var(--color-text-brow);
-  font-size: 0.78rem;
+  font-size: var(--font-size-label);
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .c-heading {
   margin: 0;
-  line-height: 1.2;
+  line-height: var(--line-height-default);
   letter-spacing: 0;
 
   &--1 {
-    font-size: clamp(1.75rem, 2vw, 2.4rem);
-    line-height: 1.1;
+    font-size: var(--font-size-heading-1);
+    line-height: var(--line-height-tight);
   }
 
   &--2 {
-    font-size: 1.25rem;
+    font-size: var(--font-size-heading-2);
   }
 
   &--3 {
-    font-size: 1.08rem;
+    font-size: var(--font-size-heading-3);
   }
 }
 
@@ -142,7 +167,7 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 24px;
+  gap: var(--space-10);
 
   @include narrow-screen {
     flex-direction: column;
@@ -152,10 +177,10 @@ body {
 
 .c-status {
   min-width: 82px;
-  padding: 6px 10px;
-  border-radius: 999px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
   text-align: center;
-  font-size: 0.8rem;
+  font-size: var(--font-size-status);
   font-weight: 700;
   background: var(--color-surface-status);
   color: var(--color-status-text);
@@ -183,8 +208,8 @@ body {
 
 .c-action-row {
   display: flex;
-  gap: 12px;
-  margin-top: 28px;
+  gap: var(--space-5);
+  margin-top: var(--space-11);
 
   @include narrow-screen {
     flex-direction: column;
@@ -194,10 +219,10 @@ body {
 
 .c-button {
   font: inherit;
-  min-height: 44px;
-  padding: 0 18px;
+  min-height: var(--control-height);
+  padding: 0 var(--space-8);
   border: 1px solid var(--color-border-button);
-  border-radius: 6px;
+  border-radius: var(--radius-m);
   background: var(--color-surface-raised);
   color: var(--color-text);
   cursor: pointer;
@@ -216,7 +241,7 @@ body {
 
 .c-field {
   display: grid;
-  gap: 8px;
+  gap: var(--space-3);
   color: var(--color-text-muted);
   font-weight: 700;
 }
@@ -228,34 +253,34 @@ body {
 .c-input {
   font: inherit;
   width: 100%;
-  min-height: 44px;
-  padding: 8px 10px;
+  min-height: var(--control-height);
+  padding: var(--space-3) var(--space-4);
   border: 1px solid var(--color-border-input);
-  border-radius: 6px;
+  border-radius: var(--radius-m);
   background: var(--color-surface-raised);
   color: var(--color-text);
 }
 
 .c-readout {
   min-width: 0;
-  padding: 14px;
+  padding: var(--space-6);
   border: 1px solid var(--color-border-default);
-  border-radius: 6px;
+  border-radius: var(--radius-m);
   background: var(--color-surface-muted);
 
   span {
     display: block;
     color: var(--color-text-subtle);
-    font-size: 0.78rem;
+    font-size: var(--font-size-label);
     font-weight: 700;
     text-transform: uppercase;
   }
 
   strong {
     display: block;
-    margin-top: 6px;
+    margin-top: var(--space-2);
     overflow-wrap: anywhere;
-    font-size: 1.25rem;
+    font-size: var(--font-size-heading-2);
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum";
   }
@@ -263,35 +288,35 @@ body {
 
 .c-detail-box {
   min-width: 0;
-  padding: 14px;
+  padding: var(--space-6);
   border: 1px solid var(--color-border-default);
-  border-radius: 6px;
+  border-radius: var(--radius-m);
   background: var(--color-surface-muted);
 
   &--compact {
     min-width: 120px;
-    padding: 8px 10px;
+    padding: var(--space-3) var(--space-4);
   }
 }
 
 .c-detail-box__label {
   display: block;
   color: var(--color-text-subtle);
-  font-size: 0.78rem;
+  font-size: var(--font-size-label);
   font-weight: 700;
   text-transform: uppercase;
 }
 
 .c-detail-box__value {
   display: block;
-  margin-top: 8px;
+  margin-top: var(--space-3);
   overflow-wrap: anywhere;
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum";
 
   .c-detail-box--compact & {
-    margin-top: 4px;
-    font-size: 0.95rem;
+    margin-top: var(--space-1);
+    font-size: var(--font-size-detail);
   }
 }
 
@@ -302,18 +327,18 @@ code.c-detail-box__value {
 .c-button-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-3);
 
   .c-button {
-    min-height: 44px;
-    padding: 0 12px;
+    min-height: var(--control-height);
+    padding: 0 var(--space-5);
   }
 }
 
 .c-time-signal {
   height: 10px;
-  margin-top: 12px;
-  border-radius: 999px;
+  margin-top: var(--space-5);
+  border-radius: var(--radius-pill);
   background: var(--color-border-default);
   transition:
     background-color 90ms linear,
@@ -338,15 +363,15 @@ code.c-detail-box__value {
 }
 
 .p-calibration {
-  margin-top: 28px;
-  padding-top: 24px;
+  margin-top: var(--space-11);
+  padding-top: var(--space-10);
   border-top: 1px solid var(--color-border-default);
 }
 
 .p-calibration__tools {
-  margin-top: 20px;
+  margin-top: var(--space-9);
   display: grid;
-  gap: 28px;
+  gap: var(--space-11);
 
   > :first-child {
     padding-top: 0;
@@ -355,22 +380,22 @@ code.c-detail-box__value {
 }
 
 .p-playback-calibration {
-  padding-top: 20px;
+  padding-top: var(--space-9);
   border-top: 1px solid var(--color-border-default);
 
   &__panel {
-    margin-top: 24px;
+    margin-top: var(--space-10);
   }
 
   &__controls {
     display: grid;
-    gap: 24px;
-    margin-top: 24px;
+    gap: var(--space-10);
+    margin-top: var(--space-10);
   }
 
   &__control-group {
     display: grid;
-    gap: 12px;
+    gap: var(--space-5);
   }
 
   &__frequency .c-field {
@@ -381,7 +406,7 @@ code.c-detail-box__value {
     display: grid;
     grid-template-columns: minmax(160px, 240px) auto;
     align-items: end;
-    gap: 16px;
+    gap: var(--space-7);
 
     @include narrow-screen {
       grid-template-columns: 1fr;
@@ -391,7 +416,7 @@ code.c-detail-box__value {
   &__storage-control {
     display: flex;
     align-items: end;
-    gap: 12px;
+    gap: var(--space-5);
 
     @include narrow-screen {
       align-items: stretch;
@@ -409,8 +434,8 @@ code.c-detail-box__value {
   &__time-readout {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 16px;
+    gap: var(--space-5);
+    margin-top: var(--space-7);
 
     @include narrow-screen {
       grid-template-columns: 1fr;
@@ -419,16 +444,16 @@ code.c-detail-box__value {
 }
 
 .p-microphone-measurement {
-  padding-top: 20px;
+  padding-top: var(--space-9);
   border-top: 1px solid var(--color-border-default);
 
   &__panel {
-    margin-top: 24px;
+    margin-top: var(--space-10);
   }
 
   &__controls {
     display: grid;
-    gap: 16px;
+    gap: var(--space-7);
     grid-template-columns: repeat(2, minmax(0, 1fr));
 
     @include narrow-screen {
@@ -439,8 +464,8 @@ code.c-detail-box__value {
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-    margin-top: 16px;
+    gap: var(--space-5);
+    margin-top: var(--space-7);
 
     @include narrow-screen {
       grid-template-columns: 1fr;
@@ -449,8 +474,8 @@ code.c-detail-box__value {
 }
 
 .c-app-footer {
-  margin-top: 18px;
-  font-size: 0.9rem;
+  margin-top: var(--space-8);
+  font-size: var(--font-size-body-s);
 
   a {
     color: var(--color-accent);
