@@ -57,10 +57,10 @@ export function PlaybackCalibrationPanel() {
 
   return (
     <section className="p-playback-calibration">
-      <div className="section-header">
+      <div className="c-section-header">
         <div>
           <p className="c-eyebrow">Playback</p>
-          <h3>Playback calibration</h3>
+          <h3 className="c-heading c-heading--3">Playback calibration</h3>
         </div>
         <span className={`c-status c-status--${audioStatus}`}>{audioStatus}</span>
       </div>
@@ -69,9 +69,10 @@ export function PlaybackCalibrationPanel() {
         <div className="p-playback-calibration__controls">
           <div className="p-playback-calibration__control-group">
             <div className="p-playback-calibration__offset-row">
-              <label>
-                <span>playbackOffsetMs</span>
+              <label className="c-field">
+                <span className="c-field__label">playbackOffsetMs</span>
                 <input
+                  className="c-input"
                   type="number"
                   min="-10000"
                   max="10000"
@@ -111,9 +112,10 @@ export function PlaybackCalibrationPanel() {
           </div>
 
           <div className="p-playback-calibration__control-group p-playback-calibration__frequency">
-            <label>
-              <span>clickFrequencyHz</span>
+            <label className="c-field">
+              <span className="c-field__label">clickFrequencyHz</span>
               <input
+                className="c-input"
                 type="number"
                 min="800"
                 max="4000"
@@ -157,7 +159,7 @@ export function PlaybackCalibrationPanel() {
           aria-label="Time signal visual indicator"
         />
 
-        <div className="action-row">
+        <div className="c-action-row">
           <button
             className="c-button c-button--primary"
             onClick={startCalibration}

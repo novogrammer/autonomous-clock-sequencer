@@ -6,11 +6,11 @@ export function CalibrationPanel() {
   const [isOpen, setOpen] = useState(false);
 
   return (
-    <section className="calibration-section">
-      <div className="section-header">
+    <section className="p-calibration">
+      <div className="c-section-header">
         <div>
           <p className="c-eyebrow">Calibration</p>
-          <h2>Calibration</h2>
+          <h2 className="c-heading c-heading--2">Calibration</h2>
         </div>
         <button
           className="c-button"
@@ -21,7 +21,7 @@ export function CalibrationPanel() {
       </div>
 
       {isOpen && (
-        <div className="calibration-tools">
+        <div className="p-calibration__tools">
           <PlaybackCalibrationPanel />
           <MicrophoneMeasurementPanel />
         </div>

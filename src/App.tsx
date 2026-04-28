@@ -10,7 +10,7 @@ function App() {
 
         <CalibrationPanel />
 
-        <footer className="app-footer">
+        <footer className="c-app-footer">
           <a
             href="https://github.com/novogrammer/autonomous-clock-sequencer"
             target="_blank"

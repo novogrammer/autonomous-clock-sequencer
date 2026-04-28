@@ -29,19 +29,20 @@ export function MicrophoneMeasurementPanel() {
 
   return (
     <section className="p-microphone-measurement">
-      <div className="section-header">
+      <div className="c-section-header">
         <div>
           <p className="c-eyebrow">Measurement</p>
-          <h3>Microphone measurement</h3>
+          <h3 className="c-heading c-heading--3">Microphone measurement</h3>
         </div>
         <span className={`c-status c-status--${status}`}>{status}</span>
       </div>
 
       <div className="p-microphone-measurement__panel">
         <div className="p-microphone-measurement__controls">
-          <label>
-            <span>device A Hz</span>
+          <label className="c-field">
+            <span className="c-field__label">device A Hz</span>
             <input
+              className="c-input"
               type="number"
               min="800"
               max="4000"
@@ -52,9 +53,10 @@ export function MicrophoneMeasurementPanel() {
             />
           </label>
 
-          <label>
-            <span>device B Hz</span>
+          <label className="c-field">
+            <span className="c-field__label">device B Hz</span>
             <input
+              className="c-input"
               type="number"
               min="800"
               max="4000"
@@ -78,7 +80,7 @@ export function MicrophoneMeasurementPanel() {
           <Readout label="B clicks" value={String(clickCounts.b)} />
         </div>
 
-        <div className="action-row">
+        <div className="c-action-row">
           <button
             className="c-button c-button--primary"
             onClick={startMeasurement}

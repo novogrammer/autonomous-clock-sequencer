@@ -75,12 +75,12 @@ export function MetronomePanel() {
       <div className="p-metronome__header">
         <div>
           <p className="c-eyebrow">Phase 0</p>
-          <h1>Autonomous Clock Metronome</h1>
+          <h1 className="c-heading c-heading--1">Autonomous Clock Metronome</h1>
         </div>
         <StatusBadge isPlaying={isPlaying} audioStatus={audioStatus} />
       </div>
 
-      <div className="action-row">
+      <div className="c-action-row">
         <button
           className="c-button c-button--primary"
           onClick={handlePlay}
@@ -92,9 +92,10 @@ export function MetronomePanel() {
       </div>
 
       <div className="p-metronome__controls">
-        <label>
-          <span>BPM</span>
+        <label className="c-field">
+          <span className="c-field__label">BPM</span>
           <input
+            className="c-input"
             type="number"
             min="20"
             max="300"
@@ -104,9 +105,10 @@ export function MetronomePanel() {
           />
         </label>
 
-        <label>
-          <span>stepsPerBeat</span>
+        <label className="c-field">
+          <span className="c-field__label">stepsPerBeat</span>
           <input
+            className="c-input"
             type="number"
             min="1"
             max="16"
@@ -116,9 +118,10 @@ export function MetronomePanel() {
           />
         </label>
 
-        <label>
-          <span>swing</span>
+        <label className="c-field">
+          <span className="c-field__label">swing</span>
           <input
+            className="c-input"
             type="number"
             min="0"
             max="0.95"
