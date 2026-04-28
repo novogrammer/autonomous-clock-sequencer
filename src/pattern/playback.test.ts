@@ -29,6 +29,16 @@ describe("getActiveTrackIdsAtStep", () => {
     ).toEqual(["kick", "snare", "closedHat", "openHat"]);
   });
 
+  it("bass-fourths ではkit順で有効track idを返す", () => {
+    expect(
+      getActiveTrackIdsAtStep(
+        "bass-fourths",
+        "1000_0100_0010_0001",
+        2,
+      ),
+    ).toEqual(["f2"]);
+  });
+
   it("無効なら空配列を返す", () => {
     expect(
       getActiveTrackIdsAtStep(

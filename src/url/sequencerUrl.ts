@@ -1,7 +1,8 @@
 import {
-  MINIMAL_KIT_ID,
-  MINIMAL_KIT_TRACK_COUNT,
-} from "../kit/minimalKit";
+  getDefaultKitId,
+  getKitTracks,
+  isKitId,
+} from "../kit/kits";
 import type { SequencerState } from "../state/sequencerStore";
 
 export type SequencerUrlState = Pick<
@@ -13,7 +14,7 @@ const DEFAULTS: SequencerUrlState = {
   bpm: 120,
   stepsPerBeat: 4,
   beatsPerLoop: 4,
-  kit: MINIMAL_KIT_ID,
+  kit: getDefaultKitId(),
   pattern: buildEmptyPattern(4, 4),
   swing: 0,
 };
@@ -139,7 +140,7 @@ function normalizeNumber(
 }
 
 function normalizeKit(value: string | undefined): string {
-  if (value === MINIMAL_KIT_ID) {
+  if (value !== undefined && isKitId(value)) {
     return value;
   }
 
@@ -147,11 +148,7 @@ function normalizeKit(value: string | undefined): string {
 }
 
 function getTrackCount(kit: string): number {
-  if (kit === MINIMAL_KIT_ID) {
-    return MINIMAL_KIT_TRACK_COUNT;
-  }
-
-  return MINIMAL_KIT_TRACK_COUNT;
+  return getKitTracks(kit).length;
 }
 
 function normalizeTrackPattern(value: string, loopLength: number): string {
@@ -165,7 +162,7 @@ function normalizeTrackPattern(value: string, loopLength: number): string {
 function buildEmptyPattern(stepsPerBeat: number, beatsPerLoop: number): string {
   const trackLength = stepsPerBeat * beatsPerLoop;
   const emptyTrack = "0".repeat(trackLength);
-  return Array.from({ length: MINIMAL_KIT_TRACK_COUNT }, () => emptyTrack).join("_");
+  return Array.from({ length: getTrackCount(getDefaultKitId()) }, () => emptyTrack).join("_");
 }
 
 function formatNumber(value: number): string {

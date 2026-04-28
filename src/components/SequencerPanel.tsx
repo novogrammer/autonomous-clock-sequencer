@@ -5,7 +5,7 @@ import {
   useSequencerEngine, type AudioStatus
 } from "../hooks/useSequencerEngine";
 import { useSequencerPosition } from "../hooks/useSequencerPosition";
-import { getKitTracks } from "../kit/kits";
+import { KIT_IDS, getKitTracks } from "../kit/kits";
 import {
   createEmptyPattern,
   splitPatternTracks,
@@ -31,6 +31,7 @@ export function SequencerPanel() {
     setBpm,
     setStepsPerBeat,
     setBeatsPerLoop,
+    setKit,
     setPattern,
     setSwing,
     start,
@@ -94,6 +95,10 @@ export function SequencerPanel() {
 
   function handleBeatsPerLoopChange(event: ChangeEvent<HTMLInputElement>) {
     setBeatsPerLoop(Number(event.target.value));
+  }
+
+  function handleKitChange(event: ChangeEvent<HTMLSelectElement>) {
+    setKit(event.target.value);
   }
 
   function handleStepToggle(trackIndex: number, stepIndex: number) {
@@ -258,10 +263,16 @@ export function SequencerPanel() {
           />
         </label>
 
-        <div className="c-detail-box c-detail-box--compact">
-          <span className="c-detail-box__label">kit</span>
-          <strong className="c-detail-box__value">{kit}</strong>
-        </div>
+        <label className="c-field">
+          <span className="c-field__label">kit</span>
+          <select className="c-input" value={kit} onChange={handleKitChange}>
+            {KIT_IDS.map((kitId) => (
+              <option key={kitId} value={kitId}>
+                {kitId}
+              </option>
+            ))}
+          </select>
+        </label>
 
         <div className="c-detail-box c-detail-box--compact">
           <span className="c-detail-box__label">loopLength</span>

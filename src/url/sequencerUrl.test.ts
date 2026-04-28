@@ -46,6 +46,18 @@ describe("parseSequencerUrl", () => {
     });
   });
 
+  it("kit=bass-fourths を復元する", () => {
+    expect(parseSequencerUrl("?kit=bass-fourths&pattern=1000_0100_0010_0001")).toEqual({
+      bpm: 120,
+      stepsPerBeat: 4,
+      beatsPerLoop: 4,
+      kit: "bass-fourths",
+      pattern:
+        "1000000000000000_0100000000000000_0010000000000000_0001000000000000",
+      swing: 0,
+    });
+  });
+
   it("stepsPerBeatを整数に丸める", () => {
     expect(parseSequencerUrl("?stepsPerBeat=3.6")).toEqual({
       bpm: 120,
@@ -163,6 +175,28 @@ describe("buildSequencerUrl", () => {
       }),
     ).toBe(
       "/sequencer?bpm=120&stepsPerBeat=4&beatsPerLoop=4&kit=minimal&pattern=1000100010001000_0000100000001000_1010101010101010_0000000010000000&swing=0",
+    );
+  });
+
+  it("bass-fourths の共有状態を URL に載せる", () => {
+    vi.stubGlobal("window", {
+      location: {
+        href: "https://example.com/sequencer",
+      },
+    });
+
+    expect(
+      buildSequencerUrl({
+        bpm: 96,
+        stepsPerBeat: 4,
+        beatsPerLoop: 4,
+        kit: "bass-fourths",
+        pattern:
+          "1000000000000000_0100000000000000_0010000000000000_0001000000000000",
+        swing: 0,
+      }),
+    ).toBe(
+      "/sequencer?bpm=96&stepsPerBeat=4&beatsPerLoop=4&kit=bass-fourths&pattern=1000000000000000_0100000000000000_0010000000000000_0001000000000000&swing=0",
     );
   });
 });
