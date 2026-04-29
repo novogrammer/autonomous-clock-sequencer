@@ -14,6 +14,7 @@
 - 全部込みの `Score Preset`
 - 時間軸を維持して差し替える `Swap Preset`
 - すぐ試せる譜面カタログ UI
+- ハッシュタグ経由の検索 URL 導線
 
 ## 維持する原則
 
@@ -28,6 +29,7 @@
 - 全部込みのプリセットで、譜面全体をすぐ試せる
 - 共有 URL から開いた後に、現在の時間軸を保ったまま `kit` や `pattern` を差し替えられる
 - プリセットは URL と同じ正規化規則で読み込まれる
+- X や Bluesky 上のハッシュタグ検索へ遷移できる
 
 ## 非スコープ
 
@@ -60,12 +62,23 @@
 - `Swap Preset` は URL に載る state のうち、対象フィールドだけを差し替える
 - `playbackOffsetMs` や metronome on/off のようなローカル値はプリセット対象に含めない
 
+## 公開 / 流通方針
+
+- 譜面 URL は個別の score として共有する
+- ハッシュタグは譜面群のインデックスとして使う
+- 埋め込みウィジェットが必須ではない場合、まずは検索 URL を公開導線として使ってよい
+- 最初の対象は X と Bluesky を想定する
+- 例:
+  - X: `https://x.com/search?q=%23autonomousclocksequencer&src=typed_query`
+  - Bluesky: `https://bsky.app/search?q=%23autonomousclocksequencer`
+
 ## UI 方針
 
 - プリセット一覧は「何を試せばよいか」が分かる入口にする
 - `Score Preset` と `Swap Preset` は別のセクションとして見せる
 - まずは少数の既定プリセットで十分とする
 - 名前だけでなく、必要なら短い説明文も添える
+- 外部共有導線は埋め込みより検索 URL を優先してよい
 
 ## 想定する最小 UI
 
@@ -73,6 +86,8 @@
   - 全部込みの譜面を呼び出す
 - `Swap Presets`
   - 現在の時間軸を維持して `kit` や `pattern` を差し替える
+- `See Shared Scores`
+  - ハッシュタグ検索ページへのリンクを並べる
 
 ## 完了条件
 
