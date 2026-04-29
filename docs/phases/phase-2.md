@@ -7,7 +7,7 @@
 
 ## 目的
 
-あらかじめ用意した `Example Score` を入口として置きつつ、他の人の譜面はハッシュタグ経由で辿れるようにし、共有 URL から開いた後も、現在の時間軸を保ったまま `kit` ごとの `Pattern Preset` を差し替えられるようにする。
+あらかじめ用意した `Example Score` を入口として置きつつ、他の人の譜面はハッシュタグ経由で辿れるようにし、共有 URL から開いた後も、現在の絶対時間基準を保ったまま `kit` ごとの `Pattern Preset` を差し替えられるようにする。
 
 ## 追加するもの
 
@@ -51,9 +51,8 @@
 ### Pattern Preset
 
 - 特定の `kit` に属する `pattern` のプリセットとして扱う
-- 現在の時間軸を維持しながら、主に `pattern` を差し替える
-- 必要なら対応する `kit` に切り替えてよい
-- `bpm`, `stepsPerBeat`, `beatsPerLoop`, `swing` は維持する
+- 現在の絶対時間基準は維持しながら、`kit`, `stepsPerBeat`, `beatsPerLoop`, `pattern` を preset 側の値へ切り替える
+- `bpm` と `swing` は維持する
 - 共有 URL から開いた後に、同じ時間軸のまま別の解釈へ切り替えるために使う
 - 譜面そのものというより、体験を補助する支援機能として扱う
 
@@ -68,8 +67,9 @@
 - Phase 2 のプリセット自体は、まずはコード内の静的定義として持ってよい
 - プリセット適用後の実際の state は、引き続き通常の URL state と同じ形に正規化する
 - `Example Score` は URL に載る state を一式差し替える
-- `Pattern Preset` は URL に載る state のうち、主に `pattern` を差し替える
-- `Pattern Preset` が対応 `kit` を持つ場合は、その `kit` に切り替えてよい
+- `Pattern Preset` は `kit`, `stepsPerBeat`, `beatsPerLoop`, `pattern` を持つ
+- `Pattern Preset` 適用時は、その値へ切り替えた上で URL state を正規化する
+- `Pattern Preset` 適用時も `bpm` と `swing` は維持する
 - `playbackOffsetMs` や metronome on/off のようなローカル値はプリセット対象に含めない
 
 ## 公開 / 流通方針
@@ -96,7 +96,7 @@
 - `Example Scores`
   - あらかじめ決めた譜面を呼び出す
 - `Pattern Presets`
-  - 特定の `kit` に属する `pattern` を、現在の時間軸を維持して差し替える
+  - 特定の `kit` に属する `pattern` を、現在の絶対時間基準を維持したまま差し替える
 - `See Shared Scores`
   - ハッシュタグ検索ページへのリンクを並べる
 
@@ -104,7 +104,7 @@
 
 - いくつかの既定譜面をワンクリックで試せる
 - `Example Score` が `bpm`, `stepsPerBeat`, `beatsPerLoop`, `swing`, `kit`, `pattern` をまとめて切り替えられる
-- `Pattern Preset` が `bpm`, `stepsPerBeat`, `beatsPerLoop`, `swing` を維持したまま適用できる
+- `Pattern Preset` が `bpm` と `swing` を維持したまま、`kit`, `stepsPerBeat`, `beatsPerLoop`, `pattern` を適用できる
 - プリセット適用後の state が URL に正しく反映される
 - 共有 URL から開いた後でも、現在の時間軸を保った差し替え体験を確認できる
 - 他の人の score をハッシュタグ検索から辿れる
