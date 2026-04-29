@@ -7,12 +7,12 @@
 
 ## 目的
 
-すぐ試せる譜面カタログを用意し、共有 URL から開いた後も、現在の時間軸を保ったまま `kit` や `pattern` を差し替えられるようにする。
+あらかじめ用意した `Example Score` を入口として置きつつ、他の人の譜面はハッシュタグ経由で辿れるようにし、共有 URL から開いた後も、現在の時間軸を保ったまま `kit` ごとの `Pattern Preset` を差し替えられるようにする。
 
 ## 追加するもの
 
-- 全部込みの `Score Preset`
-- 時間軸を維持して差し替える `Swap Preset`
+- あらかじめ決めた `Example Score`
+- `kit` ごとの `Pattern Preset`
 - すぐ試せる譜面カタログ UI
 - ハッシュタグ経由の検索 URL 導線
 
@@ -25,9 +25,9 @@
 
 ## スコープ
 
-- プリセットから現在の sequencer state を素早く切り替えられる
-- 全部込みのプリセットで、譜面全体をすぐ試せる
-- 共有 URL から開いた後に、現在の時間軸を保ったまま `kit` や `pattern` を差し替えられる
+- あらかじめ決めた example を入口として、現在の sequencer state を素早く切り替えられる
+- `Example Score` で、譜面全体をすぐ試せる
+- 共有 URL から開いた後に、現在の時間軸を保ったまま `kit` ごとの `Pattern Preset` を差し替えられる
 - プリセットは URL と同じ正規化規則で読み込まれる
 - X や Bluesky 上のハッシュタグ検索へ遷移できる
 
@@ -39,27 +39,37 @@
 - 複数人による同時編集
 - per-track swing や per-track timing offset
 
-## プリセットの種類
+## 入口と支援機能
 
-### Score Preset
+### Example Score
 
 - `bpm`, `stepsPerBeat`, `beatsPerLoop`, `swing`, `kit`, `pattern` をまとめて持つ
 - 読み込むと譜面全体を切り替える
-- 入口としてのデモ、展示用の既定譜面、共有用の作例に使う
+- リポジトリ側があらかじめ決めた example として置く
+- 「まず何を試せばよいか」を示す入口に使う
 
-### Swap Preset
+### Pattern Preset
 
-- 現在の時間軸を維持しながら一部の状態だけを差し替える
-- 最初の対象は `kit`、`pattern`、または `kit + pattern`
+- 特定の `kit` に属する `pattern` のプリセットとして扱う
+- 現在の時間軸を維持しながら、主に `pattern` を差し替える
+- 必要なら対応する `kit` に切り替えてよい
 - `bpm`, `stepsPerBeat`, `beatsPerLoop`, `swing` は維持する
 - 共有 URL から開いた後に、同じ時間軸のまま別の解釈へ切り替えるために使う
+- 譜面そのものというより、体験を補助する支援機能として扱う
+
+### Shared Scores
+
+- 他の人が投稿した score URL は、アプリ内に静的に同梱しなくてよい
+- まずはハッシュタグ検索を経由して辿れるようにする
+- `Example Score` と違い、リポジトリ側で内容を保証しない
 
 ## State / URL 方針
 
 - Phase 2 のプリセット自体は、まずはコード内の静的定義として持ってよい
 - プリセット適用後の実際の state は、引き続き通常の URL state と同じ形に正規化する
-- `Score Preset` は URL に載る state を一式差し替える
-- `Swap Preset` は URL に載る state のうち、対象フィールドだけを差し替える
+- `Example Score` は URL に載る state を一式差し替える
+- `Pattern Preset` は URL に載る state のうち、主に `pattern` を差し替える
+- `Pattern Preset` が対応 `kit` を持つ場合は、その `kit` に切り替えてよい
 - `playbackOffsetMs` や metronome on/off のようなローカル値はプリセット対象に含めない
 
 ## 公開 / 流通方針
@@ -74,25 +84,27 @@
 
 ## UI 方針
 
-- プリセット一覧は「何を試せばよいか」が分かる入口にする
-- `Score Preset` と `Swap Preset` は別のセクションとして見せる
+- `Example Score` 一覧は「何を試せばよいか」が分かる入口にする
+- `Example Score` と `Pattern Preset` は別のセクションとして見せる
 - まずは少数の既定プリセットで十分とする
 - 名前だけでなく、必要なら短い説明文も添える
 - 外部共有導線は埋め込みより検索 URL を優先してよい
+- `Shared Scores` はアプリ内例示ではなく、外部の流通面として扱う
 
 ## 想定する最小 UI
 
-- `Score Presets`
-  - 全部込みの譜面を呼び出す
-- `Swap Presets`
-  - 現在の時間軸を維持して `kit` や `pattern` を差し替える
+- `Example Scores`
+  - あらかじめ決めた譜面を呼び出す
+- `Pattern Presets`
+  - 特定の `kit` に属する `pattern` を、現在の時間軸を維持して差し替える
 - `See Shared Scores`
   - ハッシュタグ検索ページへのリンクを並べる
 
 ## 完了条件
 
 - いくつかの既定譜面をワンクリックで試せる
-- `Score Preset` が `bpm`, `stepsPerBeat`, `beatsPerLoop`, `swing`, `kit`, `pattern` をまとめて切り替えられる
-- `Swap Preset` が `bpm`, `stepsPerBeat`, `beatsPerLoop`, `swing` を維持したまま `kit` や `pattern` を差し替えられる
+- `Example Score` が `bpm`, `stepsPerBeat`, `beatsPerLoop`, `swing`, `kit`, `pattern` をまとめて切り替えられる
+- `Pattern Preset` が `bpm`, `stepsPerBeat`, `beatsPerLoop`, `swing` を維持したまま適用できる
 - プリセット適用後の state が URL に正しく反映される
 - 共有 URL から開いた後でも、現在の時間軸を保った差し替え体験を確認できる
+- 他の人の score をハッシュタグ検索から辿れる
