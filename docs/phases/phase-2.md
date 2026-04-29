@@ -47,14 +47,17 @@
 - 読み込むと譜面全体を切り替える
 - リポジトリ側があらかじめ決めた example として置く
 - 「まず何を試せばよいか」を示す入口に使う
+- 個数は Phase 2 の実装時に決める
 
 ### Pattern Preset
 
 - 特定の `kit` に属する `pattern` のプリセットとして扱う
 - 現在の絶対時間基準は維持しながら、`kit`, `stepsPerBeat`, `beatsPerLoop`, `pattern` を preset 側の値へ切り替える
 - `bpm` と `swing` は維持する
+- 適用は即時反映とする
 - 共有 URL から開いた後に、同じ時間軸のまま別の解釈へ切り替えるために使う
 - 譜面そのものというより、体験を補助する支援機能として扱う
+- 個数は `kit` ごとに Phase 2 の実装時に決める
 
 ### Shared Scores
 
@@ -76,29 +79,32 @@
 
 - 譜面 URL は個別の score として共有する
 - ハッシュタグは譜面群のインデックスとして使う
+- 既定ハッシュタグは `#AutonomousClockSequencer` とする
 - 埋め込みウィジェットが必須ではない場合、まずは検索 URL を公開導線として使ってよい
 - 最初の対象は X と Bluesky を想定する
 - 例:
-  - X: `https://x.com/search?q=%23autonomousclocksequencer&src=typed_query`
-  - Bluesky: `https://bsky.app/search?q=%23autonomousclocksequencer`
+  - X: `https://x.com/search?q=%23AutonomousClockSequencer&src=typed_query`
+  - Bluesky: `https://bsky.app/search?q=%23AutonomousClockSequencer`
 
 ## UI 方針
 
 - `Example Score` 一覧は「何を試せばよいか」が分かる入口にする
 - `Example Score` と `Pattern Preset` は別のセクションとして見せる
-- まずは少数の既定プリセットで十分とする
 - 名前だけでなく、必要なら短い説明文も添える
 - 外部共有導線は埋め込みより検索 URL を優先してよい
 - `Shared Scores` はアプリ内例示ではなく、外部の流通面として扱う
+- `Example Score` は画面の上の方に置く
+- `Pattern Preset` は `Pattern` に近い位置へ置く
+- `Shared Scores` は画面の上の方に置く
 
 ## 想定する最小 UI
 
 - `Example Scores`
-  - あらかじめ決めた譜面を呼び出す
+  - 画面上部で、あらかじめ決めた譜面を呼び出す
 - `Pattern Presets`
-  - 特定の `kit` に属する `pattern` を、現在の絶対時間基準を維持したまま差し替える
+  - `Pattern` に近い位置で、特定の `kit` に属する `pattern` を現在の絶対時間基準を維持したまま差し替える
 - `See Shared Scores`
-  - ハッシュタグ検索ページへのリンクを並べる
+  - 画面上部で、ハッシュタグ検索ページへのリンクを並べる
 
 ## 完了条件
 
