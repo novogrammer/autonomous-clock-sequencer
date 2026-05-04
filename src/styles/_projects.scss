@@ -1,6 +1,56 @@
 @use "./tokens" as *;
 
 .p-sequencer {
+  &__catalog-section {
+    margin-top: var(--space-11);
+  }
+
+  &__section-copy {
+    margin: var(--space-3) 0 0;
+    color: var(--color-text-muted);
+  }
+
+  &__catalog-grid {
+    margin-top: var(--space-6);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-5);
+  }
+
+  &__catalog-card {
+    display: grid;
+    align-content: start;
+    gap: var(--space-4);
+  }
+
+  &__catalog-title {
+    font-size: var(--font-size-heading-3);
+    line-height: var(--line-height-tight);
+  }
+
+  &__catalog-copy {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body-s);
+  }
+
+  &__preset-groups {
+    margin-top: var(--space-6);
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  &__preset-group {
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--color-border-default);
+  }
+
+  &__preset-group-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
   &__header {
     display: flex;
     align-items: flex-start;

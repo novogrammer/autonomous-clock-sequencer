@@ -1,5 +1,11 @@
 import { create } from "zustand";
 import {
+  applyExampleScore,
+  applyPatternPreset,
+  type ExampleScore,
+  type PatternPreset,
+} from "../score/scoreCatalog";
+import {
   normalizeSequencerUrlState,
   parseSequencerUrl,
 } from "../url/sequencerUrl";
@@ -18,6 +24,8 @@ export type SequencerState = {
   setKit: (kit: string) => void;
   setPattern: (pattern: string) => void;
   setSwing: (swing: number) => void;
+  loadExampleScore: (exampleScore: ExampleScore) => void;
+  loadPatternPreset: (patternPreset: PatternPreset) => void;
   start: () => void;
   stop: () => void;
   hydrateFromUrl: (search: string) => void;
@@ -49,6 +57,12 @@ export const useSequencerStore = create<SequencerState>((set) => ({
 
   setSwing: (swing) =>
     set((state) => normalizeSequencerUrlState({ ...state, swing })),
+
+  loadExampleScore: (exampleScore) =>
+    set(() => applyExampleScore(exampleScore)),
+
+  loadPatternPreset: (patternPreset) =>
+    set((state) => applyPatternPreset(state, patternPreset)),
 
   start: () =>
     set({

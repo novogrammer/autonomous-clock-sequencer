@@ -82,6 +82,9 @@
 }
 
 .c-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font: inherit;
   min-height: var(--control-height);
   padding: 0 var(--space-8);
@@ -90,6 +93,7 @@
   background: var(--color-surface-raised);
   color: var(--color-text);
   cursor: pointer;
+  text-decoration: none;
 
   &:disabled {
     cursor: not-allowed;

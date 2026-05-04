@@ -11,6 +11,12 @@ import {
   splitPatternTracks,
   togglePatternStep,
 } from "../pattern/pattern";
+import {
+  DEFAULT_SHARED_SCORES_HASHTAG,
+  EXAMPLE_SCORES,
+  PATTERN_PRESETS,
+  SHARED_SCORES_LINKS,
+} from "../score/scoreCatalog";
 import { useSequencerUrlSync } from "../hooks/useSequencerUrlSync";
 import { useSequencerStore } from "../state/sequencerStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
@@ -34,6 +40,8 @@ export function SequencerPanel() {
     setKit,
     setPattern,
     setSwing,
+    loadExampleScore,
+    loadPatternPreset,
     start,
     stop,
   } = useSequencerStore();
@@ -111,6 +119,20 @@ export function SequencerPanel() {
     setPattern(createEmptyPattern(kit, stepsPerBeat, beatsPerLoop));
   }
 
+  function handleExampleScoreClick(exampleScoreId: string) {
+    const exampleScore = EXAMPLE_SCORES.find((item) => item.id === exampleScoreId);
+    if (exampleScore !== undefined) {
+      loadExampleScore(exampleScore);
+    }
+  }
+
+  function handlePatternPresetClick(patternPresetId: string) {
+    const patternPreset = PATTERN_PRESETS.find((item) => item.id === patternPresetId);
+    if (patternPreset !== undefined) {
+      loadPatternPreset(patternPreset);
+    }
+  }
+
   function handleClickOn() {
     setClickEnabled(true);
   }
@@ -132,6 +154,10 @@ export function SequencerPanel() {
   const patternTracks = splitPatternTracks(pattern);
   const kitTracks = getKitTracks(kit);
   const loopLength = stepsPerBeat * beatsPerLoop;
+  const presetsByKit = KIT_IDS.map((kitId) => ({
+    kitId,
+    presets: PATTERN_PRESETS.filter((preset) => preset.kit === kitId),
+  })).filter((group) => group.presets.length > 0);
 
   useEffect(() => {
     let isActive = true;
@@ -172,6 +198,59 @@ export function SequencerPanel() {
       </div>
 
       <div className="l-stack l-stack--subsection">
+        <section className="p-sequencer__catalog-section">
+          <div className="c-section-header">
+            <div>
+              <h2 className="c-heading c-heading--2">Example Scores</h2>
+              <p className="p-sequencer__section-copy">
+                まず試す譜面をここから呼び出せます。
+              </p>
+            </div>
+          </div>
+
+          <div className="p-sequencer__catalog-grid">
+            {EXAMPLE_SCORES.map((exampleScore) => (
+              <article className="c-detail-box p-sequencer__catalog-card" key={exampleScore.id}>
+                <span className="c-detail-box__label">{exampleScore.state.kit}</span>
+                <strong className="p-sequencer__catalog-title">{exampleScore.name}</strong>
+                <p className="p-sequencer__catalog-copy">{exampleScore.description}</p>
+                <button
+                  className="c-button"
+                  onClick={() => handleExampleScoreClick(exampleScore.id)}
+                >
+                  Load Score
+                </button>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="p-sequencer__catalog-section">
+          <div className="c-section-header">
+            <div>
+              <h2 className="c-heading c-heading--2">See Shared Scores</h2>
+              <p className="p-sequencer__section-copy">
+                {DEFAULT_SHARED_SCORES_HASHTAG} で外部の score URL を辿ります。
+              </p>
+            </div>
+          </div>
+
+          <div className="c-button-group">
+            {SHARED_SCORES_LINKS.map((link) => (
+              <a
+                key={link.id}
+                className="c-button"
+                href={link.href}
+                target="_blank"
+                rel="noreferrer"
+                title={link.description}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </section>
+
         <div className="c-action-row">
           <span className="c-field__label">Sequencer</span>
           <button
@@ -210,6 +289,52 @@ export function SequencerPanel() {
             Clear Pattern
           </button>
         </div>
+
+        <section className="p-sequencer__catalog-section">
+          <div className="c-section-header">
+            <div>
+              <h2 className="c-heading c-heading--2">Pattern Presets</h2>
+              <p className="p-sequencer__section-copy">
+                BPM と swing は保ったまま、kit ごとの pattern 解釈だけを差し替えます。
+              </p>
+            </div>
+          </div>
+
+          <div className="p-sequencer__preset-groups">
+            {presetsByKit.map((group) => (
+              <section className="p-sequencer__preset-group" key={group.kitId}>
+                <div className="p-sequencer__preset-group-head">
+                  <span className="c-detail-box__label">kit</span>
+                  <strong>{group.kitId}</strong>
+                </div>
+                <div className="p-sequencer__catalog-grid">
+                  {group.presets.map((patternPreset) => (
+                    <article
+                      className="c-detail-box p-sequencer__catalog-card"
+                      key={patternPreset.id}
+                    >
+                      <span className="c-detail-box__label">
+                        {patternPreset.stepsPerBeat} steps/beat, {patternPreset.beatsPerLoop} beats
+                      </span>
+                      <strong className="p-sequencer__catalog-title">
+                        {patternPreset.name}
+                      </strong>
+                      <p className="p-sequencer__catalog-copy">
+                        {patternPreset.description}
+                      </p>
+                      <button
+                        className="c-button"
+                        onClick={() => handlePatternPresetClick(patternPreset.id)}
+                      >
+                        Apply Preset
+                      </button>
+                    </article>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </section>
       </div>
 
       <div className="l-grid l-grid--columns-3 l-grid--gap-l l-grid--section">
