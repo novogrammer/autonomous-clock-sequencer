@@ -24,6 +24,7 @@ export type SequencerState = {
   setKit: (kit: string) => void;
   setPattern: (pattern: string) => void;
   setSwing: (swing: number) => void;
+  applyUrlState: (state: Partial<Pick<SequencerState, "bpm" | "stepsPerBeat" | "beatsPerLoop" | "kit" | "pattern" | "swing">>) => void;
   loadExampleScore: (exampleScore: ExampleScore) => void;
   loadPatternPreset: (patternPreset: PatternPreset) => void;
   start: () => void;
@@ -57,6 +58,9 @@ export const useSequencerStore = create<SequencerState>((set) => ({
 
   setSwing: (swing) =>
     set((state) => normalizeSequencerUrlState({ ...state, swing })),
+
+  applyUrlState: (nextState) =>
+    set((state) => normalizeSequencerUrlState({ ...state, ...nextState })),
 
   loadExampleScore: (exampleScore) =>
     set(() => applyExampleScore(exampleScore)),

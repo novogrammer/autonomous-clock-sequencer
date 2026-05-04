@@ -8,6 +8,8 @@ import { useSequencerPosition } from "../hooks/useSequencerPosition";
 import { KIT_IDS, getKitTracks } from "../kit/kits";
 import {
   createEmptyPattern,
+  extendPatternWithRepeat,
+  resamplePatternByBeat,
   splitPatternTracks,
   togglePatternStep,
 } from "../pattern/pattern";
@@ -29,6 +31,8 @@ const COMMON_BEATS_PER_LOOP_VALUES = [1, 2, 4, 8, 16] as const;
 
 export function SequencerPanel() {
   const [isClickEnabled, setClickEnabled] = useState(false);
+  const [shouldRepeatOnLoopExtend, setShouldRepeatOnLoopExtend] = useState(false);
+  const [shouldResampleByBeat, setShouldResampleByBeat] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
   const {
@@ -40,11 +44,10 @@ export function SequencerPanel() {
     swing,
     isPlaying,
     setBpm,
-    setStepsPerBeat,
-    setBeatsPerLoop,
     setKit,
     setPattern,
     setSwing,
+    applyUrlState,
     loadExampleScore,
     loadPatternPreset,
     start,
@@ -122,11 +125,29 @@ export function SequencerPanel() {
   }
 
   function handleStepsPerBeatChange(event: ChangeEvent<HTMLInputElement>) {
-    setStepsPerBeat(Number(event.target.value));
+    const nextStepsPerBeat = Number(event.target.value);
+    if (!Number.isFinite(nextStepsPerBeat)) {
+      applyUrlState({ stepsPerBeat: nextStepsPerBeat });
+      return;
+    }
+
+    const nextPattern = shouldResampleByBeat
+      ? resamplePatternByBeat(pattern, {
+          trackCount: kitTracks.length,
+          fromStepsPerBeat: stepsPerBeat,
+          toStepsPerBeat: nextStepsPerBeat,
+          beatsPerLoop,
+        })
+      : pattern;
+
+    applyUrlState({
+      stepsPerBeat: nextStepsPerBeat,
+      pattern: nextPattern,
+    });
   }
 
   function handleCommonStepsPerBeatClick(value: number) {
-    setStepsPerBeat(value);
+    applyUrlState({ stepsPerBeat: value });
   }
 
   function handleSwingChange(event: ChangeEvent<HTMLInputElement>) {
@@ -134,11 +155,30 @@ export function SequencerPanel() {
   }
 
   function handleBeatsPerLoopChange(event: ChangeEvent<HTMLInputElement>) {
-    setBeatsPerLoop(Number(event.target.value));
+    const nextBeatsPerLoop = Number(event.target.value);
+    if (!Number.isFinite(nextBeatsPerLoop)) {
+      applyUrlState({ beatsPerLoop: nextBeatsPerLoop });
+      return;
+    }
+
+    const nextPattern =
+      shouldRepeatOnLoopExtend && nextBeatsPerLoop > beatsPerLoop
+        ? extendPatternWithRepeat(pattern, {
+            trackCount: kitTracks.length,
+            stepsPerBeat,
+            fromBeatsPerLoop: beatsPerLoop,
+            toBeatsPerLoop: nextBeatsPerLoop,
+          })
+        : pattern;
+
+    applyUrlState({
+      beatsPerLoop: nextBeatsPerLoop,
+      pattern: nextPattern,
+    });
   }
 
   function handleCommonBeatsPerLoopClick(value: number) {
-    setBeatsPerLoop(value);
+    applyUrlState({ beatsPerLoop: value });
   }
 
   function handleKitChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -539,6 +579,25 @@ export function SequencerPanel() {
                   ))}
                 </div>
               </div>
+            </label>
+          </div>
+          <div className="p-sequencer__grid-options">
+            <span className="p-sequencer__grid-options-label">When Grid Changes</span>
+            <label className="c-checkbox">
+              <input
+                type="checkbox"
+                checked={shouldResampleByBeat}
+                onChange={(event) => setShouldResampleByBeat(event.target.checked)}
+              />
+              <span>Resample by beat when changing stepsPerBeat</span>
+            </label>
+            <label className="c-checkbox">
+              <input
+                type="checkbox"
+                checked={shouldRepeatOnLoopExtend}
+                onChange={(event) => setShouldRepeatOnLoopExtend(event.target.checked)}
+              />
+              <span>Repeat current loop when extending beatsPerLoop</span>
             </label>
           </div>
         </section>
