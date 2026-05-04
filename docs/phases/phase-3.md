@@ -52,23 +52,32 @@
 ### Extend With Repeat
 
 - `beatsPerLoop` を増やしたいときの補助操作として扱う
+- `beatsPerLoop` を増やしたときだけ効く
 - 既存 loop を後方へ繰り返して、新しい長さへ pattern を広げる
 - 例:
   - `4/4` の 1 loop を `4/8` へ広げるとき、前半 16 step を後半へ複製する
 - 通常の値変更だけでは自動複製しない
 - 明示操作の結果は通常の pattern 文字列へ落とし込む
+- `beatsPerLoop` を小さくするときには適用しない
 
 ### Resample By Beat
 
 - `stepsPerBeat` を変更したいときの補助操作として扱う
+- `stepsPerBeat` を変更したときだけ効く
 - 古い `step index` を前から残すのではなく、各音を beat 基準の位置へ写像する
 - 再配置は少なくとも以下を満たす:
   - beat 番号は維持する
   - beat 内の相対位置を、新しい `stepsPerBeat` に応じて近い位置へ写す
 - 例:
   - `stepsPerBeat=4` から `8` へ変えるとき、旧 beat 内 step `0,1,2,3` は新 beat 内 step `0,2,4,6` へ対応づける
-- 細かい step から粗い step へ寄せるときは、丸めや重なりのルールが必要になる
-- 重なりが起きても停止せず、同一 step への集約として扱う
+- 写像は beat ごとに行い、少なくとも以下のような考え方で扱う:
+  - `beatIndex = floor(step / oldStepsPerBeat)`
+  - `offsetInBeat = step % oldStepsPerBeat`
+  - `newOffsetInBeat = round(offsetInBeat * newStepsPerBeat / oldStepsPerBeat)`
+  - `newOffsetInBeat` は `0` 以上 `newStepsPerBeat - 1` 以下へ clamp する
+  - `newStep = beatIndex * newStepsPerBeat + newOffsetInBeat`
+- 細かい step から粗い step へ寄せるときも、上記の round による近い位置への再配置として扱う
+- 重なりが起きても停止せず、同一 step への集約として `1` 扱いにする
 
 ## UI 方針
 
