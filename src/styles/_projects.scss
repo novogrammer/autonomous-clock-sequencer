@@ -5,6 +5,18 @@
     margin-top: var(--space-11);
   }
 
+  &__catalog-details {
+    padding-bottom: var(--space-2);
+  }
+
+  &__catalog-summary {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-label);
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+  }
+
   &__section-copy {
     margin: var(--space-3) 0 0;
     color: var(--color-text-muted);

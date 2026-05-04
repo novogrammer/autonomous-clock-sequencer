@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type MouseEvent } from "react";
 import { toDataURL } from "qrcode";
 import { secondsToMs } from "../clock/clock";
 import {
@@ -16,10 +16,12 @@ import {
   EXAMPLE_SCORES,
   PATTERN_PRESETS,
   SHARED_SCORES_LINKS,
+  applyPatternPreset,
 } from "../score/scoreCatalog";
 import { useSequencerUrlSync } from "../hooks/useSequencerUrlSync";
 import { useSequencerStore } from "../state/sequencerStore";
 import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
+import { buildSequencerUrl } from "../url/sequencerUrl";
 import { Readout } from "./Readout";
 
 export function SequencerPanel() {
@@ -119,18 +121,38 @@ export function SequencerPanel() {
     setPattern(createEmptyPattern(kit, stepsPerBeat, beatsPerLoop));
   }
 
-  function handleExampleScoreClick(exampleScoreId: string) {
-    const exampleScore = EXAMPLE_SCORES.find((item) => item.id === exampleScoreId);
-    if (exampleScore !== undefined) {
-      loadExampleScore(exampleScore);
+  function handleExampleScoreLinkClick(
+    event: MouseEvent<HTMLAnchorElement>,
+    exampleScoreId: string,
+  ) {
+    if (shouldKeepDefaultLinkBehavior(event)) {
+      return;
     }
+
+    const exampleScore = EXAMPLE_SCORES.find((item) => item.id === exampleScoreId);
+    if (exampleScore === undefined) {
+      return;
+    }
+
+    event.preventDefault();
+    loadExampleScore(exampleScore);
   }
 
-  function handlePatternPresetClick(patternPresetId: string) {
-    const patternPreset = PATTERN_PRESETS.find((item) => item.id === patternPresetId);
-    if (patternPreset !== undefined) {
-      loadPatternPreset(patternPreset);
+  function handlePatternPresetLinkClick(
+    event: MouseEvent<HTMLAnchorElement>,
+    patternPresetId: string,
+  ) {
+    if (shouldKeepDefaultLinkBehavior(event)) {
+      return;
     }
+
+    const patternPreset = PATTERN_PRESETS.find((item) => item.id === patternPresetId);
+    if (patternPreset === undefined) {
+      return;
+    }
+
+    event.preventDefault();
+    loadPatternPreset(patternPreset);
   }
 
   function handleClickOn() {
@@ -158,6 +180,14 @@ export function SequencerPanel() {
     kitId,
     presets: PATTERN_PRESETS.filter((preset) => preset.kit === kitId),
   })).filter((group) => group.presets.length > 0);
+  const currentUrlState = {
+    bpm,
+    stepsPerBeat,
+    beatsPerLoop,
+    kit,
+    pattern,
+    swing,
+  };
 
   useEffect(() => {
     let isActive = true;
@@ -198,32 +228,30 @@ export function SequencerPanel() {
       </div>
 
       <div className="l-stack l-stack--subsection">
-        <section className="p-sequencer__catalog-section">
-          <div className="c-section-header">
-            <div>
-              <h2 className="c-heading c-heading--2">Example Scores</h2>
-              <p className="p-sequencer__section-copy">
-                まず試す譜面をここから呼び出せます。
-              </p>
-            </div>
-          </div>
-
+        <details className="p-sequencer__catalog-section p-sequencer__catalog-details">
+          <summary className="p-sequencer__catalog-summary">
+            Example Scores
+          </summary>
+          <p className="p-sequencer__section-copy">
+            まず試す譜面をここから呼び出せます。
+          </p>
           <div className="p-sequencer__catalog-grid">
             {EXAMPLE_SCORES.map((exampleScore) => (
               <article className="c-detail-box p-sequencer__catalog-card" key={exampleScore.id}>
                 <span className="c-detail-box__label">{exampleScore.state.kit}</span>
                 <strong className="p-sequencer__catalog-title">{exampleScore.name}</strong>
                 <p className="p-sequencer__catalog-copy">{exampleScore.description}</p>
-                <button
+                <a
                   className="c-button"
-                  onClick={() => handleExampleScoreClick(exampleScore.id)}
+                  href={buildSequencerUrl(exampleScore.state)}
+                  onClick={(event) => handleExampleScoreLinkClick(event, exampleScore.id)}
                 >
-                  Load Score
-                </button>
+                  Open Score
+                </a>
               </article>
             ))}
           </div>
-        </section>
+        </details>
 
         <section className="p-sequencer__catalog-section">
           <div className="c-section-header">
@@ -237,14 +265,7 @@ export function SequencerPanel() {
 
           <div className="c-button-group">
             {SHARED_SCORES_LINKS.map((link) => (
-              <a
-                key={link.id}
-                className="c-button"
-                href={link.href}
-                target="_blank"
-                rel="noreferrer"
-                title={link.description}
-              >
+              <a key={link.id} className="c-button" href={link.href} title={link.description}>
                 {link.label}
               </a>
             ))}
@@ -290,16 +311,13 @@ export function SequencerPanel() {
           </button>
         </div>
 
-        <section className="p-sequencer__catalog-section">
-          <div className="c-section-header">
-            <div>
-              <h2 className="c-heading c-heading--2">Pattern Presets</h2>
-              <p className="p-sequencer__section-copy">
-                BPM と swing は保ったまま、kit ごとの pattern 解釈だけを差し替えます。
-              </p>
-            </div>
-          </div>
-
+        <details className="p-sequencer__catalog-section p-sequencer__catalog-details">
+          <summary className="p-sequencer__catalog-summary">
+            Pattern Presets
+          </summary>
+          <p className="p-sequencer__section-copy">
+            BPM と swing は保ったまま、kit ごとの pattern 解釈だけを差し替えます。
+          </p>
           <div className="p-sequencer__preset-groups">
             {presetsByKit.map((group) => (
               <section className="p-sequencer__preset-group" key={group.kitId}>
@@ -322,19 +340,24 @@ export function SequencerPanel() {
                       <p className="p-sequencer__catalog-copy">
                         {patternPreset.description}
                       </p>
-                      <button
+                      <a
                         className="c-button"
-                        onClick={() => handlePatternPresetClick(patternPreset.id)}
+                        href={buildSequencerUrl(
+                          applyPatternPreset(currentUrlState, patternPreset),
+                        )}
+                        onClick={(event) =>
+                          handlePatternPresetLinkClick(event, patternPreset.id)
+                        }
                       >
-                        Apply Preset
-                      </button>
+                        Open Preset
+                      </a>
                     </article>
                   ))}
                 </div>
               </section>
             ))}
           </div>
-        </section>
+        </details>
       </div>
 
       <div className="l-grid l-grid--columns-3 l-grid--gap-l l-grid--section">
@@ -504,6 +527,16 @@ export function SequencerPanel() {
         </div>
       </section>
     </section>
+  );
+}
+
+function shouldKeepDefaultLinkBehavior(event: MouseEvent<HTMLAnchorElement>): boolean {
+  return (
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
   );
 }
 
