@@ -274,7 +274,7 @@ export function SequencerPanel() {
                 {EXAMPLE_SCORES.length} scores
               </span>
             </span>
-            <span className="p-sequencer__summary-hint">Toggle</span>
+            <span className="p-sequencer__summary-hint" aria-hidden="true" />
           </summary>
           <p className="p-sequencer__section-copy">
             まず試す譜面をここから呼び出せます。
@@ -328,7 +328,7 @@ export function SequencerPanel() {
                 {PATTERN_PRESETS.length} presets
               </span>
             </span>
-            <span className="p-sequencer__summary-hint">Toggle</span>
+            <span className="p-sequencer__summary-hint" aria-hidden="true" />
           </summary>
           <p className="p-sequencer__section-copy">
             BPM と swing は保ったまま、kit ごとの pattern 解釈だけを差し替えます。
@@ -346,7 +346,7 @@ export function SequencerPanel() {
                       {group.presets.length} presets
                     </span>
                   </span>
-                  <span className="p-sequencer__summary-hint">Toggle</span>
+                  <span className="p-sequencer__summary-hint" aria-hidden="true" />
                 </summary>
                 <div className="p-sequencer__catalog-grid">
                   {group.presets.map((patternPreset) => (
