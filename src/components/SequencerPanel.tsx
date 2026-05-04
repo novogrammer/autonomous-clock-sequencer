@@ -124,8 +124,7 @@ export function SequencerPanel() {
     event.currentTarget.blur();
   }
 
-  function handleStepsPerBeatChange(event: ChangeEvent<HTMLInputElement>) {
-    const nextStepsPerBeat = Number(event.target.value);
+  function applyStepsPerBeatChange(nextStepsPerBeat: number) {
     if (!Number.isFinite(nextStepsPerBeat)) {
       applyUrlState({ stepsPerBeat: nextStepsPerBeat });
       return;
@@ -146,16 +145,19 @@ export function SequencerPanel() {
     });
   }
 
+  function handleStepsPerBeatChange(event: ChangeEvent<HTMLInputElement>) {
+    applyStepsPerBeatChange(Number(event.target.value));
+  }
+
   function handleCommonStepsPerBeatClick(value: number) {
-    applyUrlState({ stepsPerBeat: value });
+    applyStepsPerBeatChange(value);
   }
 
   function handleSwingChange(event: ChangeEvent<HTMLInputElement>) {
     setSwing(Number(event.target.value));
   }
 
-  function handleBeatsPerLoopChange(event: ChangeEvent<HTMLInputElement>) {
-    const nextBeatsPerLoop = Number(event.target.value);
+  function applyBeatsPerLoopChange(nextBeatsPerLoop: number) {
     if (!Number.isFinite(nextBeatsPerLoop)) {
       applyUrlState({ beatsPerLoop: nextBeatsPerLoop });
       return;
@@ -177,8 +179,12 @@ export function SequencerPanel() {
     });
   }
 
+  function handleBeatsPerLoopChange(event: ChangeEvent<HTMLInputElement>) {
+    applyBeatsPerLoopChange(Number(event.target.value));
+  }
+
   function handleCommonBeatsPerLoopClick(value: number) {
-    applyUrlState({ beatsPerLoop: value });
+    applyBeatsPerLoopChange(value);
   }
 
   function handleKitChange(event: ChangeEvent<HTMLSelectElement>) {
