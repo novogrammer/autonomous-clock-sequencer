@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildSequencerUrl,
   normalizePattern,
+  normalizePatternByTrackCount,
   normalizeSequencerUrlState,
   parseSequencerUrl,
 } from "./sequencerUrl";
@@ -116,6 +117,15 @@ describe("normalizeSequencerUrlState", () => {
 });
 
 describe("normalizePattern", () => {
+  it("trackCount と loopLength だけでも低レベル正規化できる", () => {
+    expect(
+      normalizePatternByTrackCount("1010_01", {
+        trackCount: 4,
+        loopLength: 8,
+      }),
+    ).toBe("10100000_01000000_00000000_00000000");
+  });
+
   it("トラック数不足と文字列長不足は0で補完する", () => {
     expect(
       normalizePattern("1010_01", {

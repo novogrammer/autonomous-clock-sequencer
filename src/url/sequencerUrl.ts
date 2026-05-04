@@ -88,8 +88,22 @@ export function normalizePattern(
   }: Pick<SequencerUrlState, "kit" | "stepsPerBeat" | "beatsPerLoop">,
 ): string {
   const normalizedKit = normalizeKit(kit);
-  const trackCount = getTrackCount(normalizedKit);
-  const loopLength = stepsPerBeat * beatsPerLoop;
+  return normalizePatternByTrackCount(value, {
+    trackCount: getTrackCount(normalizedKit),
+    loopLength: stepsPerBeat * beatsPerLoop,
+  });
+}
+
+export function normalizePatternByTrackCount(
+  value: string | undefined,
+  {
+    trackCount,
+    loopLength,
+  }: {
+    trackCount: number;
+    loopLength: number;
+  },
+): string {
   const tracks = (value ?? "").split("_");
   const normalizedTracks: string[] = [];
 

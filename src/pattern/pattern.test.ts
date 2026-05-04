@@ -56,7 +56,7 @@ describe("extendPatternWithRepeat", () => {
       extendPatternWithRepeat(
         "1000100010001000_0000100000001000_1010101000101010_0000000010000000",
         {
-          kit: "minimal",
+          trackCount: 4,
           stepsPerBeat: 4,
           fromBeatsPerLoop: 4,
           toBeatsPerLoop: 8,
@@ -70,7 +70,7 @@ describe("extendPatternWithRepeat", () => {
   it("beatsPerLoop を増やさないときは通常正規化だけ行う", () => {
     expect(
       extendPatternWithRepeat("10_01", {
-        kit: "minimal",
+        trackCount: 4,
         stepsPerBeat: 4,
         fromBeatsPerLoop: 4,
         toBeatsPerLoop: 2,
@@ -95,7 +95,7 @@ describe("resamplePatternByBeat", () => {
   it("pattern 全体では各trackへ再配置を適用して join する", () => {
     expect(
       resamplePatternByBeat("0101_0000_0000_0000", {
-        kit: "minimal",
+        trackCount: 4,
         fromStepsPerBeat: 4,
         toStepsPerBeat: 8,
         beatsPerLoop: 1,

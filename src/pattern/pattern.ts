@@ -1,5 +1,5 @@
 import { getKitTracks } from "../kit/kits";
-import { normalizePattern } from "../url/sequencerUrl";
+import { normalizePatternByTrackCount } from "../url/sequencerUrl";
 
 export function createEmptyPattern(
   kit: string,
@@ -43,62 +43,58 @@ export function splitPatternTracks(pattern: string): string[] {
 export function extendPatternWithRepeat(
   pattern: string,
   {
-    kit,
+    trackCount,
     stepsPerBeat,
     fromBeatsPerLoop,
     toBeatsPerLoop,
   }: {
-    kit: string;
+    trackCount: number;
     stepsPerBeat: number;
     fromBeatsPerLoop: number;
     toBeatsPerLoop: number;
   },
 ): string {
   if (toBeatsPerLoop <= fromBeatsPerLoop) {
-    return normalizePattern(pattern, {
-      kit,
-      stepsPerBeat,
-      beatsPerLoop: toBeatsPerLoop,
+    return normalizePatternByTrackCount(pattern, {
+      trackCount,
+      loopLength: stepsPerBeat * toBeatsPerLoop,
     });
   }
 
   const fromLoopLength = stepsPerBeat * fromBeatsPerLoop;
   const toLoopLength = stepsPerBeat * toBeatsPerLoop;
-  const normalizedSource = normalizePattern(pattern, {
-    kit,
-    stepsPerBeat,
-    beatsPerLoop: fromBeatsPerLoop,
+  const normalizedSource = normalizePatternByTrackCount(pattern, {
+    trackCount,
+    loopLength: fromLoopLength,
   });
 
   const nextTracks = splitPatternTracks(normalizedSource).map((track) => {
     return extendTrackWithRepeat(track, fromLoopLength, toLoopLength);
   });
 
-  return normalizePattern(nextTracks.join("_"), {
-    kit,
-    stepsPerBeat,
-    beatsPerLoop: toBeatsPerLoop,
+  return normalizePatternByTrackCount(nextTracks.join("_"), {
+    trackCount,
+    loopLength: toLoopLength,
   });
 }
 
 export function resamplePatternByBeat(
   pattern: string,
   {
-    kit,
+    trackCount,
     fromStepsPerBeat,
     toStepsPerBeat,
     beatsPerLoop,
   }: {
-    kit: string;
+    trackCount: number;
     fromStepsPerBeat: number;
     toStepsPerBeat: number;
     beatsPerLoop: number;
   },
 ): string {
-  const normalizedSource = normalizePattern(pattern, {
-    kit,
-    stepsPerBeat: fromStepsPerBeat,
-    beatsPerLoop,
+  const normalizedSource = normalizePatternByTrackCount(pattern, {
+    trackCount,
+    loopLength: fromStepsPerBeat * beatsPerLoop,
   });
   const targetLoopLength = toStepsPerBeat * beatsPerLoop;
   const nextTracks = splitPatternTracks(normalizedSource).map((track) => {
@@ -111,10 +107,9 @@ export function resamplePatternByBeat(
     );
   });
 
-  return normalizePattern(nextTracks.join("_"), {
-    kit,
-    stepsPerBeat: toStepsPerBeat,
-    beatsPerLoop,
+  return normalizePatternByTrackCount(nextTracks.join("_"), {
+    trackCount,
+    loopLength: toStepsPerBeat * beatsPerLoop,
   });
 }
 
