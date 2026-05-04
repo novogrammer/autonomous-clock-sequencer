@@ -282,16 +282,20 @@ export function SequencerPanel() {
           <div className="p-sequencer__catalog-grid">
             {EXAMPLE_SCORES.map((exampleScore) => (
               <article className="c-detail-box p-sequencer__catalog-card" key={exampleScore.id}>
-                <span className="c-detail-box__label">{exampleScore.state.kit}</span>
-                <strong className="p-sequencer__catalog-title">{exampleScore.name}</strong>
-                <p className="p-sequencer__catalog-copy">{exampleScore.description}</p>
-                <a
-                  className="c-button"
-                  href={buildSequencerUrl(exampleScore.state)}
-                  onClick={(event) => handleExampleScoreLinkClick(event, exampleScore.id)}
-                >
-                  Open Score
-                </a>
+                <div className="p-sequencer__catalog-card-content">
+                  <span className="c-detail-box__label">{exampleScore.state.kit}</span>
+                  <strong className="p-sequencer__catalog-title">{exampleScore.name}</strong>
+                  <p className="p-sequencer__catalog-copy">{exampleScore.description}</p>
+                </div>
+                <div className="p-sequencer__catalog-card-actions">
+                  <a
+                    className="c-button"
+                    href={buildSequencerUrl(exampleScore.state)}
+                    onClick={(event) => handleExampleScoreLinkClick(event, exampleScore.id)}
+                  >
+                    Open Score
+                  </a>
+                </div>
               </article>
             ))}
           </div>
@@ -350,26 +354,30 @@ export function SequencerPanel() {
                       className="c-detail-box p-sequencer__catalog-card"
                       key={patternPreset.id}
                     >
-                      <span className="c-detail-box__label">
-                        {patternPreset.stepsPerBeat} steps/beat, {patternPreset.beatsPerLoop} beats
-                      </span>
-                      <strong className="p-sequencer__catalog-title">
-                        {patternPreset.name}
-                      </strong>
-                      <p className="p-sequencer__catalog-copy">
-                        {patternPreset.description}
-                      </p>
-                      <a
-                        className="c-button"
-                        href={buildSequencerUrl(
-                          applyPatternPreset(currentUrlState, patternPreset),
-                        )}
-                        onClick={(event) =>
-                          handlePatternPresetLinkClick(event, patternPreset.id)
-                        }
-                      >
-                        Open Preset
-                      </a>
+                      <div className="p-sequencer__catalog-card-content">
+                        <span className="c-detail-box__label">
+                          {patternPreset.stepsPerBeat} steps/beat, {patternPreset.beatsPerLoop} beats
+                        </span>
+                        <strong className="p-sequencer__catalog-title">
+                          {patternPreset.name}
+                        </strong>
+                        <p className="p-sequencer__catalog-copy">
+                          {patternPreset.description}
+                        </p>
+                      </div>
+                      <div className="p-sequencer__catalog-card-actions">
+                        <a
+                          className="c-button"
+                          href={buildSequencerUrl(
+                            applyPatternPreset(currentUrlState, patternPreset),
+                          )}
+                          onClick={(event) =>
+                            handlePatternPresetLinkClick(event, patternPreset.id)
+                          }
+                        >
+                          Open Preset
+                        </a>
+                      </div>
                     </article>
                   ))}
                 </div>
