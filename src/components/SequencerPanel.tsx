@@ -228,6 +228,45 @@ export function SequencerPanel() {
       </div>
 
       <div className="l-stack l-stack--subsection">
+        <div className="c-action-row">
+          <span className="c-field__label">Sequencer</span>
+          <button
+            className="c-button c-button--primary"
+            onClick={handlePlay}
+            disabled={isPlaying || audioStatus === "starting"}
+          >
+            On
+          </button>
+          <button className="c-button" onClick={handleStop} disabled={!isPlaying}>
+            Off
+          </button>
+        </div>
+
+        <div className="c-action-row">
+          <span className="c-field__label">Metronome</span>
+          <button
+            className="c-button c-button--primary"
+            onClick={handleClickOn}
+            disabled={isClickEnabled}
+          >
+            On
+          </button>
+          <button
+            className="c-button"
+            onClick={handleClickOff}
+            disabled={!isClickEnabled}
+          >
+            Off
+          </button>
+        </div>
+
+        {!isPlaying ? (
+          <div className="p-sequencer__start-hint" role="status" aria-live="polite">
+            <strong>Press Sequencer On to start playback.</strong>
+            <span>Loading a score or preset only changes the shared state.</span>
+          </div>
+        ) : null}
+
         <details className="p-sequencer__catalog-section p-sequencer__catalog-details">
           <summary className="p-sequencer__catalog-summary">
             <span className="p-sequencer__summary-main">
@@ -277,45 +316,6 @@ export function SequencerPanel() {
             ))}
           </div>
         </section>
-
-        <div className="c-action-row">
-          <span className="c-field__label">Sequencer</span>
-          <button
-            className="c-button c-button--primary"
-            onClick={handlePlay}
-            disabled={isPlaying || audioStatus === "starting"}
-          >
-            On
-          </button>
-          <button className="c-button" onClick={handleStop} disabled={!isPlaying}>
-            Off
-          </button>
-        </div>
-
-        <div className="c-action-row">
-          <span className="c-field__label">Metronome</span>
-          <button
-            className="c-button c-button--primary"
-            onClick={handleClickOn}
-            disabled={isClickEnabled}
-          >
-            On
-          </button>
-          <button
-            className="c-button"
-            onClick={handleClickOff}
-            disabled={!isClickEnabled}
-          >
-            Off
-          </button>
-        </div>
-
-        <div className="c-action-row">
-          <span className="c-field__label">Pattern</span>
-          <button className="c-button" onClick={handleClearPattern}>
-            Clear Pattern
-          </button>
-        </div>
 
         <details className="p-sequencer__catalog-section p-sequencer__catalog-details">
           <summary className="p-sequencer__catalog-summary">
@@ -447,6 +447,13 @@ export function SequencerPanel() {
         <div className="c-detail-box c-detail-box--compact">
           <span className="c-detail-box__label">loopLength</span>
           <strong className="c-detail-box__value">{loopLength} steps</strong>
+        </div>
+
+        <div className="c-action-row p-sequencer__field-action">
+          <span className="c-field__label">Pattern</span>
+          <button className="c-button" onClick={handleClearPattern}>
+            Clear Pattern
+          </button>
         </div>
       </div>
 

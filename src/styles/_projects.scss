@@ -45,6 +45,31 @@
     color: var(--color-text-muted);
   }
 
+  &__start-hint {
+    margin-top: var(--space-6);
+    padding: var(--space-5) var(--space-6);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-m);
+    background: var(--color-surface-accent-soft);
+    color: var(--color-text-accent-soft);
+    display: grid;
+    gap: var(--space-2);
+
+    strong,
+    span {
+      display: block;
+    }
+
+    span {
+      font-size: var(--font-size-body-s);
+    }
+  }
+
+  &__field-action {
+    margin-top: 0;
+    align-items: end;
+  }
+
   &__summary-main {
     min-width: 0;
     display: flex;
