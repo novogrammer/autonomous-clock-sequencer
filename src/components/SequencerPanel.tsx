@@ -557,6 +557,17 @@ export function SequencerPanel() {
                   ))}
                 </div>
               </div>
+              <div className="p-sequencer__field-option">
+                <span className="p-sequencer__field-option-label">When changing this value</span>
+                <label className="c-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={shouldResampleByBeat}
+                    onChange={(event) => setShouldResampleByBeat(event.target.checked)}
+                  />
+                  <span>Resample by beat</span>
+                </label>
+              </div>
             </label>
 
             <label className="c-field">
@@ -585,25 +596,17 @@ export function SequencerPanel() {
                   ))}
                 </div>
               </div>
-            </label>
-          </div>
-          <div className="p-sequencer__grid-options">
-            <span className="p-sequencer__grid-options-label">When Grid Changes</span>
-            <label className="c-checkbox">
-              <input
-                type="checkbox"
-                checked={shouldResampleByBeat}
-                onChange={(event) => setShouldResampleByBeat(event.target.checked)}
-              />
-              <span>Resample by beat when changing stepsPerBeat</span>
-            </label>
-            <label className="c-checkbox">
-              <input
-                type="checkbox"
-                checked={shouldRepeatOnLoopExtend}
-                onChange={(event) => setShouldRepeatOnLoopExtend(event.target.checked)}
-              />
-              <span>Repeat current loop when extending beatsPerLoop</span>
+              <div className="p-sequencer__field-option">
+                <span className="p-sequencer__field-option-label">When increasing this value</span>
+                <label className="c-checkbox">
+                  <input
+                    type="checkbox"
+                    checked={shouldRepeatOnLoopExtend}
+                    onChange={(event) => setShouldRepeatOnLoopExtend(event.target.checked)}
+                  />
+                  <span>Repeat current loop</span>
+                </label>
+              </div>
             </label>
           </div>
         </section>
