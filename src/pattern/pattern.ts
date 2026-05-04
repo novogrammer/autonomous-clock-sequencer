@@ -1,4 +1,5 @@
 import { getKitTracks } from "../kit/kits";
+import { normalizePattern } from "../url/sequencerUrl";
 
 export function createEmptyPattern(
   kit: string,
@@ -37,4 +38,131 @@ export function togglePatternStep(
 
 export function splitPatternTracks(pattern: string): string[] {
   return pattern.split("_");
+}
+
+export function extendPatternWithRepeat(
+  pattern: string,
+  {
+    kit,
+    stepsPerBeat,
+    fromBeatsPerLoop,
+    toBeatsPerLoop,
+  }: {
+    kit: string;
+    stepsPerBeat: number;
+    fromBeatsPerLoop: number;
+    toBeatsPerLoop: number;
+  },
+): string {
+  if (toBeatsPerLoop <= fromBeatsPerLoop) {
+    return normalizePattern(pattern, {
+      kit,
+      stepsPerBeat,
+      beatsPerLoop: toBeatsPerLoop,
+    });
+  }
+
+  const fromLoopLength = stepsPerBeat * fromBeatsPerLoop;
+  const toLoopLength = stepsPerBeat * toBeatsPerLoop;
+  const normalizedSource = normalizePattern(pattern, {
+    kit,
+    stepsPerBeat,
+    beatsPerLoop: fromBeatsPerLoop,
+  });
+
+  const nextTracks = splitPatternTracks(normalizedSource).map((track) => {
+    return extendTrackWithRepeat(track, fromLoopLength, toLoopLength);
+  });
+
+  return normalizePattern(nextTracks.join("_"), {
+    kit,
+    stepsPerBeat,
+    beatsPerLoop: toBeatsPerLoop,
+  });
+}
+
+export function resamplePatternByBeat(
+  pattern: string,
+  {
+    kit,
+    fromStepsPerBeat,
+    toStepsPerBeat,
+    beatsPerLoop,
+  }: {
+    kit: string;
+    fromStepsPerBeat: number;
+    toStepsPerBeat: number;
+    beatsPerLoop: number;
+  },
+): string {
+  const normalizedSource = normalizePattern(pattern, {
+    kit,
+    stepsPerBeat: fromStepsPerBeat,
+    beatsPerLoop,
+  });
+  const targetLoopLength = toStepsPerBeat * beatsPerLoop;
+  const nextTracks = splitPatternTracks(normalizedSource).map((track) => {
+    return resampleTrackByBeat(
+      track,
+      fromStepsPerBeat,
+      toStepsPerBeat,
+      beatsPerLoop,
+      targetLoopLength,
+    );
+  });
+
+  return normalizePattern(nextTracks.join("_"), {
+    kit,
+    stepsPerBeat: toStepsPerBeat,
+    beatsPerLoop,
+  });
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+export function extendTrackWithRepeat(
+  track: string,
+  fromLoopLength: number,
+  toLoopLength: number,
+): string {
+  let expandedTrack = "";
+
+  while (expandedTrack.length < toLoopLength) {
+    expandedTrack += track.slice(0, fromLoopLength);
+  }
+
+  return expandedTrack.slice(0, toLoopLength);
+}
+
+export function resampleTrackByBeat(
+  track: string,
+  fromStepsPerBeat: number,
+  toStepsPerBeat: number,
+  beatsPerLoop: number,
+  targetLoopLength: number = toStepsPerBeat * beatsPerLoop,
+): string {
+  const nextSteps = Array.from({ length: targetLoopLength }, () => "0");
+
+  for (let stepIndex = 0; stepIndex < track.length; stepIndex += 1) {
+    if (track[stepIndex] !== "1") {
+      continue;
+    }
+
+    const beatIndex = Math.floor(stepIndex / fromStepsPerBeat);
+    const offsetInBeat = stepIndex % fromStepsPerBeat;
+    const unclampedOffset = Math.round(
+      (offsetInBeat * toStepsPerBeat) / fromStepsPerBeat,
+    );
+    const nextOffsetInBeat = clamp(
+      unclampedOffset,
+      0,
+      toStepsPerBeat - 1,
+    );
+    const nextStepIndex = beatIndex * toStepsPerBeat + nextOffsetInBeat;
+    nextSteps[nextStepIndex] = "1";
+  }
+
+  return nextSteps.join("");
 }
