@@ -91,21 +91,27 @@
 
 - `Example Score` 一覧は「何を試せばよいか」が分かる入口にする
 - `Example Score` と `Pattern Preset` は別のセクションとして見せる
+- `Example Score` と `Pattern Preset` のセクションは、必要時に開ける折り畳み UI として見せてよい
 - 名前だけでなく、必要なら短い説明文も添える
 - `Sound On` は共有時間軸を開始する操作ではなく、この端末で音声を有効にするローカル操作として見せる
+- `Sound On / Off` は画面の上の方で先に見えるように置き、譜面を開いたあとに音を聴く導線を分かりやすくする
 - `Metronome` は `Sound` と独立した再生開始操作ではなく、`Sound On` 中だけ効くローカル補助設定として見せる
 - 外部共有導線は埋め込みより検索 URL を優先してよい
 - `Shared Scores` はアプリ内例示ではなく、外部の流通面として扱う
 - `Example Score` は画面の上の方に置く
 - `Pattern Preset` は `Pattern` に近い位置へ置く
 - `Shared Scores` は画面の上の方に置く
+- `Pattern Preset` は `kit` ごとにまとまりを作り、必要なら `kit` 単位でも折り畳めるようにしてよい
 
 ## 想定する最小 UI
 
 - `Example Scores`
   - 画面上部で、あらかじめ決めた譜面を呼び出す
+  - 折り畳みセクションとして置いてよい
 - `Pattern Presets`
   - `Pattern` に近い位置で、特定の `kit` に属する `pattern` を現在の絶対時間基準を維持したまま差し替える
+  - 折り畳みセクションとして置いてよい
+  - `kit` ごとのグループに分けて見せる
 - `See Shared Scores`
   - 画面上部で、ハッシュタグ検索ページへのリンクを並べる
 - `Sound`
