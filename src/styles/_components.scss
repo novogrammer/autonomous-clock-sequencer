@@ -118,6 +118,25 @@
   }
 }
 
+.c-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--control-height);
+  color: var(--color-text);
+  font-weight: 700;
+
+  input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-accent);
+  }
+
+  &:has(input:disabled) {
+    color: var(--color-text-subtle);
+  }
+}
+
 .c-input {
   font: inherit;
   width: 100%;

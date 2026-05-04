@@ -44,7 +44,7 @@ export function useSequencerEngine({
   const engineRef = useRef<SequencerEngine | null>(null);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [audioStatus, setAudioStatus] = useState<AudioStatus>("idle");
-  const shouldRun = isPlaying || isClickEnabled;
+  const shouldRun = isPlaying;
   const engineConfig = useMemo(
     () => ({
       bpm,
@@ -53,7 +53,7 @@ export function useSequencerEngine({
       kit,
       pattern,
       isPatternEnabled: isPlaying,
-      isClickEnabled,
+      isClickEnabled: isPlaying && isClickEnabled,
       swing,
       playbackOffsetMs,
     }),

@@ -242,26 +242,27 @@ export function SequencerPanel() {
 
         <div className="c-action-row">
           <span className="c-field__label">Metronome</span>
-          <button
-            className="c-button c-button--primary"
-            onClick={handleClickOn}
-            disabled={isClickEnabled}
-          >
-            On
-          </button>
-          <button
-            className="c-button"
-            onClick={handleClickOff}
-            disabled={!isClickEnabled}
-          >
-            Off
-          </button>
+          <label className="c-checkbox">
+            <input
+              type="checkbox"
+              checked={isClickEnabled}
+              onChange={(event) => {
+                if (event.target.checked) {
+                  handleClickOn();
+                  return;
+                }
+
+                handleClickOff();
+              }}
+            />
+            <span>Enable click</span>
+          </label>
         </div>
 
         {!isPlaying ? (
           <div className="p-sequencer__start-hint" role="status" aria-live="polite">
             <strong>Press Sound On to hear the sequencer on this device.</strong>
-            <span>Loading a score or preset only changes the shared state.</span>
+            <span>Loading a score or preset only changes the shared state. Metronome is available while sound is on.</span>
           </div>
         ) : null}
 

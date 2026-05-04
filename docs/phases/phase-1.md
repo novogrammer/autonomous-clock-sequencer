@@ -143,10 +143,11 @@
 
 - ヘッダには機能名のみを表示する
 - この端末での音声出力を `Sound On / Off` で有効 / 無効にできる
+- `Metronome` は `Sound On` 中にだけ有効になるローカル補助設定として扱う
 - `bpm`, `stepsPerBeat`, `swing`, `beatsPerLoop`, `kit` を編集できる
 - トラックごとの step grid を表示する
 - URL を確認できる
-- メトロノーム click を個別に on/off できる
+- メトロノーム click をローカル設定として有効 / 無効にできる
 - calibration 系 UI を残す場合は、シーケンサー本体の補助として扱う
 
 ## State 仕様
