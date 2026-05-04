@@ -46,7 +46,7 @@ describe("applyPatternPreset", () => {
       stepsPerBeat: 3,
       beatsPerLoop: 4,
       kit: "bass-fourths",
-      pattern: "100100100100_010010010010_001001001001_000100010001",
+      pattern: "100000100000_010001010000_001010001000_000100000100",
       swing: 0.27,
     });
   });

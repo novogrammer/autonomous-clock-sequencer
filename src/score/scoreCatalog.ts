@@ -106,12 +106,12 @@ export const PATTERN_PRESETS: readonly PatternPreset[] = [
   {
     id: "bass-fourths-triplet-climb",
     kit: "bass-fourths",
-    name: "Triplet Climb",
-    description: "3 steps / beat で上行感を作る preset。",
+    name: "Triplet Weave",
+    description: "3 steps / beat で各音が交差する interlocking な bass preset。",
     stepsPerBeat: 3,
     beatsPerLoop: 4,
     pattern:
-      "100100100100_010010010010_001001001001_000100010001",
+      "100000100000_010001010000_001010001000_000100000100",
   },
 ] as const;
 
