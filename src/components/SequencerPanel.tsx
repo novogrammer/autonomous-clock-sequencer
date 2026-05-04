@@ -229,19 +229,19 @@ export function SequencerPanel() {
 
       <div className="l-stack l-stack--subsection">
         <div className="c-action-row">
-          <span className="c-field__label">Sound</span>
           <button
             className="c-button c-button--primary"
             onClick={handlePlay}
             disabled={isPlaying || audioStatus === "starting"}
           >
-            On
+            Sound On
           </button>
-          <button className="c-button" onClick={handleStop} disabled={!isPlaying}>Off</button>
+          <button className="c-button" onClick={handleStop} disabled={!isPlaying}>
+            Sound Off
+          </button>
         </div>
 
-        <div className="c-action-row">
-          <span className="c-field__label">Metronome</span>
+        <div className="p-sequencer__subcontrol-row">
           <label className="c-checkbox">
             <input
               type="checkbox"
@@ -255,7 +255,7 @@ export function SequencerPanel() {
                 handleClickOff();
               }}
             />
-            <span>Enable click</span>
+            <span>Enable metronome click</span>
           </label>
         </div>
 
