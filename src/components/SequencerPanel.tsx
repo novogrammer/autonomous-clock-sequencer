@@ -663,7 +663,7 @@ export function SequencerPanel() {
 
       <details className="p-sequencer__transport-details">
         <summary className="p-sequencer__transport-summary">
-          Transport 詳細
+          再生情報
         </summary>
         <div className="l-grid l-grid--columns-3 l-grid--gap-m l-grid--section">
           <Readout
