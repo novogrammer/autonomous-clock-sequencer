@@ -142,7 +142,7 @@
 ## UI 構成
 
 - ヘッダには機能名のみを表示する
-- 再生 / 停止を行える
+- この端末での音声出力を `Sound On / Off` で有効 / 無効にできる
 - `bpm`, `stepsPerBeat`, `swing`, `beatsPerLoop`, `kit` を編集できる
 - トラックごとの step grid を表示する
 - URL を確認できる
