@@ -38,7 +38,7 @@ export const EXAMPLE_SCORES: readonly ExampleScore[] = [
       beatsPerLoop: 4,
       kit: "minimal",
       pattern:
-        "1000100010001000_0000100000001000_1010101010101010_0000000010000000",
+        "1000100010001000_0000100000001000_1010101000101010_0000000010000000",
       swing: 0,
     },
   }),
@@ -81,7 +81,7 @@ export const PATTERN_PRESETS: readonly PatternPreset[] = [
     stepsPerBeat: 4,
     beatsPerLoop: 4,
     pattern:
-      "1000100010001000_0000100000001000_1010101010101010_0000000010000000",
+      "1000100010001000_0000100000001000_1010101000101010_0000000010000000",
   },
   {
     id: "minimal-offbeat-open-hat",
