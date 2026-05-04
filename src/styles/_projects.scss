@@ -10,16 +10,76 @@
   }
 
   &__catalog-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-5);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-m);
+    background: var(--color-surface-muted);
     color: var(--color-text-muted);
     font-size: var(--font-size-label);
     font-weight: 700;
     cursor: pointer;
     user-select: none;
+
+    &::marker,
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::before {
+      content: "▸";
+      color: var(--color-text);
+      font-size: var(--font-size-body-s);
+    }
+
+    .p-sequencer__catalog-details[open] &::before {
+      content: "▾";
+    }
   }
 
   &__section-copy {
     margin: var(--space-3) 0 0;
     color: var(--color-text-muted);
+  }
+
+  &__summary-main {
+    min-width: 0;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  &__summary-title {
+    color: var(--color-text);
+    font-size: var(--font-size-body-s);
+    font-weight: 700;
+  }
+
+  &__summary-meta,
+  &__summary-hint {
+    color: var(--color-text-subtle);
+    font-size: var(--font-size-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  &__summary-hint {
+    flex-shrink: 0;
+  }
+
+  &__catalog-details[open] &__summary-hint::before,
+  &__preset-group[open] &__summary-hint::before {
+    content: "Hide";
+  }
+
+  &__catalog-details:not([open]) &__summary-hint::before,
+  &__preset-group:not([open]) &__summary-hint::before {
+    content: "Show";
   }
 
   &__catalog-grid {
@@ -58,6 +118,32 @@
   }
 
   &__preset-group-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-2) 0;
+    cursor: pointer;
+    user-select: none;
+
+    &::marker,
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &::before {
+      content: "▸";
+      color: var(--color-text);
+      font-size: var(--font-size-body-s);
+      margin-right: var(--space-2);
+    }
+
+    .p-sequencer__preset-group[open] &::before {
+      content: "▾";
+    }
+  }
+
+  &__preset-group-label {
     display: flex;
     align-items: baseline;
     gap: var(--space-3);

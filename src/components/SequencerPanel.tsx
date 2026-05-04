@@ -230,7 +230,13 @@ export function SequencerPanel() {
       <div className="l-stack l-stack--subsection">
         <details className="p-sequencer__catalog-section p-sequencer__catalog-details">
           <summary className="p-sequencer__catalog-summary">
-            Example Scores
+            <span className="p-sequencer__summary-main">
+              <span className="p-sequencer__summary-title">Example Scores</span>
+              <span className="p-sequencer__summary-meta">
+                {EXAMPLE_SCORES.length} scores
+              </span>
+            </span>
+            <span className="p-sequencer__summary-hint">Toggle</span>
           </summary>
           <p className="p-sequencer__section-copy">
             まず試す譜面をここから呼び出せます。
@@ -313,18 +319,32 @@ export function SequencerPanel() {
 
         <details className="p-sequencer__catalog-section p-sequencer__catalog-details">
           <summary className="p-sequencer__catalog-summary">
-            Pattern Presets
+            <span className="p-sequencer__summary-main">
+              <span className="p-sequencer__summary-title">Pattern Presets</span>
+              <span className="p-sequencer__summary-meta">
+                {PATTERN_PRESETS.length} presets
+              </span>
+            </span>
+            <span className="p-sequencer__summary-hint">Toggle</span>
           </summary>
           <p className="p-sequencer__section-copy">
             BPM と swing は保ったまま、kit ごとの pattern 解釈だけを差し替えます。
           </p>
           <div className="p-sequencer__preset-groups">
             {presetsByKit.map((group) => (
-              <section className="p-sequencer__preset-group" key={group.kitId}>
-                <div className="p-sequencer__preset-group-head">
-                  <span className="c-detail-box__label">kit</span>
-                  <strong>{group.kitId}</strong>
-                </div>
+              <details className="p-sequencer__preset-group" key={group.kitId}>
+                <summary className="p-sequencer__preset-group-head">
+                  <span className="p-sequencer__summary-main">
+                    <span className="p-sequencer__preset-group-label">
+                      <span className="c-detail-box__label">kit</span>
+                      <strong>{group.kitId}</strong>
+                    </span>
+                    <span className="p-sequencer__summary-meta">
+                      {group.presets.length} presets
+                    </span>
+                  </span>
+                  <span className="p-sequencer__summary-hint">Toggle</span>
+                </summary>
                 <div className="p-sequencer__catalog-grid">
                   {group.presets.map((patternPreset) => (
                     <article
@@ -354,7 +374,7 @@ export function SequencerPanel() {
                     </article>
                   ))}
                 </div>
-              </section>
+              </details>
             ))}
           </div>
         </details>
