@@ -74,6 +74,49 @@
     align-items: end;
   }
 
+  &__grid-group {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  &__grid-group-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-4);
+
+    @include narrow-screen {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  &__grid-group-value {
+    font-size: var(--font-size-detail);
+  }
+
+  &__grid-group-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-7);
+
+    @include narrow-screen {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__common-values {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  &__common-values-label {
+    color: var(--color-text-subtle);
+    font-size: var(--font-size-label);
+    font-weight: 700;
+  }
+
   &__summary-main {
     min-width: 0;
     display: flex;

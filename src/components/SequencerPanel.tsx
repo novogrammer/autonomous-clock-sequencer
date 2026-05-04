@@ -24,6 +24,9 @@ import { usePlaybackCalibrationStore } from "../state/playbackCalibrationStore";
 import { buildSequencerUrl } from "../url/sequencerUrl";
 import { Readout } from "./Readout";
 
+const COMMON_STEPS_PER_BEAT_VALUES = [3, 4, 6, 8] as const;
+const COMMON_BEATS_PER_LOOP_VALUES = [1, 2, 4, 8, 16] as const;
+
 export function SequencerPanel() {
   const [isClickEnabled, setClickEnabled] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
@@ -99,12 +102,20 @@ export function SequencerPanel() {
     setStepsPerBeat(Number(event.target.value));
   }
 
+  function handleCommonStepsPerBeatClick(value: number) {
+    setStepsPerBeat(value);
+  }
+
   function handleSwingChange(event: ChangeEvent<HTMLInputElement>) {
     setSwing(Number(event.target.value));
   }
 
   function handleBeatsPerLoopChange(event: ChangeEvent<HTMLInputElement>) {
     setBeatsPerLoop(Number(event.target.value));
+  }
+
+  function handleCommonBeatsPerLoopClick(value: number) {
+    setBeatsPerLoop(value);
   }
 
   function handleKitChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -402,19 +413,6 @@ export function SequencerPanel() {
         </label>
 
         <label className="c-field">
-          <span className="c-field__label">stepsPerBeat</span>
-          <input
-            className="c-input"
-            type="number"
-            min="1"
-            max="16"
-            step="1"
-            value={stepsPerBeat}
-            onChange={handleStepsPerBeatChange}
-          />
-        </label>
-
-        <label className="c-field">
           <span className="c-field__label">swing</span>
           <input
             className="c-input"
@@ -424,19 +422,6 @@ export function SequencerPanel() {
             step="0.05"
             value={swing}
             onChange={handleSwingChange}
-          />
-        </label>
-
-        <label className="c-field">
-          <span className="c-field__label">beatsPerLoop</span>
-          <input
-            className="c-input"
-            type="number"
-            min="1"
-            max="32"
-            step="1"
-            value={beatsPerLoop}
-            onChange={handleBeatsPerLoopChange}
           />
         </label>
 
@@ -451,10 +436,69 @@ export function SequencerPanel() {
           </select>
         </label>
 
-        <div className="c-detail-box c-detail-box--compact">
-          <span className="c-detail-box__label">loopLength</span>
-          <strong className="c-detail-box__value">{loopLength} steps</strong>
-        </div>
+        <section className="c-detail-box p-sequencer__grid-group">
+          <div className="p-sequencer__grid-group-head">
+            <span className="c-detail-box__label">Grid</span>
+            <strong className="p-sequencer__grid-group-value">{loopLength} steps / loop</strong>
+          </div>
+          <div className="p-sequencer__grid-group-fields">
+            <label className="c-field">
+              <span className="c-field__label">stepsPerBeat</span>
+              <input
+                className="c-input"
+                type="number"
+                min="1"
+                max="16"
+                step="1"
+                value={stepsPerBeat}
+                onChange={handleStepsPerBeatChange}
+              />
+              <div className="p-sequencer__common-values">
+                <span className="p-sequencer__common-values-label">Common</span>
+                <div className="c-button-group c-button-group--compact">
+                  {COMMON_STEPS_PER_BEAT_VALUES.map((value) => (
+                    <button
+                      key={value}
+                      className={`c-button ${stepsPerBeat === value ? "c-button--primary" : ""}`}
+                      type="button"
+                      onClick={() => handleCommonStepsPerBeatClick(value)}
+                    >
+                      {value}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </label>
+
+            <label className="c-field">
+              <span className="c-field__label">beatsPerLoop</span>
+              <input
+                className="c-input"
+                type="number"
+                min="1"
+                max="32"
+                step="1"
+                value={beatsPerLoop}
+                onChange={handleBeatsPerLoopChange}
+              />
+              <div className="p-sequencer__common-values">
+                <span className="p-sequencer__common-values-label">Common</span>
+                <div className="c-button-group c-button-group--compact">
+                  {COMMON_BEATS_PER_LOOP_VALUES.map((value) => (
+                    <button
+                      key={value}
+                      className={`c-button ${beatsPerLoop === value ? "c-button--primary" : ""}`}
+                      type="button"
+                      onClick={() => handleCommonBeatsPerLoopClick(value)}
+                    >
+                      {value}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </label>
+          </div>
+        </section>
 
         <div className="c-action-row p-sequencer__field-action">
           <span className="c-field__label">Pattern</span>

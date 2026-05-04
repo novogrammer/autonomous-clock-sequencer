@@ -220,6 +220,16 @@
     min-height: var(--control-height);
     padding: 0 var(--space-5);
   }
+
+  &--compact {
+    gap: var(--space-2);
+
+    .c-button {
+      min-height: 32px;
+      padding: 0 var(--space-4);
+      font-size: var(--font-size-body-s);
+    }
+  }
 }
 
 .c-time-signal {
