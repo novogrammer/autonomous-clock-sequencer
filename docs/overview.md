@@ -22,8 +22,10 @@
 - Phase 0: `docs/phases/phase-0.md`
 - Phase 1: `docs/phases/phase-1.md`
 - Phase 2: `docs/phases/phase-2.md`
+- Phase 3: `docs/phases/phase-3.md`
 
 ## 現在の状態
 
 - Phase 1 の実装は完了している
 - Phase 2 の実装は完了扱いとする
+- 次の仕様は Phase 3 として検討する
