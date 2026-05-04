@@ -229,7 +229,7 @@ export function SequencerPanel() {
 
       <div className="l-stack l-stack--subsection">
         <div className="c-action-row">
-          <span className="c-field__label">Sequencer</span>
+          <span className="c-field__label">Sound</span>
           <button
             className="c-button c-button--primary"
             onClick={handlePlay}
@@ -237,9 +237,7 @@ export function SequencerPanel() {
           >
             On
           </button>
-          <button className="c-button" onClick={handleStop} disabled={!isPlaying}>
-            Off
-          </button>
+          <button className="c-button" onClick={handleStop} disabled={!isPlaying}>Off</button>
         </div>
 
         <div className="c-action-row">
@@ -262,7 +260,7 @@ export function SequencerPanel() {
 
         {!isPlaying ? (
           <div className="p-sequencer__start-hint" role="status" aria-live="polite">
-            <strong>Press Sequencer On to start playback.</strong>
+            <strong>Press Sound On to hear the sequencer on this device.</strong>
             <span>Loading a score or preset only changes the shared state.</span>
           </div>
         ) : null}
