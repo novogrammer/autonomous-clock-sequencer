@@ -2,7 +2,7 @@
 
 ## 状態
 
-- 仕様検討中
+- 実装中
 - Phase 2 までの時間モデルと URL 共有を維持したまま、pattern 編集時の補助操作を追加する
 
 ## 目的
@@ -31,7 +31,7 @@
 - `beatsPerLoop` を増やすときに、既存 pattern を繰り返して拡張する補助操作を提供する
 - `stepsPerBeat` を変えるときに、beat 基準の位置関係を保つ再配置操作を提供する
 - 補助操作の結果は通常の URL state と同じ形に正規化される
-- 編集補助は `Pattern` 周辺の UI から呼び出せる
+- 編集補助は `Grid` に近い UI から呼び出せる
 
 ## 非スコープ
 
@@ -81,25 +81,30 @@
 
 ## UI 方針
 
-- 補助操作は `Pattern` 周辺にまとめる
+- 補助操作は `stepsPerBeat` / `beatsPerLoop` それぞれの入力の近くに置く
 - 通常の値変更と、推測を含む変換操作は見分けがつくようにする
-- `stepsPerBeat` / `beatsPerLoop` の単純な変更だけでは、既存 pattern を暗黙変換しない
+- 補助操作が有効な場合、`stepsPerBeat` / `beatsPerLoop` の変更時に対応する変換を自動で適用してよい
 - `Extend With Repeat` と `Resample By Beat` は、何が起きるかを短い文言で添える
 - 補助操作は URL 正規化の代替ではなく、編集体験を助けるローカル操作として見せる
 - 補助操作の有効 / 無効は、まずはチェックボックスなどのローカル UI で切り替えられる形を想定してよい
+- 初期状態では補助操作を有効にしてよい
 - 補助設定の永続化方法は今すぐ固定せず、必要なら後で検討する
 
 ## 想定する最小 UI
 
-- `Pattern Tools`
-  - `Extend With Repeat`
-    - 現在の loop を繰り返して pattern を広げる
-  - `Resample By Beat`
-    - `stepsPerBeat` の変更に合わせて beat 基準で pattern を再配置する
+- `Grid`
+  - `stepsPerBeat`
+    - number input と common shortcut を持つ
+    - 近くに `Resample by beat` のチェックボックスを置く
+  - `beatsPerLoop`
+    - number input と common shortcut を持つ
+    - 近くに `Repeat current loop` のチェックボックスを置く
+  - 補助操作のチェックボックスはローカル状態として扱い、URL には載せない
 
 ## 完了条件
 
 - `beatsPerLoop` を広げる補助操作で、既存 loop を繰り返して pattern を拡張できる
 - `stepsPerBeat` 変更用の補助操作で、beat 基準の位置関係を保った再配置ができる
 - 補助操作の結果が通常の URL state と同じ形に正規化される
-- 通常の URL 読み込みや値変更だけでは、推測的な自動変換を行わない
+- 補助操作の有効 / 無効をローカル UI で切り替えられる
+- 通常の URL 読み込みでは、推測的な自動変換を行わない
