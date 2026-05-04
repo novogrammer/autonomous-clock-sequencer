@@ -305,7 +305,7 @@ export function SequencerPanel() {
     <section className="p-sequencer">
       <div className="p-sequencer__header">
         <div>
-          <p className="c-eyebrow">Sequencer</p>
+          <p className="c-eyebrow">シーケンサー</p>
           <h1 className="c-heading c-heading--1">Autonomous Clock Sequencer</h1>
         </div>
         <StatusBadge isPlaying={isPlaying} audioStatus={audioStatus} />
@@ -318,10 +318,10 @@ export function SequencerPanel() {
             onClick={handlePlay}
             disabled={isPlaying || audioStatus === "starting"}
           >
-            Sound On
+            音をオン
           </button>
           <button className="c-button" onClick={handleStop} disabled={!isPlaying}>
-            Sound Off
+            音をオフ
           </button>
         </div>
 
@@ -339,23 +339,23 @@ export function SequencerPanel() {
                 handleClickOff();
               }}
             />
-            <span>Enable metronome click</span>
+            <span>メトロノームを鳴らす</span>
           </label>
         </div>
 
         {!isPlaying ? (
           <div className="p-sequencer__start-hint" role="status" aria-live="polite">
-            <strong>Press Sound On to hear the sequencer on this device.</strong>
-            <span>Loading a score or preset only changes the shared state. Metronome is available while sound is on.</span>
+            <strong>この端末で音を聴くには「音をオン」を押してください。</strong>
+            <span>score や preset を開いても変わるのは共有 state だけです。メトロノームは音がオンの間だけ使えます。</span>
           </div>
         ) : null}
 
         <details className="p-sequencer__catalog-section p-sequencer__catalog-details">
           <summary className="p-sequencer__catalog-summary">
             <span className="p-sequencer__summary-main">
-              <span className="p-sequencer__summary-title">Example Scores</span>
+              <span className="p-sequencer__summary-title">スコア例</span>
               <span className="p-sequencer__summary-meta">
-                {EXAMPLE_SCORES.length} scores
+                {EXAMPLE_SCORES.length} 件
               </span>
             </span>
             <span className="p-sequencer__summary-hint" aria-hidden="true" />
@@ -377,7 +377,7 @@ export function SequencerPanel() {
                     href={buildSequencerUrl(exampleScore.state)}
                     onClick={(event) => handleExampleScoreLinkClick(event, exampleScore.id)}
                   >
-                    Open Score
+                    開く
                   </a>
                 </div>
               </article>
@@ -388,7 +388,7 @@ export function SequencerPanel() {
         <section className="p-sequencer__catalog-section">
           <div className="c-section-header">
             <div>
-              <h2 className="c-heading c-heading--2">See Shared Scores</h2>
+              <h2 className="c-heading c-heading--2">共有されたスコアを見る</h2>
               <p className="p-sequencer__section-copy">
                 {DEFAULT_SHARED_SCORES_HASHTAG} で外部の score URL を辿ります。
               </p>
@@ -407,9 +407,9 @@ export function SequencerPanel() {
         <details className="p-sequencer__catalog-section p-sequencer__catalog-details">
           <summary className="p-sequencer__catalog-summary">
             <span className="p-sequencer__summary-main">
-              <span className="p-sequencer__summary-title">Pattern Presets</span>
+              <span className="p-sequencer__summary-title">パターンプリセット</span>
               <span className="p-sequencer__summary-meta">
-                {PATTERN_PRESETS.length} presets
+                {PATTERN_PRESETS.length} 件
               </span>
             </span>
             <span className="p-sequencer__summary-hint" aria-hidden="true" />
@@ -427,7 +427,7 @@ export function SequencerPanel() {
                       <strong>{group.kitId}</strong>
                     </span>
                     <span className="p-sequencer__summary-meta">
-                      {group.presets.length} presets
+                      {group.presets.length} 件
                     </span>
                   </span>
                   <span className="p-sequencer__summary-hint" aria-hidden="true" />
@@ -440,7 +440,7 @@ export function SequencerPanel() {
                     >
                       <div className="p-sequencer__catalog-card-content">
                         <span className="c-detail-box__label">
-                          {patternPreset.stepsPerBeat} steps/beat, {patternPreset.beatsPerLoop} beats
+                          {patternPreset.stepsPerBeat} ステップ/ビート, {patternPreset.beatsPerLoop} ビート
                         </span>
                         <strong className="p-sequencer__catalog-title">
                           {patternPreset.name}
@@ -459,7 +459,7 @@ export function SequencerPanel() {
                             handlePatternPresetLinkClick(event, patternPreset.id)
                           }
                         >
-                          Open Preset
+                          開く
                         </a>
                       </div>
                     </article>
@@ -527,12 +527,12 @@ export function SequencerPanel() {
 
         <section className="c-detail-box p-sequencer__grid-group">
           <div className="p-sequencer__grid-group-head">
-            <span className="c-detail-box__label">Grid</span>
-            <strong className="p-sequencer__grid-group-value">{loopLength} steps / loop</strong>
+            <span className="c-detail-box__label">グリッド</span>
+            <strong className="p-sequencer__grid-group-value">{loopLength} step / loop</strong>
           </div>
           <div className="p-sequencer__grid-group-fields">
             <label className="c-field">
-              <span className="c-field__label">stepsPerBeat</span>
+              <span className="c-field__label">1ビートあたりのステップ数</span>
               <input
                 className="c-input"
                 type="number"
@@ -543,7 +543,7 @@ export function SequencerPanel() {
                 onChange={handleStepsPerBeatChange}
               />
               <div className="p-sequencer__common-values">
-                <span className="p-sequencer__common-values-label">Common</span>
+                <span className="p-sequencer__common-values-label">一般的な値</span>
                 <div className="c-button-group c-button-group--compact">
                   {COMMON_STEPS_PER_BEAT_VALUES.map((value) => (
                     <button
@@ -558,20 +558,20 @@ export function SequencerPanel() {
                 </div>
               </div>
               <div className="p-sequencer__field-option">
-                <span className="p-sequencer__field-option-label">When changing this value</span>
+                <span className="p-sequencer__field-option-label">この値を変えるとき</span>
                 <label className="c-checkbox">
                   <input
                     type="checkbox"
                     checked={shouldResampleByBeat}
                     onChange={(event) => setShouldResampleByBeat(event.target.checked)}
                   />
-                  <span>Resample by beat</span>
+                  <span>ビート基準で並べ替える</span>
                 </label>
               </div>
             </label>
 
             <label className="c-field">
-              <span className="c-field__label">beatsPerLoop</span>
+              <span className="c-field__label">ループのビート数</span>
               <input
                 className="c-input"
                 type="number"
@@ -582,7 +582,7 @@ export function SequencerPanel() {
                 onChange={handleBeatsPerLoopChange}
               />
               <div className="p-sequencer__common-values">
-                <span className="p-sequencer__common-values-label">Common</span>
+                <span className="p-sequencer__common-values-label">一般的な値</span>
                 <div className="c-button-group c-button-group--compact">
                   {COMMON_BEATS_PER_LOOP_VALUES.map((value) => (
                     <button
@@ -597,14 +597,14 @@ export function SequencerPanel() {
                 </div>
               </div>
               <div className="p-sequencer__field-option">
-                <span className="p-sequencer__field-option-label">When increasing this value</span>
+                <span className="p-sequencer__field-option-label">この値を増やすとき</span>
                 <label className="c-checkbox">
                   <input
                     type="checkbox"
                     checked={shouldRepeatOnLoopExtend}
                     onChange={(event) => setShouldRepeatOnLoopExtend(event.target.checked)}
                   />
-                  <span>Repeat current loop</span>
+                  <span>現在のループを繰り返す</span>
                 </label>
               </div>
             </label>
@@ -612,9 +612,9 @@ export function SequencerPanel() {
         </section>
 
         <div className="c-action-row p-sequencer__field-action">
-          <span className="c-field__label">Pattern</span>
+          <span className="c-field__label">パターン</span>
           <button className="c-button" onClick={handleClearPattern}>
-            Clear Pattern
+            クリア
           </button>
         </div>
       </div>
@@ -663,24 +663,24 @@ export function SequencerPanel() {
 
       <details className="p-sequencer__transport-details">
         <summary className="p-sequencer__transport-summary">
-          Transport Details
+          Transport 詳細
         </summary>
         <div className="l-grid l-grid--columns-3 l-grid--gap-m l-grid--section">
           <Readout
-            label="elapsed"
+            label="経過時間"
             value={`${(position.elapsedMs / secondsToMs(1)).toFixed(2)}s`}
           />
-          <Readout label="beat" value={String(position.beat)} />
-          <Readout label="step" value={String(position.step)} />
-          <Readout label="stepInBeat" value={String(position.stepInBeat)} />
-          <Readout label="stepInLoop" value={String(position.stepInLoop)} />
+          <Readout label="ビート" value={String(position.beat)} />
+          <Readout label="ステップ" value={String(position.step)} />
+          <Readout label="ビート内ステップ" value={String(position.stepInBeat)} />
+          <Readout label="ループ内ステップ" value={String(position.stepInLoop)} />
         </div>
       </details>
 
       <section className="p-sequencer__share-section">
         <div className="c-section-header">
           <div>
-            <h2 className="c-heading c-heading--2">Share</h2>
+            <h2 className="c-heading c-heading--2">共有</h2>
           </div>
         </div>
 
@@ -690,26 +690,26 @@ export function SequencerPanel() {
             <code className="c-detail-box__value">{currentUrl}</code>
             <div className="p-sequencer__share-actions">
               <button className="c-button" onClick={handleCopyUrl}>
-                Copy URL
+                URLをコピー
               </button>
               {copyStatus === "copied" ? (
-                <span className="p-sequencer__share-status">Copied</span>
+                <span className="p-sequencer__share-status">コピーしました</span>
               ) : null}
               {copyStatus === "failed" ? (
-                <span className="p-sequencer__share-status">Copy failed</span>
+                <span className="p-sequencer__share-status">コピーに失敗しました</span>
               ) : null}
             </div>
           </div>
 
           <div className="c-detail-box p-sequencer__qr-box">
-            <span className="c-detail-box__label">QR Code</span>
+            <span className="c-detail-box__label">QRコード</span>
             {qrCodeUrl === "" ? (
-              <span className="c-detail-box__value">QR unavailable</span>
+              <span className="c-detail-box__value">QRコードを作れませんでした</span>
             ) : (
               <img
                 className="p-sequencer__qr-image"
                 src={qrCodeUrl}
-                alt="Shared sequencer URL QR code"
+                alt="共有用シーケンサーURLのQRコード"
               />
             )}
           </div>
@@ -742,6 +742,24 @@ function StatusBadge({
   isPlaying: boolean;
   audioStatus: AudioStatus;
 }) {
-  const label = isPlaying ? audioStatus : "stopped";
-  return <span className={`c-status c-status--${label}`}>{label}</span>;
+  const status = isPlaying ? audioStatus : "stopped";
+  const label = formatStatusLabel(status);
+  return <span className={`c-status c-status--${status}`}>{label}</span>;
+}
+
+function formatStatusLabel(status: AudioStatus | "stopped"): string {
+  switch (status) {
+    case "idle":
+      return "待機中";
+    case "locked":
+      return "ロック中";
+    case "starting":
+      return "起動中";
+    case "ready":
+      return "再生中";
+    case "blocked":
+      return "停止";
+    case "stopped":
+      return "停止";
+  }
 }
