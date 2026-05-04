@@ -91,7 +91,7 @@ export const PATTERN_PRESETS: readonly PatternPreset[] = [
     stepsPerBeat: 4,
     beatsPerLoop: 4,
     pattern:
-      "1000000010001000_0000100000001000_1000100010001000_0010001000100010",
+      "1000100010001010_0000100000001000_1000100010001000_0010001000100010",
   },
   {
     id: "bass-fourths-pulse",
