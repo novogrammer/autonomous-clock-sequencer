@@ -148,6 +148,12 @@
   color: var(--color-text);
 }
 
+.c-range {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
 .c-readout {
   min-width: 0;
   padding: var(--space-6);

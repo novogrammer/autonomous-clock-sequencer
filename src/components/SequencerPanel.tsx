@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent, type MouseEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type KeyboardEvent, type MouseEvent } from "react";
 import { toDataURL } from "qrcode";
 import { secondsToMs } from "../clock/clock";
 import {
@@ -50,6 +50,7 @@ export function SequencerPanel() {
     start,
     stop,
   } = useSequencerStore();
+  const [bpmDraft, setBpmDraft] = useState(() => String(bpm));
   const playbackOffsetMs = usePlaybackCalibrationStore(
     (state) => state.playbackOffsetMs,
   );
@@ -94,8 +95,30 @@ export function SequencerPanel() {
     stop();
   }
 
-  function handleBpmChange(event: ChangeEvent<HTMLInputElement>) {
+  function handleBpmRangeChange(event: ChangeEvent<HTMLInputElement>) {
     setBpm(Number(event.target.value));
+  }
+
+  function handleBpmDraftChange(event: ChangeEvent<HTMLInputElement>) {
+    setBpmDraft(event.target.value);
+  }
+
+  function commitBpmDraft() {
+    const nextBpm = Number(bpmDraft);
+    if (!Number.isFinite(nextBpm)) {
+      setBpmDraft(String(bpm));
+      return;
+    }
+
+    setBpm(nextBpm);
+  }
+
+  function handleBpmDraftKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key !== "Enter") {
+      return;
+    }
+
+    event.currentTarget.blur();
   }
 
   function handleStepsPerBeatChange(event: ChangeEvent<HTMLInputElement>) {
@@ -199,6 +222,10 @@ export function SequencerPanel() {
     pattern,
     swing,
   };
+
+  useEffect(() => {
+    setBpmDraft(String(bpm));
+  }, [bpm]);
 
   useEffect(() => {
     let isActive = true;
@@ -401,28 +428,44 @@ export function SequencerPanel() {
       <div className="l-grid l-grid--columns-3 l-grid--gap-l l-grid--section">
         <label className="c-field">
           <span className="c-field__label">BPM</span>
-          <input
-            className="c-input"
-            type="number"
-            min="20"
-            max="300"
-            step="1"
-            value={bpm}
-            onChange={handleBpmChange}
-          />
+          <div className="p-sequencer__slider-field">
+            <input
+              className="c-input"
+              type="number"
+              min="20"
+              max="300"
+              step="1"
+              value={bpmDraft}
+              onChange={handleBpmDraftChange}
+              onBlur={commitBpmDraft}
+              onKeyDown={handleBpmDraftKeyDown}
+            />
+            <input
+              className="c-range"
+              type="range"
+              min="20"
+              max="300"
+              step="1"
+              value={bpm}
+              onChange={handleBpmRangeChange}
+            />
+          </div>
         </label>
 
         <label className="c-field">
           <span className="c-field__label">swing</span>
-          <input
-            className="c-input"
-            type="number"
-            min="0"
-            max="0.95"
-            step="0.05"
-            value={swing}
-            onChange={handleSwingChange}
-          />
+          <div className="p-sequencer__slider-field">
+            <strong className="p-sequencer__slider-value">{formatControlNumber(swing)}</strong>
+            <input
+              className="c-range"
+              type="range"
+              min="0"
+              max="0.95"
+              step="0.05"
+              value={swing}
+              onChange={handleSwingChange}
+            />
+          </div>
         </label>
 
         <label className="c-field">
@@ -606,6 +649,12 @@ export function SequencerPanel() {
       </section>
     </section>
   );
+}
+
+function formatControlNumber(value: number): string {
+  return Number.isInteger(value)
+    ? String(value)
+    : value.toFixed(2).replace(/0+$/, "").replace(/\.$/, "");
 }
 
 function shouldKeepDefaultLinkBehavior(event: MouseEvent<HTMLAnchorElement>): boolean {

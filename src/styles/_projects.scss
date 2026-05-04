@@ -74,6 +74,18 @@
     align-items: end;
   }
 
+  &__slider-field {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  &__slider-value {
+    font-size: var(--font-size-heading-3);
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
   &__grid-group {
     grid-column: 1 / -1;
     display: grid;
