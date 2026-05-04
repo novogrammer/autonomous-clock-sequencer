@@ -31,8 +31,8 @@ const COMMON_BEATS_PER_LOOP_VALUES = [1, 2, 4, 8, 16] as const;
 
 export function SequencerPanel() {
   const [isClickEnabled, setClickEnabled] = useState(false);
-  const [shouldRepeatOnLoopExtend, setShouldRepeatOnLoopExtend] = useState(false);
-  const [shouldResampleByBeat, setShouldResampleByBeat] = useState(false);
+  const [shouldRepeatOnLoopExtend, setShouldRepeatOnLoopExtend] = useState(true);
+  const [shouldResampleByBeat, setShouldResampleByBeat] = useState(true);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
   const {
