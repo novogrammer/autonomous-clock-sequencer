@@ -10,7 +10,7 @@ const SNARE_CLAP_VELOCITIES = [0.72, 0.4] as const;
 const DEFAULT_HAT_DURATION = "32n";
 const DEFAULT_OPEN_HAT_DURATION = "8n";
 const CLOSED_HAT_FREQUENCY = 280;
-const OPEN_HAT_FREQUENCY = 220;
+const OPEN_HAT_FREQUENCY = 360;
 const SNARE_TONE_NOTE = "E3";
 
 export const MINIMAL_KIT_TRACKS = [
@@ -83,14 +83,14 @@ export function createMinimalKitVoices(): MinimalKitVoices {
     openHat: new Tone.MetalSynth({
       envelope: {
         attack: 0.001,
-        decay: 0.14,
-        release: 0.08,
+        decay: 0.13,
+        release: 0.1,
       },
-      harmonicity: 5.1,
-      modulationIndex: 28,
-      resonance: 2200,
-      octaves: 1.5,
-      volume: -26,
+      harmonicity: 7.2,
+      modulationIndex: 34,
+      resonance: 3800,
+      octaves: 2.1,
+      volume: -21,
     }).toDestination(),
   };
 }
@@ -140,7 +140,7 @@ export function playMinimalKitTrack(
         OPEN_HAT_FREQUENCY,
         DEFAULT_OPEN_HAT_DURATION,
         toneTime,
-        0.35,
+        0.4,
       );
       break;
   }
