@@ -106,4 +106,32 @@ describe("applyPatternPreset", () => {
       swing: 0.05,
     });
   });
+
+  it("drum-standard preset でも 8 track pattern を正規化して差し替える", () => {
+    const preset = PATTERN_PRESETS.find((item) => item.id === "drum-standard-floor-toms");
+
+    expect(preset).toBeDefined();
+    expect(
+      applyPatternPreset(
+        {
+          bpm: 126,
+          stepsPerBeat: 4,
+          beatsPerLoop: 4,
+          kit: "minimal",
+          pattern:
+            "1000100010001000_0000100000001000_1010101000101010_0000000010000000",
+          swing: 0.09,
+        },
+        preset!,
+      ),
+    ).toEqual({
+      bpm: 126,
+      stepsPerBeat: 4,
+      beatsPerLoop: 4,
+      kit: "drum-standard",
+      pattern:
+        "1000100010001000_0000100000001000_1010101010101010_0000000010000010_0000000000001000_0000001000000000_0000000000000010_0000000000000001",
+      swing: 0.09,
+    });
+  });
 });

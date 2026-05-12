@@ -91,6 +91,22 @@ describe("parseSequencerUrl", () => {
     });
   });
 
+  it("kit=drum-standard を復元する", () => {
+    expect(
+      parseSequencerUrl(
+        "?kit=drum-standard&pattern=10_01_1",
+      ),
+    ).toEqual({
+      bpm: 120,
+      stepsPerBeat: 4,
+      beatsPerLoop: 4,
+      kit: "drum-standard",
+      pattern:
+        "1000000000000000_0100000000000000_1000000000000000_0000000000000000_0000000000000000_0000000000000000_0000000000000000_0000000000000000",
+      swing: 0,
+    });
+  });
+
   it("stepsPerBeatを整数に丸める", () => {
     expect(parseSequencerUrl("?stepsPerBeat=3.6")).toEqual({
       bpm: 120,
@@ -213,6 +229,16 @@ describe("normalizePattern", () => {
       }),
     ).toBe("1100_1000_0000_0000_0000_0000_0000");
   });
+
+  it("8 track drum kit でも不足trackを0で補完する", () => {
+    expect(
+      normalizePattern("1_01_1111", {
+        kit: "drum-standard",
+        stepsPerBeat: 2,
+        beatsPerLoop: 2,
+      }),
+    ).toBe("1000_0100_1111_0000_0000_0000_0000_0000");
+  });
 });
 
 describe("buildSequencerUrl", () => {
@@ -305,6 +331,28 @@ describe("buildSequencerUrl", () => {
       }),
     ).toBe(
       "/sequencer?bpm=96&stepsPerBeat=4&beatsPerLoop=4&kit=diatonic-triads-c-major&pattern=0000000000000000_0000000000000000_0010000000000000_0000000010000000_0000000000001000_0000100000000000_1000000000000000&swing=0.02",
+    );
+  });
+
+  it("drum-standard の共有状態を URL に載せる", () => {
+    vi.stubGlobal("window", {
+      location: {
+        href: "https://example.com/sequencer",
+      },
+    });
+
+    expect(
+      buildSequencerUrl({
+        bpm: 122,
+        stepsPerBeat: 4,
+        beatsPerLoop: 4,
+        kit: "drum-standard",
+        pattern:
+          "1000100010001000_0000100000001000_1010101010101010_0000000010000010_0000000000001000_0000001000000000_0000000000000010_0000000000000001",
+        swing: 0.06,
+      }),
+    ).toBe(
+      "/sequencer?bpm=122&stepsPerBeat=4&beatsPerLoop=4&kit=drum-standard&pattern=1000100010001000_0000100000001000_1010101010101010_0000000010000010_0000000000001000_0000001000000000_0000000000000010_0000000000000001&swing=0.06",
     );
   });
 });

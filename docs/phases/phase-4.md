@@ -80,15 +80,12 @@
 ### drum 系
 
 - 既存の 4 track drum は最小構成として維持する
-- 多トラック drum では、まず 6 track 前後の `basic` 構成を優先する
-- tom を含む 8 track 構成はその次の候補とする
+- 多トラック drum では、tom を含む 8 track 構成を先に試す
+- `minimal` より drum set らしい入口を別 kit として追加する
 
 #### 候補
 
-- `drum-basic`
-  - 6 tracks
-  - `kick, snare, closed hat, open hat, clap, perc`
-- `drum-extended`
+- `drum-standard`
   - 8 tracks
   - `kick, snare, closed hat, open hat, clap, perc, low tom, high tom`
 

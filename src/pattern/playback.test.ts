@@ -59,6 +59,16 @@ describe("getActiveTrackIdsAtStep", () => {
     ).toEqual(["bdim", "am", "g", "f"]);
   });
 
+  it("drum-standard でもkit順で有効track idを返す", () => {
+    expect(
+      getActiveTrackIdsAtStep(
+        "drum-standard",
+        "1000_1000_1000_1000_1000_0000_0000_0000",
+        0,
+      ),
+    ).toEqual(["kick", "snare", "closedHat", "openHat", "clap"]);
+  });
+
   it("無効なら空配列を返す", () => {
     expect(
       getActiveTrackIdsAtStep(

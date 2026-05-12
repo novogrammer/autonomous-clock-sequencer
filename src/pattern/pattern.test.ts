@@ -27,6 +27,12 @@ describe("createEmptyPattern", () => {
       "0000_0000_0000_0000_0000_0000_0000",
     );
   });
+
+  it("drum-standard では 8 track 分の空patternを返す", () => {
+    expect(createEmptyPattern("drum-standard", 4, 1)).toBe(
+      "0000_0000_0000_0000_0000_0000_0000_0000",
+    );
+  });
 });
 
 describe("togglePatternStep", () => {

@@ -98,6 +98,20 @@ export const EXAMPLE_SCORES: readonly ExampleScore[] = [
       swing: 0.02,
     },
   }),
+  defineExampleScore({
+    id: "drum-standard-floor-toms",
+    name: "Standard Floor Toms",
+    description: "tom を含む 8 track drum kit でフィル込みの入口を確認する譜面。",
+    state: {
+      bpm: 122,
+      stepsPerBeat: 4,
+      beatsPerLoop: 4,
+      kit: "drum-standard",
+      pattern:
+        "1000100010001000_0000100000001000_1010101010101010_0000000010000010_0000000000001000_0000001000000000_0000000000000010_0000000000000001",
+      swing: 0.06,
+    },
+  }),
 ] as const;
 
 export const PATTERN_PRESETS: readonly PatternPreset[] = [
@@ -160,6 +174,16 @@ export const PATTERN_PRESETS: readonly PatternPreset[] = [
     beatsPerLoop: 4,
     pattern:
       "0000000000000000_0000000000000000_0010000000000000_0000000010000000_0000000000001000_0000100000000000_1000000000000000",
+  },
+  {
+    id: "drum-standard-floor-toms",
+    kit: "drum-standard",
+    name: "Floor Toms",
+    description: "kick と hat を保ったまま clap, perc, tom でフィルを加える drum preset。",
+    stepsPerBeat: 4,
+    beatsPerLoop: 4,
+    pattern:
+      "1000100010001000_0000100000001000_1010101010101010_0000000010000010_0000000000001000_0000001000000000_0000000000000010_0000000000000001",
   },
 ] as const;
 
