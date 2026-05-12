@@ -15,8 +15,8 @@ const CLAP_VELOCITIES = [0.76, 0.46, 0.24] as const;
 const CLOSED_HAT_FREQUENCY = 290;
 const OPEN_HAT_FREQUENCY = 380;
 const PERC_NOTE = "A4";
-const LOW_TOM_NOTE = "G1";
-const HIGH_TOM_NOTE = "C2";
+const LOW_TOM_NOTE = "G2";
+const HIGH_TOM_NOTE = "C3";
 
 export const DRUM_STANDARD_KIT_TRACKS = [
   { id: "kick", label: "Kick" },
@@ -119,26 +119,26 @@ export function createDrumStandardKitVoices(): DrumStandardKitVoices {
       volume: -18,
     }).toDestination(),
     lowTom: new Tone.MembraneSynth({
-      octaves: 2.3,
-      pitchDecay: 0.03,
+      octaves: 2.4,
+      pitchDecay: 0.04,
       envelope: {
         attack: 0.001,
-        decay: 0.15,
+        decay: 0.16,
+        sustain: 0,
+        release: 0.09,
+      },
+      volume: -7.5,
+    }).toDestination(),
+    highTom: new Tone.MembraneSynth({
+      octaves: 2.1,
+      pitchDecay: 0.035,
+      envelope: {
+        attack: 0.001,
+        decay: 0.13,
         sustain: 0,
         release: 0.08,
       },
       volume: -8,
-    }).toDestination(),
-    highTom: new Tone.MembraneSynth({
-      octaves: 1.8,
-      pitchDecay: 0.028,
-      envelope: {
-        attack: 0.001,
-        decay: 0.12,
-        sustain: 0,
-        release: 0.06,
-      },
-      volume: -9,
     }).toDestination(),
   };
 }
