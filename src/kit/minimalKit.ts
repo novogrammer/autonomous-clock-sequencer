@@ -43,9 +43,9 @@ export function createMinimalKitVoices(): MinimalKitVoices {
       pitchDecay: 0.05,
       envelope: {
         attack: 0.001,
-        decay: 0.2,
+        decay: 0.1,
         sustain: 0,
-        release: 0.08,
+        release: 0.04,
       },
     }).toDestination(),
     snare: new Tone.NoiseSynth({
