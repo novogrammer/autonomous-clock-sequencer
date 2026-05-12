@@ -123,9 +123,9 @@ export function createDrumStandardKitVoices(): DrumStandardKitVoices {
       pitchDecay: 0.04,
       envelope: {
         attack: 0.001,
-        decay: 0.16,
+        decay: 0.64,
         sustain: 0,
-        release: 0.09,
+        release: 1.12,
       },
       volume: -7.5,
     }).toDestination(),
@@ -134,9 +134,9 @@ export function createDrumStandardKitVoices(): DrumStandardKitVoices {
       pitchDecay: 0.035,
       envelope: {
         attack: 0.001,
-        decay: 0.13,
+        decay: 0.52,
         sustain: 0,
-        release: 0.08,
+        release: 0.96,
       },
       volume: -8,
     }).toDestination(),
