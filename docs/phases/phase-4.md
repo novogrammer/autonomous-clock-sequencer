@@ -2,7 +2,7 @@
 
 ## 状態
 
-- 仕様検討中
+- 実装と検証を進行中
 - Phase 3 までの時間モデル、URL 共有、pattern 編集補助を維持したまま、多トラック `kit` を追加する
 
 ## 目的
@@ -11,9 +11,9 @@
 
 ## 追加するもの
 
-- 多トラック `kit` の候補整理
+- 多トラック `kit` の実装と比較用入口
 - `note` 系、`chord` 系、`drum` 系の最小構成
-- track 数が増えたときの UI / URL 長の検証方針
+- track 数が増えたときの UI / URL 長の確認項目
 
 ## 維持する原則
 
@@ -25,10 +25,10 @@
 
 ## スコープ
 
-- track 数が 6 から 8 前後の `kit` を追加候補として整理する
+- track 数が 6 から 8 前後の `kit` を追加して使い勝手を確認する
 - melodic 系では、まず半音を含まない `diatonic` な並びを優先する
 - harmonic 系では、`1 track = 1 chord` の構成を優先する
-- drum 系では、既存 4 track より多い `basic` 構成を検討する
+- drum 系では、既存 4 track より多い構成を 1 つ追加する
 - `kit` ごとの track 名、並び順、想定音域を定義する
 
 ## 非スコープ
@@ -54,12 +54,13 @@
 - まずは 1 オクターブ 7 track を基本候補とする
 - chromatic は将来候補として残すが、最初の導入対象にはしない
 
-#### 候補
+#### 実装
 
 - `diatonic-notes-c-major`
   - 7 tracks
   - `B4, A4, G4, F4, E4, D4, C4`
   - 上の `C` は含めず、`1 track = 1 degree` を優先する
+  - 高音が上に来るよう、UI 上の並びと `pattern` 順を一致させる
 
 ### chord 系
 
@@ -68,12 +69,14 @@
 - まずはダイアトニックな triad を優先する
 - 7th chord 系は triad 系と分けて別 kit として扱う
 
-#### 候補
+#### 実装
 
 - `diatonic-triads-c-major`
   - 7 tracks
   - `Bdim, Am, G, F, Em, Dm, C`
+  - triad を 1 track = 1 chord として扱う
 - `diatonic-sevenths-c-major`
+  - 将来候補
   - 7 tracks
   - `Cmaj7, Dm7, Em7, Fmaj7, G7, Am7, Bm7b5`
 
@@ -83,11 +86,13 @@
 - 多トラック drum では、tom を含む 8 track 構成を先に試す
 - `minimal` より drum set らしい入口を別 kit として追加する
 
-#### 候補
+#### 実装
 
 - `drum-standard`
   - 8 tracks
   - `kick, snare, closed hat, open hat, clap, perc, low tom, high tom`
+  - `minimal` を置き換えず、tom を含む別系統の drum kit として追加する
+  - 初期 preset では closed/open hat の同時発音や fill 中の過密な重なりを避ける
 
 ## UI / URL 方針
 
@@ -95,17 +100,29 @@
 - track 数が増えても、pattern 形式自体は `_` 区切りのまま維持する
 - 共有 URL の長さは browser より先に QR や共有体験で問題化しやすいので、初期候補は 8 track 前後に留める
 - `kit` は当面、音色セットと track layout をまとめて持つ概念として扱ってよい
+- track label は音楽表記を優先し、強制的な大文字変換は行わない
 
 ## 想定する最小 UI
 
 - `kit` selector に多トラック候補を追加する
 - track 名が増えても読める最小レイアウトを維持する
-- 必要なら `Example Score` や `Pattern Preset` に多トラック kit 用の入口を追加する
+- `Example Score` と `Pattern Preset` に各 kit の入口を置く
+
+## 現状メモ
+
+- `diatonic-notes-c-major`
+  - 7 track の note kit として追加済み
+- `diatonic-triads-c-major`
+  - 7 track の chord kit として追加済み
+- `drum-standard`
+  - 8 track の drum kit として追加済み
+- 既存の URL / state 形式で 7-8 track の `pattern` を共有できることは確認済み
+- 残タスクは、preset の比較材料追加と、多トラック時の UI 密度確認が中心になる
 
 ## 完了条件
 
-- 少なくとも 1 つの note 系多トラック kit を試せる
-- 少なくとも 1 つの chord 系多トラック kit を試せる
-- 少なくとも 1 つの drum 系多トラック kit を試せる
+- `diatonic-notes-c-major` を試せる
+- `diatonic-triads-c-major` を試せる
+- `drum-standard` を試せる
 - 多トラック kit でも既存の URL state と同じ形で共有できる
 - track 数増加に対する UI と URL 長の課題を確認できる
