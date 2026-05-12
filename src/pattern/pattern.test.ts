@@ -21,6 +21,12 @@ describe("createEmptyPattern", () => {
       "0000_0000_0000_0000_0000_0000_0000",
     );
   });
+
+  it("diatonic triad kit でも 7 track 分の空patternを返す", () => {
+    expect(createEmptyPattern("diatonic-triads-c-major", 2, 2)).toBe(
+      "0000_0000_0000_0000_0000_0000_0000",
+    );
+  });
 });
 
 describe("togglePatternStep", () => {

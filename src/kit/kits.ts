@@ -13,6 +13,13 @@ import {
   playDiatonicNotesCMajorTrack,
 } from "./diatonicNotesCMajorKit";
 import {
+  createDiatonicTriadsCMajorKitVoices,
+  DIATONIC_TRIADS_C_MAJOR_KIT_ID,
+  DIATONIC_TRIADS_C_MAJOR_KIT_TRACKS,
+  disposeDiatonicTriadsCMajorKitVoices,
+  playDiatonicTriadsCMajorTrack,
+} from "./diatonicTriadsCMajorKit";
+import {
   MINIMAL_KIT_ID,
   MINIMAL_KIT_TRACKS,
   createMinimalKitVoices,
@@ -24,6 +31,7 @@ export const KIT_IDS = [
   MINIMAL_KIT_ID,
   BASS_FOURTHS_KIT_ID,
   DIATONIC_NOTES_C_MAJOR_KIT_ID,
+  DIATONIC_TRIADS_C_MAJOR_KIT_ID,
 ] as const;
 
 export type KitId = (typeof KIT_IDS)[number];
@@ -101,10 +109,32 @@ const diatonicNotesCMajorKitDefinition: KitDefinition = {
   },
 };
 
+const diatonicTriadsCMajorKitDefinition: KitDefinition = {
+  id: DIATONIC_TRIADS_C_MAJOR_KIT_ID,
+  tracks: DIATONIC_TRIADS_C_MAJOR_KIT_TRACKS,
+  createInstance() {
+    const voices = createDiatonicTriadsCMajorKitVoices();
+
+    return {
+      id: DIATONIC_TRIADS_C_MAJOR_KIT_ID,
+      tracks: DIATONIC_TRIADS_C_MAJOR_KIT_TRACKS,
+      dispose: () => disposeDiatonicTriadsCMajorKitVoices(voices),
+      playTrack: (trackId, toneTime) => {
+        playDiatonicTriadsCMajorTrack(
+          trackId as (typeof DIATONIC_TRIADS_C_MAJOR_KIT_TRACKS)[number]["id"],
+          voices,
+          toneTime,
+        );
+      },
+    };
+  },
+};
+
 const KIT_DEFINITIONS: Record<KitId, KitDefinition> = {
   [MINIMAL_KIT_ID]: minimalKitDefinition,
   [BASS_FOURTHS_KIT_ID]: bassFourthsKitDefinition,
   [DIATONIC_NOTES_C_MAJOR_KIT_ID]: diatonicNotesCMajorKitDefinition,
+  [DIATONIC_TRIADS_C_MAJOR_KIT_ID]: diatonicTriadsCMajorKitDefinition,
 };
 
 export function getDefaultKitId(): KitId {

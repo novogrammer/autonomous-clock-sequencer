@@ -75,6 +75,22 @@ describe("parseSequencerUrl", () => {
     });
   });
 
+  it("kit=diatonic-triads-c-major を復元する", () => {
+    expect(
+      parseSequencerUrl(
+        "?kit=diatonic-triads-c-major&pattern=1000_0100_0010_0001_1",
+      ),
+    ).toEqual({
+      bpm: 120,
+      stepsPerBeat: 4,
+      beatsPerLoop: 4,
+      kit: "diatonic-triads-c-major",
+      pattern:
+        "1000000000000000_0100000000000000_0010000000000000_0001000000000000_1000000000000000_0000000000000000_0000000000000000",
+      swing: 0,
+    });
+  });
+
   it("stepsPerBeatを整数に丸める", () => {
     expect(parseSequencerUrl("?stepsPerBeat=3.6")).toEqual({
       bpm: 120,
@@ -187,6 +203,16 @@ describe("normalizePattern", () => {
       "1010_0100_0000_0000_0000_0000_0000",
     );
   });
+
+  it("triad kit でも不足trackを0で補完する", () => {
+    expect(
+      normalizePattern("11_1", {
+        kit: "diatonic-triads-c-major",
+        stepsPerBeat: 2,
+        beatsPerLoop: 2,
+      }),
+    ).toBe("1100_1000_0000_0000_0000_0000_0000");
+  });
 });
 
 describe("buildSequencerUrl", () => {
@@ -257,6 +283,28 @@ describe("buildSequencerUrl", () => {
       }),
     ).toBe(
       "/sequencer?bpm=110&stepsPerBeat=4&beatsPerLoop=4&kit=diatonic-notes-c-major&pattern=0000000000100000_0000001000000000_0010000000000000_0000000000001000_0000000010000000_0000100000000000_1000000000000000&swing=0.04",
+    );
+  });
+
+  it("diatonic-triads-c-major の共有状態を URL に載せる", () => {
+    vi.stubGlobal("window", {
+      location: {
+        href: "https://example.com/sequencer",
+      },
+    });
+
+    expect(
+      buildSequencerUrl({
+        bpm: 96,
+        stepsPerBeat: 4,
+        beatsPerLoop: 4,
+        kit: "diatonic-triads-c-major",
+        pattern:
+          "0000000000000000_0000000000000000_0010000000000000_0000000010000000_0000000000001000_0000100000000000_1000000000000000",
+        swing: 0.02,
+      }),
+    ).toBe(
+      "/sequencer?bpm=96&stepsPerBeat=4&beatsPerLoop=4&kit=diatonic-triads-c-major&pattern=0000000000000000_0000000000000000_0010000000000000_0000000010000000_0000000000001000_0000100000000000_1000000000000000&swing=0.02",
     );
   });
 });

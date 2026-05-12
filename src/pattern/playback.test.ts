@@ -49,6 +49,16 @@ describe("getActiveTrackIdsAtStep", () => {
     ).toEqual(["b4", "a4", "g4", "f4"]);
   });
 
+  it("diatonic triad kit でもkit順で有効track idを返す", () => {
+    expect(
+      getActiveTrackIdsAtStep(
+        "diatonic-triads-c-major",
+        "1000_1000_1000_1000_0000_0000_0000",
+        0,
+      ),
+    ).toEqual(["bdim", "am", "g", "f"]);
+  });
+
   it("無効なら空配列を返す", () => {
     expect(
       getActiveTrackIdsAtStep(

@@ -84,6 +84,20 @@ export const EXAMPLE_SCORES: readonly ExampleScore[] = [
       swing: 0.04,
     },
   }),
+  defineExampleScore({
+    id: "diatonic-triads-c-major-cadence",
+    name: "Triad Cadence",
+    description: "C major の triad を順に置いて harmonic 系 kit の入口を確認する譜面。",
+    state: {
+      bpm: 96,
+      stepsPerBeat: 4,
+      beatsPerLoop: 4,
+      kit: "diatonic-triads-c-major",
+      pattern:
+        "0000000000000000_0000000000000000_0010000000000000_0000000010000000_0000000000001000_0000100000000000_1000000000000000",
+      swing: 0.02,
+    },
+  }),
 ] as const;
 
 export const PATTERN_PRESETS: readonly PatternPreset[] = [
@@ -136,6 +150,16 @@ export const PATTERN_PRESETS: readonly PatternPreset[] = [
     beatsPerLoop: 4,
     pattern:
       "0000000000100000_0000001000000000_0010000000000000_0000000000001000_0000000010000000_0000100000000000_1000000000000000",
+  },
+  {
+    id: "diatonic-triads-c-major-cadence",
+    kit: "diatonic-triads-c-major",
+    name: "Cadence",
+    description: "C major の triad を下から積み上げる最小 harmonic preset。",
+    stepsPerBeat: 4,
+    beatsPerLoop: 4,
+    pattern:
+      "0000000000000000_0000000000000000_0010000000000000_0000000010000000_0000000000001000_0000100000000000_1000000000000000",
   },
 ] as const;
 

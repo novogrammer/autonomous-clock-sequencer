@@ -78,4 +78,32 @@ describe("applyPatternPreset", () => {
       swing: 0.12,
     });
   });
+
+  it("diatonic triad preset でも 7 track pattern を正規化して差し替える", () => {
+    const preset = PATTERN_PRESETS.find((item) => item.id === "diatonic-triads-c-major-cadence");
+
+    expect(preset).toBeDefined();
+    expect(
+      applyPatternPreset(
+        {
+          bpm: 118,
+          stepsPerBeat: 4,
+          beatsPerLoop: 4,
+          kit: "minimal",
+          pattern:
+            "1000100010001000_0000100000001000_1010101000101010_0000000010000000",
+          swing: 0.05,
+        },
+        preset!,
+      ),
+    ).toEqual({
+      bpm: 118,
+      stepsPerBeat: 4,
+      beatsPerLoop: 4,
+      kit: "diatonic-triads-c-major",
+      pattern:
+        "0000000000000000_0000000000000000_0010000000000000_0000000010000000_0000000000001000_0000100000000000_1000000000000000",
+      swing: 0.05,
+    });
+  });
 });

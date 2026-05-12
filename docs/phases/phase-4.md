@@ -72,7 +72,7 @@
 
 - `diatonic-triads-c-major`
   - 7 tracks
-  - `C, Dm, Em, F, G, Am, Bdim`
+  - `Bdim, Am, G, F, Em, Dm, C`
 - `diatonic-sevenths-c-major`
   - 7 tracks
   - `Cmaj7, Dm7, Em7, Fmaj7, G7, Am7, Bm7b5`
