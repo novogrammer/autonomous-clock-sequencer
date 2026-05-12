@@ -39,6 +39,16 @@ describe("getActiveTrackIdsAtStep", () => {
     ).toEqual(["f2"]);
   });
 
+  it("diatonic note kit でもkit順で有効track idを返す", () => {
+    expect(
+      getActiveTrackIdsAtStep(
+        "diatonic-notes-c-major",
+        "0001_0001_0001_0001_0000_0000_0000",
+        3,
+      ),
+    ).toEqual(["b4", "a4", "g4", "f4"]);
+  });
+
   it("無効なら空配列を返す", () => {
     expect(
       getActiveTrackIdsAtStep(

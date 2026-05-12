@@ -70,6 +70,20 @@ export const EXAMPLE_SCORES: readonly ExampleScore[] = [
       swing: 0.08,
     },
   }),
+  defineExampleScore({
+    id: "diatonic-notes-c-major-cascade",
+    name: "Diatonic Cascade",
+    description: "C major の 7 track を上行させて note 系 kit の入口を確認する譜面。",
+    state: {
+      bpm: 110,
+      stepsPerBeat: 4,
+      beatsPerLoop: 4,
+      kit: "diatonic-notes-c-major",
+      pattern:
+        "0000000000100000_0000001000000000_0010000000000000_0000000000001000_0000000010000000_0000100000000000_1000000000000000",
+      swing: 0.04,
+    },
+  }),
 ] as const;
 
 export const PATTERN_PRESETS: readonly PatternPreset[] = [
@@ -112,6 +126,16 @@ export const PATTERN_PRESETS: readonly PatternPreset[] = [
     beatsPerLoop: 4,
     pattern:
       "100000100000_010001010000_001010001000_000100000100",
+  },
+  {
+    id: "diatonic-notes-c-major-cascade",
+    kit: "diatonic-notes-c-major",
+    name: "Cascade",
+    description: "C major の各 degree を順に置く最小 melodic preset。",
+    stepsPerBeat: 4,
+    beatsPerLoop: 4,
+    pattern:
+      "0000000000100000_0000001000000000_0010000000000000_0000000000001000_0000000010000000_0000100000000000_1000000000000000",
   },
 ] as const;
 

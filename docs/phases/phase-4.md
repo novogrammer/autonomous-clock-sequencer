@@ -58,7 +58,8 @@
 
 - `diatonic-notes-c-major`
   - 7 tracks
-  - `C, D, E, F, G, A, B`
+  - `B4, A4, G4, F4, E4, D4, C4`
+  - 上の `C` は含めず、`1 track = 1 degree` を優先する
 
 ### chord 系
 

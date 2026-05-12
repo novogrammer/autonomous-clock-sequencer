@@ -15,6 +15,12 @@ describe("createEmptyPattern", () => {
       "00000000_00000000_00000000_00000000",
     );
   });
+
+  it("diatonic note kit では 7 track 分の空patternを返す", () => {
+    expect(createEmptyPattern("diatonic-notes-c-major", 4, 1)).toBe(
+      "0000_0000_0000_0000_0000_0000_0000",
+    );
+  });
 });
 
 describe("togglePatternStep", () => {
